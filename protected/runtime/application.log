@@ -1,0 +1,131 @@
+2016/09/12 14:40:50 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php:101)
+Stack trace:
+#0 C:\xampp\htdocs\yii\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\yii\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\yii\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\api\index.php(16): CWebApplication->run()
+REQUEST_URI=/api/api/register
+in C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php (101)
+in C:\xampp\htdocs\api\index.php (16)
+2016/09/12 14:41:11 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php:101)
+Stack trace:
+#0 C:\xampp\htdocs\yii\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\yii\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\yii\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\api\index.php(16): CWebApplication->run()
+REQUEST_URI=/api/api/register
+in C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php (101)
+in C:\xampp\htdocs\api\index.php (16)
+2016/09/12 14:44:42 [error] [php] Array to string conversion (C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php:101)
+Stack trace:
+#0 C:\xampp\htdocs\yii\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\yii\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\yii\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\api\index.php(16): CWebApplication->run()
+REQUEST_URI=/api/api/register
+in C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php (101)
+in C:\xampp\htdocs\api\index.php (16)
+2016/09/12 14:45:20 [error] [php] Undefined offset: 0 (C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php:101)
+Stack trace:
+#0 C:\xampp\htdocs\yii\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\yii\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\yii\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\api\index.php(16): CWebApplication->run()
+REQUEST_URI=/api/api/register
+in C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php (101)
+in C:\xampp\htdocs\api\index.php (16)
+2016/09/12 14:46:04 [error] [php] Undefined offset: 0 (C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php:102)
+Stack trace:
+#0 C:\xampp\htdocs\yii\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\yii\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\yii\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\api\index.php(16): CWebApplication->run()
+REQUEST_URI=/api/api/register
+in C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php (102)
+in C:\xampp\htdocs\api\index.php (16)
+2016/09/12 17:10:12 [error] [php] Undefined property: stdClass::$errorlist (C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php:100)
+Stack trace:
+#0 C:\xampp\htdocs\yii\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\yii\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\yii\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\api\index.php(16): CWebApplication->run()
+REQUEST_URI=/api/api/register
+in C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php (100)
+in C:\xampp\htdocs\api\index.php (16)
+2016/09/12 17:22:12 [error] [php] Undefined property: stdClass::$errorlist (C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php:100)
+Stack trace:
+#0 C:\xampp\htdocs\yii\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\yii\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\yii\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\api\index.php(16): CWebApplication->run()
+REQUEST_URI=/api/api/register
+in C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php (100)
+in C:\xampp\htdocs\api\index.php (16)
+2016/09/12 17:23:10 [error] [php] Undefined property: stdClass::$errorlist (C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php:100)
+Stack trace:
+#0 C:\xampp\htdocs\yii\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\yii\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\yii\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\api\index.php(16): CWebApplication->run()
+REQUEST_URI=/api/api/register
+in C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php (100)
+in C:\xampp\htdocs\api\index.php (16)
+2016/09/12 18:26:40 [error] [php] Undefined property: stdClass::$errorlist (C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php:125)
+Stack trace:
+#0 C:\xampp\htdocs\yii\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\yii\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\yii\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\api\index.php(16): CWebApplication->run()
+REQUEST_URI=/api/api/register
+in C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php (125)
+in C:\xampp\htdocs\api\index.php (16)
+2016/09/12 18:32:42 [error] [php] Undefined property: stdClass::$errorlist (C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php:127)
+Stack trace:
+#0 C:\xampp\htdocs\yii\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\yii\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\yii\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\api\index.php(16): CWebApplication->run()
+REQUEST_URI=/api/api/register
+in C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php (127)
+in C:\xampp\htdocs\api\index.php (16)
+2016/09/13 08:44:50 [error] [php] Object of class stdClass could not be converted to string (C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php:133)
+Stack trace:
+#0 C:\xampp\htdocs\yii\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\yii\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\yii\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\api\index.php(16): CWebApplication->run()
+REQUEST_URI=/api/api/register
+in C:\xampp\htdocs\api\protected\controllers\api\RegisterAction.php (133)
+in C:\xampp\htdocs\api\index.php (16)
+2016/09/14 03:00:22 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "resetpass".' in C:\xampp\htdocs\yii\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\yii\framework\web\CController.php(270): CController->missingAction('resetpass')
+#1 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(282): CController->run('resetpass')
+#2 C:\xampp\htdocs\yii\framework\web\CWebApplication.php(141): CWebApplication->runController('api/resetpass')
+#3 C:\xampp\htdocs\yii\framework\base\CApplication.php(185): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\api\index.php(16): CApplication->run()
+#5 {main}
+REQUEST_URI=/api/api/resetpass
+---
