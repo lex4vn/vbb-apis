@@ -7,7 +7,7 @@
 // CWebApplication properties can be configured here.
 
 if (!isset($root_dir)) $root_dir = dirname(dirname(dirname(dirname(__FILE__))));
-Yii::setPathOfAlias('protected', $root_dir . '/api/protected/');
+Yii::setPathOfAlias('protected', $root_dir . '/vbb-apis/protected/');
 
 return array(
     'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
