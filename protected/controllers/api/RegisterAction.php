@@ -38,7 +38,7 @@ class RegisterAction extends CAction
         }
 
         //Parameters
-        $uniqueId = '123123';
+        $uniqueId = uniqueId();
         $content = '';
 
         $apiConfig = new ApiConfig(API_KEY, $uniqueId, CLIENT_NAME, CLIENT_VERSION, PLATFORM_NAME, PLATFORM_VERSION);
