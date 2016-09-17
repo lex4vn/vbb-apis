@@ -11,7 +11,7 @@ class ResetPassAction extends CAction
             return;
         }
         //Parameters
-        $uniqueId = uniqueId();
+        $uniqueId = uniqid();
         $content = '';
 
         $apiConfig = new ApiConfig(API_KEY, $uniqueId, CLIENT_NAME, CLIENT_VERSION, PLATFORM_NAME, PLATFORM_VERSION);

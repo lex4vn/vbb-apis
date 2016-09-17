@@ -15,7 +15,7 @@ class LoginAction extends CAction
             return;
         }
         //Parameters
-        $uniqueId = uniqueId();
+        $uniqueId = uniqid();
         $content = '';
 
         $apiConfig = new ApiConfig(API_KEY, $uniqueId, CLIENT_NAME, CLIENT_VERSION, PLATFORM_NAME, PLATFORM_VERSION);
@@ -62,7 +62,7 @@ class LoginAction extends CAction
         // ["userid"]=> string(1) "0" } ["response"]=> object(stdClass)#50 (1) { ["errormessage"]=> array(3) { [0]=> string(7) "strikes" [1]=> string(18) "http://pkl.vn/test" [2]=> string(49) "s=955fd073816ddf01059e87369ae90e42&api=1&" } } }
         //Wrong username or password. You have used up your failed login quota! Please wait 15 minutes before trying again. Don't forget that the password is case sensitive. Forgotten your password? Click here!
 
-        //var_dump($response);die(1);
+        var_dump($response);die(1);
         // var_dump($response['response']);die(1);
         //  if(!isset($response->response->errorlist)){
 

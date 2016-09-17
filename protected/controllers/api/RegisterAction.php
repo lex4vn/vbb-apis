@@ -38,7 +38,7 @@ class RegisterAction extends CAction
         }
 
         //Parameters
-        $uniqueId = uniqueId();
+        $uniqueId = uniqid();
         $content = '';
 
         $apiConfig = new ApiConfig(API_KEY, $uniqueId, CLIENT_NAME, CLIENT_VERSION, PLATFORM_NAME, PLATFORM_VERSION);
@@ -52,7 +52,7 @@ class RegisterAction extends CAction
             'platformversion' => PLATFORM_VERSION,
             'uniqueid' => $uniqueId]);
 
-        // var_dump($response);die(1);
+        //var_dump($response);die(1);
 
         // Get token key
         $accessToken = $response['apiaccesstoken'];
@@ -80,8 +80,9 @@ class RegisterAction extends CAction
         $year = date("Y", strtotime($birthday));
 
         $birthdate = $day . '/' . $month . '/' . $year;
+     //   var_dump($birthdate);die(1);
 
-        $response = $api->callRequest('register_addmember', [
+        $response1 = $api->callRequest('register_addmember', [
             'agree' => '1',
             'username' => $userName,
             'email' => $email,
@@ -95,7 +96,7 @@ class RegisterAction extends CAction
             'timezoneoptions' => TIME_ZONE_7,
             'userfield' => $userfield
         ]);
-        //  var_dump($response);die(1);
+         var_dump($response1);die(1);
 
         if (!isset($response)) {
             echo json_encode(array('code' => 1, 'message' => 'Forum error'));
