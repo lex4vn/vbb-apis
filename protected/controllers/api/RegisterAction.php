@@ -4,6 +4,7 @@ class RegisterAction extends CAction
 {
     public function run()
     {
+        //ndthanh: test - sao em eo chay dc cai nay nhi?
         header('Content-type: application/json');
         $userName = isset($_POST['username']) ? $_POST['username'] : null;
         $email = isset($_POST['email']) ? $_POST['email'] : null;
