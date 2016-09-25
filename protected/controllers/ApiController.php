@@ -24,6 +24,7 @@ class ApiController extends Controller
             && $action->id != "test3"
             && $action->id != "partner"
             && $action->id != "loginFaceBook"
+            && $action->id != "listCommentInPost"
             && $action->id != "resetPass"
             && $action->id != "login"
             && $action->id != "register"
@@ -87,6 +88,7 @@ class ApiController extends Controller
             'iosInAppPurchase' => 'protected.controllers.api.IosInAppPurchaseAction',
             'level' => 'protected.controllers.api.LevelAction',
             'likeQuestion' => 'protected.controllers.api.LikequestionAction',
+            'listCommentInPost' => 'protected.controllers.api.ListCommentInPost',
             'listApp' => 'protected.controllers.api.ListAppAction',
             'listBlog' => 'protected.controllers.api.ListBlogAction',
             'listCategoryBlog' => 'protected.controllers.api.CategoryBlogAction',
@@ -100,6 +102,7 @@ class ApiController extends Controller
             'listVideo' => 'protected.controllers.api.ListVideoAction',
             'login' => 'protected.controllers.api.LoginAction',
             'loginFaceBook' => 'protected.controllers.api.LoginFaceBookAction',
+            'loginFaceBookDemo' => 'protected.controllers.api.LoginFacebookDemo',
             'loginGoogle' => 'protected.controllers.api.LoginGoogleAction',
             'loginGoogleAndroid' => 'protected.controllers.api.LoginGoogleAndroidAction',
             'partner' => 'protected.controllers.api.PartnerAction',
