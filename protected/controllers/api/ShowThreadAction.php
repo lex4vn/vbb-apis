@@ -13,7 +13,11 @@ class ShowThreadAction extends CAction
         //test
         header('Content-type: application/json');
         $params = $_GET;
-
+        $threadId = isset($_GET['threadId']) ? $_GET['threadId'] : null;
+        if ($threadId == null) {
+            echo json_encode(array('code' => 5, 'message' => 'Missing params thread id'));
+            return;
+        }
         //Parameters
         $uniqueId = uniqid();
         $content = '';
@@ -38,7 +42,7 @@ class ShowThreadAction extends CAction
         $api = new Api($apiConfig, $apiConnector);
 
         $response = $api->callRequest('showthread', [
-            'threadid' => 29080, 'api_v'=> '1'
+            'threadid' => $threadId, 'api_v'=> '1'
         ], ConnectorInterface::METHOD_GET);
         var_dump($response);
         die;
