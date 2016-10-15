@@ -6,14 +6,18 @@ class RegisterAction extends CAction
     {
         //ndthanh: test - sao em eo chay dc cai nay nhi?
         header('Content-type: application/json');
-        $userName = isset($_POST['username']) ? $_POST['username'] : null;
-        $email = isset($_POST['email']) ? $_POST['email'] : null;
-        $fullName = isset($_POST['fullname']) ? $_POST['fullname'] : null;
-        $password = isset($_POST['password']) ? $_POST['password'] : null;
-        $phoneNumber = isset($_POST['phonenumber']) ? $_POST['phonenumber'] : "0912345678";
-        $job = isset($_POST['job']) ? $_POST['job'] : 'Nhân viên';
-        $wife = isset($_POST['wife']) ? $_POST['wife'] : 'Vợ 2';
-        $birthday = isset($_POST['birthday']) ? $_POST['birthday'] : null;
+        if(empty($_POST)) {
+            $_POST = json_decode(file_get_contents('php://input'), true);
+        }
+        $params = $_POST;
+        $userName = isset($params['username']) ? $params['username'] : null;
+        $email = isset($params['email']) ? $params['email'] : null;
+        $fullName = isset($params['fullname']) ? $params['fullname'] : null;
+        $password = isset($params['password']) ? $params['password'] : null;
+        $phoneNumber = isset($params['phonenumber']) ? $params['phonenumber'] : "0912345678";
+        $job = isset($params['job']) ? $params['job'] : 'Nhân viên';
+        $wife = isset($params['wife']) ? $params['wife'] : 'Vợ 2';
+        $birthday = isset($params['birthday']) ? $params['birthday'] : null;
 
         if ($userName == null) {
             echo json_encode(array('code' => 5, 'message' => 'Missing params username'));
