@@ -38,6 +38,8 @@ class ApiController extends Controller
             && $action->id != "searchUser"
             && $action->id != "showThread"
             && $action->id != "newThread"
+            && $action->id != "getForumsByPage"
+            && $action->id != "showThreadByPage"
         ) {
             $sessionKey = isset($_POST['sessionkey']) ? $_POST['sessionkey'] : null;
             if ($sessionKey == null) {
@@ -133,6 +135,8 @@ class ApiController extends Controller
             'useCardNet2e' => 'protected.controllers.api.UseCardNet2EAction',
             'showThread' => 'protected.controllers.api.ShowThreadAction',
             'newThread' => 'protected.controllers.api.NewThreadAction',
+            'getForumsByPage' => 'protected.controllers.api.GetForumsByPage',
+            'showThreadByPage' => 'protected.controllers.api.ShowThreadByPage',
         );
     }
 
