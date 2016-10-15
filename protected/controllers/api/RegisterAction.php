@@ -6,14 +6,18 @@ class RegisterAction extends CAction
     {
         //ndthanh: test - sao em eo chay dc cai nay nhi?
         header('Content-type: application/json');
-        $userName = isset($_POST['username']) ? $_POST['username'] : null;
-        $email = isset($_POST['email']) ? $_POST['email'] : null;
-        $fullName = isset($_POST['fullname']) ? $_POST['fullname'] : null;
-        $password = isset($_POST['password']) ? $_POST['password'] : null;
-        $phoneNumber = isset($_POST['phonenumber']) ? $_POST['phonenumber'] : "0912345678";
-        $job = isset($_POST['job']) ? $_POST['job'] : 'Nhân viên';
-        $wife = isset($_POST['wife']) ? $_POST['wife'] : 'Vợ 2';
-        $birthday = isset($_POST['birthday']) ? $_POST['birthday'] : null;
+        if(empty($_POST)) {
+            $_POST = json_decode(file_get_contents('php://input'), true);
+        }
+        $params = $_POST;
+        $userName = isset($params['username']) ? $params['username'] : null;
+        $email = isset($params['email']) ? $params['email'] : null;
+        $fullName = isset($params['fullname']) ? $params['fullname'] : null;
+        $password = isset($params['password']) ? $params['password'] : null;
+        $phoneNumber = isset($params['phonenumber']) ? $params['phonenumber'] : "0912345678";
+        $job = isset($params['job']) ? $params['job'] : 'Nhân viên';
+        $wife = isset($params['wife']) ? $params['wife'] : 'Vợ 2';
+        $birthday = isset($params['birthday']) ? $params['birthday'] : null;
 
         if ($userName == null) {
             echo json_encode(array('code' => 5, 'message' => 'Missing params username'));
@@ -53,8 +57,6 @@ class RegisterAction extends CAction
             'platformversion' => PLATFORM_VERSION,
             'uniqueid' => $uniqueId]);
 
-        //var_dump($response);die(1);
-
         // Get token key
         $accessToken = $response['apiaccesstoken'];
 
@@ -81,9 +83,8 @@ class RegisterAction extends CAction
         $year = date("Y", strtotime($birthday));
 
         $birthdate = $day . '/' . $month . '/' . $year;
-     //   var_dump($birthdate);die(1);
 
-        $response1 = $api->callRequest('register_addmember', [
+        $response = $api->callRequest('register_addmember', [
             'agree' => '1',
             'username' => $userName,
             'email' => $email,
@@ -97,15 +98,11 @@ class RegisterAction extends CAction
             'timezoneoptions' => TIME_ZONE_7,
             'userfield' => $userfield
         ]);
-         var_dump($response1);die(1);
 
         if (!isset($response)) {
             echo json_encode(array('code' => 1, 'message' => 'Forum error'));
             return;
         }
-        //var_dump($response);die(1);
-        // var_dump($response['response']);die(1);
-        //  if(!isset($response->response->errorlist)){
 
         if (isset($response['response'])) {
             if (isset($response['response']->errormessage)) {
@@ -150,26 +147,5 @@ class RegisterAction extends CAction
                 }
             }
         }
-//        if ($user->save()) {
-//            $sessionKey = CUtils::generateSessionKey($user->primaryKey);
-//            $version = Version::model()->findByPk(2);
-//            $profile = array(
-//                'id' => $user->primaryKey,
-//                'fullName' => $firstName . ' ' . $lastName,
-//                'userName' => $userName,
-//                'avatar' => $avatar,
-//                'phoneNumber' => !empty($user->phone_number) ? (string)$user->phone_number : '',
-//                'lastName' => !empty($user->lastname) ? $user->lastname : '',
-//                'firstName' => !empty($user->$firstName) ? $user->$firstName : '',
-//                'numberMessage' => 0,
-//                'versionApp' => '1.0',
-//            );
-//            echo json_encode(array('code' => 0,
-//                'sessionkey' => $sessionKey,
-//                'message' => 'Tài khoản của bạn đã đăng ký thành công',
-//                'item' => $profile));
-//            //Yii::app()->mail->send($message);
-//            return;
-//        }
     }
 }
