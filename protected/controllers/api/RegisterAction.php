@@ -57,8 +57,6 @@ class RegisterAction extends CAction
             'platformversion' => PLATFORM_VERSION,
             'uniqueid' => $uniqueId]);
 
-        //var_dump($response);die(1);
-
         // Get token key
         $accessToken = $response['apiaccesstoken'];
 
@@ -85,9 +83,8 @@ class RegisterAction extends CAction
         $year = date("Y", strtotime($birthday));
 
         $birthdate = $day . '/' . $month . '/' . $year;
-     //   var_dump($birthdate);die(1);
 
-        $response1 = $api->callRequest('register_addmember', [
+        $response = $api->callRequest('register_addmember', [
             'agree' => '1',
             'username' => $userName,
             'email' => $email,
@@ -101,15 +98,11 @@ class RegisterAction extends CAction
             'timezoneoptions' => TIME_ZONE_7,
             'userfield' => $userfield
         ]);
-         var_dump($response1);die(1);
 
         if (!isset($response)) {
             echo json_encode(array('code' => 1, 'message' => 'Forum error'));
             return;
         }
-        //var_dump($response);die(1);
-        // var_dump($response['response']);die(1);
-        //  if(!isset($response->response->errorlist)){
 
         if (isset($response['response'])) {
             if (isset($response['response']->errormessage)) {
@@ -154,26 +147,5 @@ class RegisterAction extends CAction
                 }
             }
         }
-//        if ($user->save()) {
-//            $sessionKey = CUtils::generateSessionKey($user->primaryKey);
-//            $version = Version::model()->findByPk(2);
-//            $profile = array(
-//                'id' => $user->primaryKey,
-//                'fullName' => $firstName . ' ' . $lastName,
-//                'userName' => $userName,
-//                'avatar' => $avatar,
-//                'phoneNumber' => !empty($user->phone_number) ? (string)$user->phone_number : '',
-//                'lastName' => !empty($user->lastname) ? $user->lastname : '',
-//                'firstName' => !empty($user->$firstName) ? $user->$firstName : '',
-//                'numberMessage' => 0,
-//                'versionApp' => '1.0',
-//            );
-//            echo json_encode(array('code' => 0,
-//                'sessionkey' => $sessionKey,
-//                'message' => 'Tài khoản của bạn đã đăng ký thành công',
-//                'item' => $profile));
-//            //Yii::app()->mail->send($message);
-//            return;
-//        }
     }
 }
