@@ -36,6 +36,8 @@ class ApiController extends Controller
             && $action->id != "getPass"
             && $action->id != "getForum"
             && $action->id != "searchUser"
+            && $action->id != "showThread"
+            && $action->id != "newThread"
         ) {
             $sessionKey = isset($_POST['sessionkey']) ? $_POST['sessionkey'] : null;
             if ($sessionKey == null) {
@@ -129,6 +131,8 @@ class ApiController extends Controller
             'updateStatus' => 'protected.controllers.api.UpdateStatusAction',
             'useCard' => 'protected.controllers.api.UseCardAction',
             'useCardNet2e' => 'protected.controllers.api.UseCardNet2EAction',
+            'showThread' => 'protected.controllers.api.ShowThreadAction',
+            'newThread' => 'protected.controllers.api.NewThreadAction',
         );
     }
 

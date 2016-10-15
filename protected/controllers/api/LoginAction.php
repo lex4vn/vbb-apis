@@ -4,8 +4,13 @@ class LoginAction extends CAction
 {
     public function run()
     {
+        //test
         header('Content-type: application/json');
+        if(empty($_POST)) {
+            $_POST = json_decode(file_get_contents('php://input'), true);
+        }
         $params = $_POST;
+        var_dump($_POST);
         if (!isset($params['username']) || $params['username'] == '' ) {
             echo json_encode(array('code' => 5, 'message' => 'Missing params username'));
             return;
@@ -63,6 +68,7 @@ class LoginAction extends CAction
         //Wrong username or password. You have used up your failed login quota! Please wait 15 minutes before trying again. Don't forget that the password is case sensitive. Forgotten your password? Click here!
 
         var_dump($response);die(1);
+
         // var_dump($response['response']);die(1);
         //  if(!isset($response->response->errorlist)){
 

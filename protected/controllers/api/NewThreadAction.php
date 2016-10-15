@@ -1,15 +1,19 @@
 <?php
 
-class GetForum extends CAction
+/**
+ * Created by PhpStorm.
+ * User: Administrator
+ * Date: 10/15/2016
+ * Time: 10:43 AM
+ */
+class NewThreadAction extends CAction
 {
     public function run()
     {
+        //test
         header('Content-type: application/json');
-//        $forumid = isset($_GET['forumid']) ? $_GET['forumid'] : null;
-//        if ($forumid == null) {
-//            echo json_encode(array('code' => 5, 'message' => 'Missing params forumid'));
-//            return;
-//        }
+        $params = $_GET;
+
         //Parameters
         $uniqueId = uniqid();
         $content = '';
@@ -23,27 +27,21 @@ class GetForum extends CAction
             'clientversion' => CLIENT_VERSION,
             'platformname' => PLATFORM_NAME,
             'platformversion' => PLATFORM_VERSION,
-            'api_v'=> '1',
             'uniqueid' => $uniqueId]);
 
-        //var_dump($response);die(1);
-        //var_dump($post_id);die(1);
+        // var_dump($response);die(1);
+
         // Get token key
         $accessToken = $response['apiaccesstoken'];
-       // var_dump($accessToken);die(1);
+
         $apiConfig->setAccessToken($accessToken);
         $api = new Api($apiConfig, $apiConnector);
-        $response = $api->callRequest('forumdisplay', ['forumid' => '69', 'api_v'=> '1' ], ConnectorInterface::METHOD_GET);
-        var_dump($response);
-        die(1);
-        //Thanh cong
-        if (isset($response['response'])) {
 
-        } else {
-            echo json_encode(array('code' => 1, 'message' => 'Forum error'));
-            return;
-        }
+        $response = $api->callRequest('newthread_newthread', [
+           'sessionhash' => 'e365c1d8b847d2c39b1b3c2d689cd162', 'forumid' => 69, 'api_v'=> '1'
+        ], ConnectorInterface::METHOD_GET);
+        var_dump($response);
+        die;
 
     }
 }
-
