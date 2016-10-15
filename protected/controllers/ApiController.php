@@ -34,6 +34,7 @@ class ApiController extends Controller
             && $action->id != "adsOncash"
             && $action->id != "getSchool"
             && $action->id != "getPass"
+            && $action->id != "getForum"
             && $action->id != "searchUser"
         ) {
             $sessionKey = isset($_POST['sessionkey']) ? $_POST['sessionkey'] : null;
@@ -77,6 +78,7 @@ class ApiController extends Controller
             'detailVideo' => 'protected.controllers.api.DetailVideoAction',
             'exam' => 'protected.controllers.api.ExamAction',
             'getDeviceToken' => 'protected.controllers.api.GetdevicetokenAction',
+            'getForum' => 'protected.controllers.api.GetForum',
             'getNotifi' => 'protected.controllers.api.GetNotifiAction',
             'getPass' => 'protected.controllers.api.GetPassAction',
             'getSchool' => 'protected.controllers.api.GetSchoolAction',
