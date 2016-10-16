@@ -4,7 +4,6 @@ class RegisterAction extends CAction
 {
     public function run()
     {
-        //ndthanh: test - sao em eo chay dc cai nay nhi?
         header('Content-type: application/json');
         if(empty($_POST)) {
             $_POST = json_decode(file_get_contents('php://input'), true);
@@ -41,7 +40,6 @@ class RegisterAction extends CAction
             echo json_encode(array('code' => 5, 'message' => 'Missing params birthday'));
             return;
         }
-
         //Parameters
         $uniqueId = uniqid();
         $content = '';
@@ -79,7 +77,7 @@ class RegisterAction extends CAction
         // Get day
         $day = date("d", strtotime($birthday));
 
-        // Get day
+        // Get year
         $year = date("Y", strtotime($birthday));
 
         $birthdate = $day . '/' . $month . '/' . $year;
@@ -89,17 +87,23 @@ class RegisterAction extends CAction
             'username' => $userName,
             'email' => $email,
             'emailconfirm' => $email,
-            'password' => $password,
-            'passwordconfirm' => $password,
+            'password_md5' => $password,
+            'passwordconfirm_md5' => $password,
             'month' => $month,
             'day' => $day,
             'year' => $year,
             'birthdate' => $birthdate,
             'timezoneoptions' => TIME_ZONE_7,
-            'userfield' => $userfield
+            'userfield' => $userfield,
+            'api_v'=> '1'
         ]);
 
         if (!isset($response)) {
+            echo json_encode(array('code' => 1, 'message' => 'Forum error'));
+            return;
+        }
+
+        if (!isset($response['response'])) {
             echo json_encode(array('code' => 1, 'message' => 'Forum error'));
             return;
         }
@@ -108,20 +112,19 @@ class RegisterAction extends CAction
             if (isset($response['response']->errormessage)) {
                 $result = $response['response']->errormessage[0];
                 if ('registration_complete' == $result) {
-                    //var_dump($response);
                     echo json_encode(array('code' => 0,
                         'accessToken' => $accessToken,
-                        'message' => 'Dang ky thanh cong',
-                        'profile' => $response['response']));
+                        'message' => 'Register successful',
+                        'profile' => $response['response']
+                        //TODO Get Profile
+                    ));
                     return;
                 }
             } else {
                 $errorList = $response['response']->errorlist;
-                //  var_dump($errorList);die(1);
                 if (!empty($errorList)) {
                     $messsage = '';
                     foreach ($errorList as $e) {
-                       // var_dump($e);
                         if ('usernametaken' == $e[0]) {
                             echo json_encode(array('code' => 2, 'message' => 'Tên tài khoản đã được sử dụng'));
                             return;
@@ -139,9 +142,7 @@ class RegisterAction extends CAction
                             echo json_encode(array('code' => 2, 'message' => 'Tên tài khoản quá dài'));
                             return;
                         }
-
                     }
-
                     echo json_encode(array('code' => 2, 'message' => $messsage));
                     return;
                 }
