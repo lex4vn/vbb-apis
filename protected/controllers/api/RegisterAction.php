@@ -117,7 +117,6 @@ class RegisterAction extends CAction
                         'message' => 'Register successful',
                         'username' => $userName,
                         'email' => $email,
-                        'password' => $password,
                         'birthdate' => $birthdate,
                         'fullName' => $fullName,
                     ));
