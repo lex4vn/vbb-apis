@@ -115,8 +115,11 @@ class RegisterAction extends CAction
                     echo json_encode(array('code' => 0,
                         'accessToken' => $accessToken,
                         'message' => 'Register successful',
-                        'profile' => $response['response']
-                        //TODO Get Profile
+                        'username' => $userName,
+                        'email' => $email,
+                        'password' => $password,
+                        'birthdate' => $birthdate,
+                        'fullName' => $fullName,
                     ));
                     return;
                 }
