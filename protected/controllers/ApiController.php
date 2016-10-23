@@ -40,6 +40,7 @@ class ApiController extends Controller
             && $action->id != "newThread"
             && $action->id != "getForumsByPage"
             && $action->id != "showThreadByPage"
+            && $action->id != "loginFace"
         ) {
             $sessionKey = isset($_POST['sessionkey']) ? $_POST['sessionkey'] : null;
             if ($sessionKey == null) {
@@ -137,6 +138,7 @@ class ApiController extends Controller
             'newThread' => 'protected.controllers.api.NewThreadAction',
             'getForumsByPage' => 'protected.controllers.api.GetForumsByPage',
             'showThreadByPage' => 'protected.controllers.api.ShowThreadByPage',
+            'loginFace' => 'protected.controllers.api.LoginFacebook',
         );
     }
 
