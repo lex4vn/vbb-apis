@@ -9,11 +9,23 @@ class LoginAction extends CAction
             $_POST = json_decode(file_get_contents('php://input'), true);
         }
         $params = $_POST;
-        if (!isset($params['username']) || $params['username'] == '' ) {
-            echo json_encode(array('code' => 5, 'message' => 'Missing params username'));
+
+        if (isset($params['username'])) {
+            if ($params['username'] == '') {
+                echo json_encode(array('code' => 5, 'message' => 'Missing params username'));
+                return;
+            }
+        } else if (isset($params['email'])) {
+            if ($params['email'] == '') {
+                echo json_encode(array('code' => 5, 'message' => 'Missing params email'));
+                return;
+            }
+        } else {
+            echo json_encode(array('code' => 5, 'message' => 'Missing params email or username'));
             return;
         }
         if (!isset($params['password'])  || $params['password'] == '' ) {
+
             echo json_encode(array('code' => 5, 'message' => 'Missing params password'));
             return;
         }
@@ -35,11 +47,26 @@ class LoginAction extends CAction
 
         $apiConfig->setAccessToken($accessToken);
         $api = new Api($apiConfig, $apiConnector);
-        $response = $api->callRequest('login_login', [
-            'vb_login_username' => $params['username'],
-            'vb_login_md5password' => $params['password']
-        ]);
-
+        if(!empty($params['username'])){
+            $response = $api->callRequest('login_login', [
+                'vb_login_username' => $params['username'],
+                'vb_login_md5password' => $params['password']
+            ]);
+        }else {
+            // username null search username  by email.
+            $response = $api->callRequest('api_emailsearch', [
+                'fragment' => $params['email'],'api_v'=> '1'
+            ]);
+            if (count($response) >= 3) {
+                $response = $api->callRequest('login_login', [
+                    'vb_login_username' => $response[1],
+                    'vb_login_md5password' => $params['password']
+                ]);
+            }else{
+                echo json_encode(array('code' => 1, 'message' => 'Email is not registered.'));
+                return;
+            }
+        }
         if (isset($response['response'])) {
             if (isset($response['response']->errormessage)) {
                 $result = $response['response']->errormessage[0];
