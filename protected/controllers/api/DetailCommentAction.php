@@ -17,7 +17,6 @@ class DetailCommentAction extends CAction
             return;
         }
         $pageNumber = isset($_GET['pageNumber']) ? $_GET['pageNumber'] : null;
-        var_dump($pageNumber);
         if ($pageNumber == null) {
             $pageNumber = 1;
         }
@@ -47,7 +46,6 @@ class DetailCommentAction extends CAction
         $response = $api->callRequest('showthread', [
             'threadid' => $threadId, 'api_v'=> '1', 'pagenumber' => $pageNumber
         ], ConnectorInterface::METHOD_GET);
-        var_dump($response);
         $result = array();
         foreach ( $response["response"]->postbits as $postbit){
             $item = array(
