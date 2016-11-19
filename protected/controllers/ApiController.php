@@ -41,6 +41,9 @@ class ApiController extends Controller
             && $action->id != "getForumsByPage"
             && $action->id != "showThreadByPage"
             && $action->id != "loginFace"
+            && $action->id != "detailPost"
+            && $action->id != "detailComments"
+
         ) {
             $sessionKey = isset($_POST['sessionkey']) ? $_POST['sessionkey'] : null;
             if ($sessionKey == null) {
@@ -139,6 +142,8 @@ class ApiController extends Controller
             'getForumsByPage' => 'protected.controllers.api.GetForumsByPage',
             'showThreadByPage' => 'protected.controllers.api.ShowThreadByPage',
             'loginFace' => 'protected.controllers.api.LoginFacebook',
+            'detailPost' => 'protected.controllers.api.DetailPostAction',
+            'detailComments' => 'protected.controllers.api.DetailCommentAction',
         );
     }
 
