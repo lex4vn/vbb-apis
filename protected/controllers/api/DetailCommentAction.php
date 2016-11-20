@@ -1,11 +1,6 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 11/6/2016
- * Time: 3:36 PM
- */
+
 class DetailCommentAction extends CAction
 {
     public function run(){
@@ -19,6 +14,11 @@ class DetailCommentAction extends CAction
         $pageNumber = isset($_GET['pageNumber']) ? $_GET['pageNumber'] : null;
         if ($pageNumber == null) {
             $pageNumber = 1;
+        }
+        $userId = isset($_GET['userid']) ? $_GET['userid'] : null;
+        if ($userId == null) {
+            echo json_encode(array('code' => 5, 'message' => 'you need login'));
+            return;
         }
         //Parameters
         $uniqueId = uniqid();
@@ -46,20 +46,31 @@ class DetailCommentAction extends CAction
         $response = $api->callRequest('showthread', [
             'threadid' => $threadId, 'api_v'=> '1', 'pagenumber' => $pageNumber
         ], ConnectorInterface::METHOD_GET);
-        $result = array();
-        foreach ( $response["response"]->postbits as $postbit){
-            $item = array(
-                'username' => $postbit->post->username,
-                'avatarurl' => $postbit->post->avatarurl,
-                'onlinestatus' => $postbit->post->onlinestatus,
-                'usertitle' => $postbit->post->usertitle,
-                'message' => $postbit->post->message,
-                'postdate' => $postbit->post->postdate
-            );
-            array_push($result, $item);
+
+        if (isset($response['response'])) {
+            $result = array();
+            foreach ( $response["response"]->postbits as $postbit){
+                $item = array(
+                    'username' => $postbit->post->username,
+                    'avatarurl' => $postbit->post->avatarurl,
+                    'onlinestatus' => $postbit->post->onlinestatus,
+                    'usertitle' => $postbit->post->usertitle,
+                    'message' => $postbit->post->message,
+                    'postdate' => $postbit->post->postdate,
+                    'isMycomment' => $postbit->post->userid == $userId
+                );
+                array_push($result, $item);
+            }
+            echo json_encode(array('code' => 0,
+                'message' => 'get detail comment success',
+                'listcomment' => $result
+            ));
+            return;
+        } else {
+            echo json_encode(array('code' => 1, 'message' => 'Forum error'));
+            return;
         }
 // con thieu phan lay email, SĐT, check user hiện tại có phải là người đăng post hay là ban hay ko
-        var_dump($result);
-        die;
     }
+
 }

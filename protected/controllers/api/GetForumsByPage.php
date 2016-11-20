@@ -1,11 +1,6 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 10/15/2016
- * Time: 10:13 PM
- */
+
 class GetForumsByPage extends CAction
 {
     public function run(){
@@ -42,12 +37,25 @@ class GetForumsByPage extends CAction
         // var_dump($accessToken);die(1);
         $apiConfig->setAccessToken($accessToken);
         $api = new Api($apiConfig, $apiConnector);
-        $response = $api->callRequest('forumdisplay', ['forumid' => '69', 'api_v'=> '1', 'pagenumber' => $pageNumber ], ConnectorInterface::METHOD_GET);
-        var_dump($response);
-        die(1);
+        $response = $api->callRequest('forumdisplay', ['forumid' => $forumid, 'api_v'=> '1', 'pagenumber' => $pageNumber ], ConnectorInterface::METHOD_GET);
         //Thanh cong
         if (isset($response['response'])) {
-
+            $result = array();
+            foreach ( $response["response"]->threadbits as $threadbits){
+                $item = array(
+                    'threadid' => $threadbits->thread->threadid,
+                    'threadtitle' => $threadbits->thread->threadtitle,
+                    'postuserid' => $threadbits->thread->postuserid,
+                    'postusername' => $threadbits->thread->postusername,
+                    'preview' => $threadbits->thread->preview,
+                );
+                array_push($result, $item);
+            }
+            echo json_encode(array('code' => 0,
+                'message' => 'get detail forum success',
+                'listThread' => $result
+            ));
+            return;
         } else {
             echo json_encode(array('code' => 1, 'message' => 'Forum error'));
             return;

@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 11/5/2016
- * Time: 2:39 PM
- */
 class DetailPostAction extends CAction
 {
     public function run()
@@ -17,6 +11,11 @@ class DetailPostAction extends CAction
         $threadId = isset($_GET['threadId']) ? $_GET['threadId'] : null;
         if ($threadId == null) {
             echo json_encode(array('code' => 5, 'message' => 'Missing params thread id'));
+            return;
+        }
+        $userId = isset($_GET['userid']) ? $_GET['userid'] : null;
+        if ($userId == null) {
+            echo json_encode(array('code' => 5, 'message' => 'you need login'));
             return;
         }
         //Parameters
@@ -45,22 +44,28 @@ class DetailPostAction extends CAction
         $response = $api->callRequest('showthread', [
             'threadid' => $threadId, 'api_v'=> '1'
         ], ConnectorInterface::METHOD_GET);
-        $userId = $response["response"]->postbits[0]->post->userid;
 
-        $result = array(
-            'username' => $response["response"]->postbits[0]->post->username,
-            'avatarurl' => $response["response"]->postbits[0]->post->avatarurl,
-            'onlinestatus' => $response["response"]->postbits[0]->post->onlinestatus,
-            'usertitle' => $response["response"]->postbits[0]->post->usertitle,
-            'postid' => $response["response"]->postbits[0]->post->postid, //first post id
-            'postdate' => $response["response"]->postbits[0]->post->postdate,
-            'title' => $response["response"]->postbits[0]->post->title,
-            'message' => $response["response"]->postbits[0]->post->message,
-        );
+        if (isset($response['response'])) {
+            $result = array(
+                'username' => $response["response"]->postbits[0]->post->username,
+                'avatarurl' => $response["response"]->postbits[0]->post->avatarurl,
+                'onlinestatus' => $response["response"]->postbits[0]->post->onlinestatus,
+                'usertitle' => $response["response"]->postbits[0]->post->usertitle,
+                'postid' => $response["response"]->postbits[0]->post->postid, //first post id
+                'postdate' => $response["response"]->postbits[0]->post->postdate,
+                'title' => $response["response"]->postbits[0]->post->title,
+                'message' => $response["response"]->postbits[0]->post->message,
+                'ismypost' => $response["response"]->postbits[0]->post->userid == $userId
+            );
+            echo json_encode(array('code' => 0,
+                'message' => 'get detail post success',
+                'detailsthread' => $result
+            ));
+            return;
+        } else {
+            echo json_encode(array('code' => 1, 'message' => 'Forum error'));
+            return;
+        }
         // con thieu phan lay email, SĐT, check user hiện tại có phải là người đăng post hay là ban hay ko
-        var_dump($result);
-        die;
-
-
     }
 }
