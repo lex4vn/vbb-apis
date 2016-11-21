@@ -55,7 +55,9 @@ class DetailPostAction extends CAction
                 'postdate' => $response["response"]->postbits[0]->post->postdate,
                 'title' => $response["response"]->postbits[0]->post->title,
                 'message' => $response["response"]->postbits[0]->post->message,
-                'ismypost' => $response["response"]->postbits[0]->post->userid == $userId
+                'ismypost' => $response["response"]->postbits[0]->post->userid == $userId,
+                'price' => '50000',
+                'address' => 'Ha Noi'
             );
             echo json_encode(array('code' => 0,
                 'message' => 'get detail post success',

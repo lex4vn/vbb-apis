@@ -47,6 +47,8 @@ class GetForum extends CAction
                     'postuserid' => $threadbits->thread->postuserid,
                     'postusername' => $threadbits->thread->postusername,
                     'preview' => $threadbits->thread->preview,
+                    'price' => '50000',
+                    'address' => 'Ha Noi'
                 );
                 array_push($result, $item);
             }
