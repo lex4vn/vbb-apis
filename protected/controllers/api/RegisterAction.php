@@ -13,7 +13,7 @@ class RegisterAction extends CAction
         $email = isset($params['email']) ? $params['email'] : null;
         $fullName = isset($params['fullname']) ? $params['fullname'] : null;
         $password = isset($params['password']) ? $params['password'] : null;
-        $phoneNumber = isset($params['phonenumber']) ? $params['phonenumber'] : "0912345678";
+        $phoneNumber = isset($params['phonenumber']) && !empty($params['phonenumber'])  ? $params['phonenumber'] : "0912345678";
         $job = isset($params['job']) ? $params['job'] : 'Nhân viên';
         $wife = isset($params['wife']) ? $params['wife'] : 'Vợ 2';
         $birthday = isset($params['birthday']) ? $params['birthday'] : null;
@@ -146,8 +146,10 @@ class RegisterAction extends CAction
                         }
                     }
                     echo json_encode(array('code' => 2, 'message' => $messsage));
+                    var_dump($errorList);
                     return;
                 }
+
             }
         }
     }
