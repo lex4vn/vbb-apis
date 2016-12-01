@@ -10,27 +10,16 @@ class LoginAction extends CAction
         }
         $params = $_POST;
 
-        if (isset($params['username'])) {
-            if ($params['username'] == '') {
-                echo json_encode(array('code' => 5, 'message' => 'Missing params username'));
-                return;
-            }
-        } else if (isset($params['email'])) {
-            if ($params['email'] == '') {
-                echo json_encode(array('code' => 5, 'message' => 'Missing params email'));
-                return;
-            }
-        } else {
-            echo json_encode(array('code' => 5, 'message' => 'Missing params email or username'));
-            return;
-        }
-        if (!isset($params['password'])  || $params['password'] == '' ) {
-
-            echo json_encode(array('code' => 5, 'message' => 'Missing params password'));
-            return;
-        }
+		if (!isset($params['username']) || $params['username'] == '') {
+			echo json_encode(array('code' => 5, 'message' => 'Missing params username'));
+			return;
+		} 
+		if (!isset($params['password']) || $params['password'] == '' ) {
+				echo json_encode(array('code' => 5, 'message' => 'Missing params password'));
+				return;
+		}
+		$isEmail = filter_var($params['username'], FILTER_VALIDATE_EMAIL);
         $uniqueId = uniqid();
-        $content = '';
 
         $apiConfig = new ApiConfig(API_KEY, $uniqueId, CLIENT_NAME, CLIENT_VERSION, PLATFORM_NAME, PLATFORM_VERSION);
         $apiConnector = new GuzzleProvider(API_URL);
@@ -47,7 +36,7 @@ class LoginAction extends CAction
 
         $apiConfig->setAccessToken($accessToken);
         $api = new Api($apiConfig, $apiConnector);
-        if(!empty($params['username'])){
+        if(!$isEmail){
             $response = $api->callRequest('login_login', [
                 'vb_login_username' => $params['username'],
                 'vb_login_md5password' => $params['password']
@@ -55,7 +44,7 @@ class LoginAction extends CAction
         }else {
             // username null search username  by email.
             $response = $api->callRequest('api_emailsearch', [
-                'fragment' => $params['email'],'api_v'=> '1'
+                'fragment' => $params['username'],'api_v'=> '1'
             ]);
             if (count($response) >= 3) {
                 $response = $api->callRequest('login_login', [
