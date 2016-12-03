@@ -83,7 +83,7 @@ class ImageAction extends CAction{
             $image_result = array(
                 'id' => $post_image->id,
                 'image_name' => $post_image->base_url,
-                'image_url' => IMAGES_SOURCE .$post_image->base_url,
+                'image_url' => IMAGES_PATH .$post_image->base_url,
             );
             $image_results[] = $image_result;
         }
