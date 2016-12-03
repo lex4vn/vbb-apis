@@ -54,10 +54,6 @@ class ImageAction extends CAction{
             $extension = $item['extension'];
             $image_base64 = $item['image_base64'];
 
-            if (!file_exists(IMAGES_SOURCE)) {
-                mkdir(IMAGES_SOURCE, 0777, true);
-            }
-
             $binary = base64_decode($image_base64);
             header('Content-Type: bitmap; charset=utf-8');
 
