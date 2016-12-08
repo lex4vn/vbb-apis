@@ -21,6 +21,10 @@ class NewThreadAction extends CAction
 //            echo json_encode(array('code' => 5, 'message' => 'Missing params apiaccesstoken'));
 //            return;
 //        }
+        if (!isset($params['type']) || $params['type'] == '') {
+            echo json_encode(array('code' => 5, 'message' => 'Missing params type'));
+            return;
+        }
         if (!isset($params['sessionhash']) || $params['sessionhash'] == '') {
             echo json_encode(array('code' => 5, 'message' => 'Missing params sessionhash'));
             return;
@@ -46,6 +50,7 @@ class NewThreadAction extends CAction
             echo json_encode(array('code' => 5, 'message' => 'Missing params subject'));
             return;
         }
+        $type = $params['type'];
         $sessionhash = $params['sessionhash'];
       //  $accessToken = $params['apiaccesstoken'];
         $username = $params['username'];
@@ -83,7 +88,12 @@ class NewThreadAction extends CAction
         //$currentLoggedInUserContext = new FetchCurrentUserInfo();
         //$loginUserContext = new Login('ksoft11', '4297f44b13955235245b2497399d7a93');
        // var_dump($currentLoggedInUserContext);die();
-
+        if($type == 1){
+            // Can ban
+            $f_id = 69;
+        }else{
+            $f_id = 17;
+        }
         $response = $api->callRequest('newthread_postthread', [
             //'vb_login_username' => 'ksoft11',
             'username' => $username,
@@ -98,7 +108,7 @@ class NewThreadAction extends CAction
             //'postnew'=>true,
             'subject'=>$subject,
             'postminchars'=>10,
-            'f' => 69, 'api_v'=> '1'
+            'f' => $f_id, 'api_v'=> '1'
         ], ConnectorInterface::METHOD_POST);
        // var_dump($response);
        // die;
