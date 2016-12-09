@@ -25,7 +25,7 @@ class NewThreadAction extends CAction
             echo json_encode(array('code' => 5, 'message' => 'Missing params type'));
             return;
         }
-        if (!($params['type'] == 1 && $params['type'] == 2)) {
+        if (!($params['type'] == 1 || $params['type'] == 2)) {
             echo json_encode(array('code' => 5, 'message' => 'Params type can be 1 or 2. Therein 1 is need to buy. 2 is need to sell.'));
             return;
         }
