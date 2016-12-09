@@ -25,6 +25,10 @@ class NewThreadAction extends CAction
             echo json_encode(array('code' => 5, 'message' => 'Missing params type'));
             return;
         }
+        if (!($params['type'] == 1 && $params['type'] == 2)) {
+            echo json_encode(array('code' => 5, 'message' => 'Params type can be 1 or 2. Therein 1 is need to buy. 2 is need to sell.'));
+            return;
+        }
         if (!isset($params['sessionhash']) || $params['sessionhash'] == '') {
             echo json_encode(array('code' => 5, 'message' => 'Missing params sessionhash'));
             return;
@@ -42,12 +46,20 @@ class NewThreadAction extends CAction
             echo json_encode(array('code' => 5, 'message' => 'Missing params message'));
             return;
         }
+        if (strlen($params['message']) < 10) {
+            echo json_encode(array('code' => 5, 'message' => 'Missing params message too short, min 10 character'));
+            return;
+        }
 //        if (!isset($params['title']) || $params['title'] == '') {
 //            echo json_encode(array('code' => 5, 'message' => 'Missing params title'));
 //            return;
 //        }
         if (!isset($params['subject']) || $params['subject'] == '') {
             echo json_encode(array('code' => 5, 'message' => 'Missing params subject'));
+            return;
+        }
+        if (strlen($params['subject']) > 85) {
+            echo json_encode(array('code' => 5, 'message' => 'Missing params subject too long, max 85 character'));
             return;
         }
         $type = $params['type'];
@@ -116,9 +128,22 @@ class NewThreadAction extends CAction
         //postfloodcheck  errorlist errors
 
         //redirect_postthanks errormessage
-        if (isset($response['response']->errormessage) && $response['response']->errormessage == 'redirect_postthanks') {
-            echo json_encode(array('code' => 0, 'message' => 'Post successfull'));
-            return;
+       // var_dump($response);die();
+        if(isset($response['response']->errormessage)) {
+            if ($response['response']->errormessage == 'redirect_postthanks') {
+                echo json_encode(array('code' => 0, 'message' => 'Post successfull.'));
+                return;
+            }
+            //redirect_duplicatethread
+            if ($response['response']->errormessage == 'redirect_duplicatethread') {
+                echo json_encode(array('code' => 0, 'message' => 'Post successfull.'));
+                return;
+            }
+            //redirect_postthanks_moderate
+            if ($response['response']->errormessage == 'redirect_postthanks_moderate') {
+                echo json_encode(array('code' => 0, 'message' => 'Post successfull. Please wait moderate acceptance'));
+                return;
+            }
         }
         echo json_encode(array('code' => 2, 'message' => 'Forum error'));
     }
