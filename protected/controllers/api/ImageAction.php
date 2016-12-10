@@ -23,20 +23,6 @@ class ImageAction extends CAction{
         //var_dump($params['images']);
 
         for ($i = 0; $i < $number_image; $i++){
-            //var_dump($params['images'][$i]);
-            $item = $params['images'][$i];
-            if(!isset($params['images'][$i]["width"])){
-                echo json_encode(array('code' => 5, 'message' => 'Missing params width_'.$i));
-                return;
-            }
-            if(!isset($params['images'][$i]["height"])){
-                echo json_encode(array('code' => 5, 'message' => 'Missing params height_'.$i));
-                return;
-            }
-            if(!isset($params['images'][$i]["extension"])){
-                echo json_encode(array('code' => 5, 'message' => 'Missing params extension_'.$i));
-                return;
-            }
             if(!isset($params['images'][$i]["image_base64"])){
                 echo json_encode(array('code' => 5, 'message' => 'Missing params image_base64'.$i));
                 return;
@@ -51,13 +37,13 @@ class ImageAction extends CAction{
         }
         $image_results = [];
         foreach ($params['images'] as $item){
-            $extension = $item['extension'];
+           //$extension = $item['extension'];
             $image_base64 = $item['image_base64'];
 
             $binary = base64_decode($image_base64);
             header('Content-Type: bitmap; charset=utf-8');
 
-            $file_name = date('YmdHis') . '-' . rand() . '.' . $extension;
+            $file_name = date('YmdHis') . '-' . rand() . '.jpg';
             $path = fopen(IMAGES_SOURCE . '/' . $file_name, 'w+');
 
             //write file
@@ -68,8 +54,8 @@ class ImageAction extends CAction{
             $post_image = new Images();
             $post_image->type = 1;
             $post_image->status = 1;
-            $post_image->width = $item['width'];
-            $post_image->height = $item['height'];
+            //$post_image->width = $item['width'];
+            //$post_image->height = $item['height'];
             $post_image->base_url = $file_name;
             if (!$post_image->save()){
                 echo json_encode(array('code' => 5, 'message' => 'Cannot upload images file'));

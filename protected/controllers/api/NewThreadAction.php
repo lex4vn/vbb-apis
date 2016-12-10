@@ -83,7 +83,7 @@ class NewThreadAction extends CAction
         $subject = $params['subject'];
         $price = isset($params['price'])? $params['price']: 0 ;
         $phone = isset($params['phone'])?$params['phone']: 0 ;
-        $location = isset($params['location'])?$params['location']: 0 ;
+        $location = isset($params['location'])?$params['location']: '' ;
         //Parameters
         $uniqueId = uniqid();
         $content = '';
