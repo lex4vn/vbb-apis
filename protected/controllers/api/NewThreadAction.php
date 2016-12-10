@@ -66,7 +66,8 @@ class NewThreadAction extends CAction
         $info .= $params['message'];
         if(isset($params['images'])){
             foreach ($params['images'] as $item) {
-                $info .= '[IMG]' . $item['image_url'] . '/[IMG]';
+
+                $info .= '[IMAGE]' . $item['image_url'] . '/[IMAGE]';
             }
         }
 

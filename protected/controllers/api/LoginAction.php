@@ -74,7 +74,6 @@ class LoginAction extends CAction
                     echo json_encode(array('code' => 0,
                         'message' => 'Login successful',
                         'sessionhash' => base64_encode(serialize($apiConfig)),
-                       // 'sessionhash' =>  $response['session']->dbsessionhash,
                         'result' =>  true,
                         'userid' =>  $response['session']->userid,
                         'username' =>  $response['response']->errormessage[1],
