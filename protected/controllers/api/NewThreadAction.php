@@ -33,6 +33,10 @@ class NewThreadAction extends CAction
             echo json_encode(array('code' => 5, 'message' => 'Missing params message'));
             return;
         }
+        if (!isset($params['username']) || $params['username'] == '') {
+            echo json_encode(array('code' => 5, 'message' => 'Missing params username'));
+            return;
+        }
         if (strlen($params['message']) < 10) {
             echo json_encode(array('code' => 5, 'message' => 'Missing params message too short, min 10 character'));
             return;
@@ -72,12 +76,13 @@ class NewThreadAction extends CAction
         }
 
         $response = $api->callRequest('newthread_postthread', [
+            'username' => $username,
             'message' => $info,
             'subject' => $params['subject'],
             'f' => $params['type'] == 1? 69:17,
             'api_v' => '1'
         ], ConnectorInterface::METHOD_POST);
-
+        //var_dump($response);
         if (isset($response['response']->errormessage)) {
             if ($response['response']->errormessage == 'redirect_postthanks') {
                 echo json_encode(array('code' => 0, 'message' => 'Post successfull.'));
