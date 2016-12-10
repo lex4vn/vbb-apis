@@ -107,19 +107,26 @@ class RegisterAction extends CAction
             echo json_encode(array('code' => 1, 'message' => 'Forum error'));
             return;
         }
-
+        //var_dump($response);
         if (isset($response['response'])) {
             if (isset($response['response']->errormessage)) {
                 $result = $response['response']->errormessage[0];
+
                 if ('registration_complete' == $result) {
-                    echo json_encode(array('code' => 0,
-                        'accessToken' => $accessToken,
-                        'message' => 'Register successful',
-                        'username' => $userName,
-                        'email' => $email,
-                        'birthdate' => $birthdate,
-                        'fullName' => $fullName,
-                    ));
+                    $sessionhash = $response['session']['sessionhash'];
+                    if($sessionhash != null){
+                        echo json_encode(array('code' => 0,
+                            'accessToken' => $accessToken,
+                            'sessionhash' => $sessionhash,
+                            'message' => 'Register successful',
+                            'username' => $userName,
+                            'email' => $email,
+                            'birthdate' => $birthdate,
+                            'fullName' => $fullName,
+                        ));
+                        return;
+                    }
+                    echo json_encode(array('code' => 2, 'message' => 'Forum error'));
                     return;
                 }
             } else {

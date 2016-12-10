@@ -41,6 +41,7 @@ class LoginAction extends CAction
                 'vb_login_username' => $params['username'],
                 'vb_login_md5password' => $params['password']
             ]);
+
         }else {
             // username null search username  by email.
             $response = $api->callRequest('api_emailsearch', [
@@ -72,11 +73,13 @@ class LoginAction extends CAction
                 if ('redirect_login' == $result &&  $response['session']->userid !== '0') {
                     echo json_encode(array('code' => 0,
                         'message' => 'Login successful',
+                        'accessToken' => $accessToken,
                         'sessionhash' =>  $response['session']->dbsessionhash,
                         'result' =>  true,
                         'userid' =>  $response['session']->userid,
                         'username' =>  $response['response']->errormessage[1],
                     ));
+                    //var_dump($response);
                     return;
                 }
             }

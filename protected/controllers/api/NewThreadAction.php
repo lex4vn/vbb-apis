@@ -21,6 +21,8 @@ class NewThreadAction extends CAction
 //            echo json_encode(array('code' => 5, 'message' => 'Missing params apiaccesstoken'));
 //            return;
 //        }
+
+
         if (!isset($params['type']) || $params['type'] == '') {
             echo json_encode(array('code' => 5, 'message' => 'Missing params type'));
             return;
@@ -50,10 +52,7 @@ class NewThreadAction extends CAction
             echo json_encode(array('code' => 5, 'message' => 'Missing params message too short, min 10 character'));
             return;
         }
-//        if (!isset($params['title']) || $params['title'] == '') {
-//            echo json_encode(array('code' => 5, 'message' => 'Missing params title'));
-//            return;
-//        }
+
         if (!isset($params['subject']) || $params['subject'] == '') {
             echo json_encode(array('code' => 5, 'message' => 'Missing params subject'));
             return;
@@ -62,6 +61,18 @@ class NewThreadAction extends CAction
             echo json_encode(array('code' => 5, 'message' => 'Missing params subject too long, max 85 character'));
             return;
         }
+
+
+        //        [BIKE]Sport BIKE[/BIKE]
+//[PRICE]10000[/PRICE]
+//[PHONE]0987654321[/PHONE]
+//[FORMALITY]98[/FORMALITY]
+//[LOCATION]8 hàng Than[/LOCATION]
+//[STATUS]Chưa bán[/STATUS]
+//        if (!isset($params['title']) || $params['title'] == '') {
+//            echo json_encode(array('code' => 5, 'message' => 'Missing params title'));
+//            return;
+//        }
         $type = $params['type'];
         $sessionhash = $params['sessionhash'];
       //  $accessToken = $params['apiaccesstoken'];
@@ -70,6 +81,9 @@ class NewThreadAction extends CAction
         $message = $params['message'];
 //        $title = $params['title'];
         $subject = $params['subject'];
+        $price = isset($params['price'])? $params['price']: 0 ;
+        $phone = isset($params['phone'])?$params['phone']: 0 ;
+        $location = isset($params['location'])?$params['location']: 0 ;
         //Parameters
         $uniqueId = uniqid();
         $content = '';
@@ -106,6 +120,11 @@ class NewThreadAction extends CAction
         }else{
             $f_id = 17;
         }
+
+        $info = '[PRICE]'.$price.'[/PRICE]';
+        $info = $info.'[PHONE]'.$phone.'[/PHONE]';
+        $info = $info.'[LOCATION]'.$location.'[/LOCATION]';
+        $message = $info.$message;
         $response = $api->callRequest('newthread_postthread', [
             //'vb_login_username' => 'ksoft11',
             'username' => $username,
@@ -120,7 +139,8 @@ class NewThreadAction extends CAction
             //'postnew'=>true,
             'subject'=>$subject,
             'postminchars'=>10,
-            'f' => $f_id, 'api_v'=> '1'
+            'f' => $f_id,
+            'api_v'=> '1'
         ], ConnectorInterface::METHOD_POST);
        // var_dump($response);
        // die;
