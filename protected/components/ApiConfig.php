@@ -12,52 +12,52 @@ class ApiConfig
     /**
      * @var string
      */
-    private $uniqueName;
+    public $uniqueName;
 
     /**
      * @var string
      */
-    private $clientName;
+    public $clientName;
 
     /**
      * @var string
      */
-    private $clientVersion;
+    public $clientVersion;
 
     /**
      * @var string
      */
-    private $platformName;
+    public $platformName;
 
     /**
      * @var string
      */
-    private $platformVersion;
+    public $platformVersion;
 
     /**
      * @var string
      */
-    private $accessToken;
+    public $accessToken;
 
     /**
      * @var string
      */
-    private $secret;
+    public $secret;
 
     /**
      * @var int
      */
-    private $clientId;
+    public $clientId;
 
     /**
      * @var string
      */
-    private $apiKey;
+    public $apiKey;
 
     /**
      * @var int
      */
-    private $apiVersion;
+    public $apiVersion;
 
     /**
      * ApiConfig constructor.
@@ -96,7 +96,7 @@ class ApiConfig
      * @return static
      * @throws AssertionFailedException
      */
-    protected function setSecret($secret)
+    public function setSecret($secret)
     {
         \Assert\that($secret, "Api secret must be non empty string. Given: '{$secret}'")->notEmpty()->string();
         $this->secret = $secret;
@@ -109,7 +109,7 @@ class ApiConfig
      * @return static
      * @throws AssertionFailedException
      */
-    protected function setClientId($clientId)
+    public function setClientId($clientId)
     {
         \Assert\that($clientId, "Client ID must be integer greater than zero. Given: '{$clientId}'")
             ->notEmpty()
@@ -125,7 +125,7 @@ class ApiConfig
      * @return static
      * @throws AssertionFailedException
      */
-    protected function setApiKey($apiKey)
+    public function setApiKey($apiKey)
     {
         \Assert\that($apiKey, "Api key must be non empty string. Given: '{$apiKey}'")->notEmpty()->string();
         $this->apiKey = $apiKey;
@@ -138,7 +138,7 @@ class ApiConfig
      * @return static
      * @throws AssertionFailedException
      */
-    protected function setApiVersion($apiVersion)
+    public function setApiVersion($apiVersion)
     {
         \Assert\that($apiVersion)->notEmpty()->integerish()->greaterThan(0);
         $this->apiVersion = $apiVersion;
@@ -150,7 +150,7 @@ class ApiConfig
      * @param string $uniqueName
      * @return static
      */
-    protected function setUniqueName($uniqueName)
+    public function setUniqueName($uniqueName)
     {
         \Assert\that($uniqueName, "Unique name must be non empty string. Given: '{$uniqueName}'")->notEmpty()->string();
         $this->uniqueName = $uniqueName;
@@ -163,7 +163,7 @@ class ApiConfig
      * @param string $clientName
      * @return static
      */
-    protected function setClientName($clientName)
+    public function setClientName($clientName)
     {
         \Assert\that($clientName, "Client name must be non empty string. Given: '{$clientName}'")->notEmpty()->string();
         $this->clientName = $clientName;
@@ -175,7 +175,7 @@ class ApiConfig
      * @param string $clientVersion
      * @return static
      */
-    protected function setClientVersion($clientVersion)
+    public function setClientVersion($clientVersion)
     {
         \Assert\that($clientVersion, "Client version must be non empty string. Given: '{$clientVersion}'")
             ->notEmpty()
@@ -190,7 +190,7 @@ class ApiConfig
      * @param string $platformName
      * @return static
      */
-    protected function setPlatformName($platformName)
+    public function setPlatformName($platformName)
     {
         \Assert\that($platformName, "Platform name must be non empty string. Given: '{$platformName}'")
             ->notEmpty()
@@ -204,7 +204,7 @@ class ApiConfig
      * @param string $platformVersion
      * @return static
      */
-    protected function setPlatformVersion($platformVersion)
+    public function setPlatformVersion($platformVersion)
     {
         \Assert\that($platformVersion, "Platform version must be non empty string. Given: '{$platformVersion}'")
             ->notEmpty()

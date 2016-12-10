@@ -10,18 +10,11 @@ class NewThreadAction extends CAction
 {
     public function run()
     {
-        //test
         header('Content-type: application/json');
-        if(empty($_POST)) {
+        if (empty($_POST)) {
             $_POST = json_decode(file_get_contents('php://input'), true);
         }
         $params = $_POST;
-
-//        if (!isset($params['apiaccesstoken']) || $params['apiaccesstoken'] == '') {
-//            echo json_encode(array('code' => 5, 'message' => 'Missing params apiaccesstoken'));
-//            return;
-//        }
-
 
         if (!isset($params['type']) || $params['type'] == '') {
             echo json_encode(array('code' => 5, 'message' => 'Missing params type'));
@@ -33,14 +26,6 @@ class NewThreadAction extends CAction
         }
         if (!isset($params['sessionhash']) || $params['sessionhash'] == '') {
             echo json_encode(array('code' => 5, 'message' => 'Missing params sessionhash'));
-            return;
-        }
-        if (!isset($params['username']) || $params['username'] == '') {
-            echo json_encode(array('code' => 5, 'message' => 'Missing params username'));
-            return;
-        }
-        if (!isset($params['userid']) || $params['userid'] == '') {
-            echo json_encode(array('code' => 5, 'message' => 'Missing params userid'));
             return;
         }
 
@@ -62,101 +47,44 @@ class NewThreadAction extends CAction
             return;
         }
 
+        $bike = isset($params['bike']) ? $params['bike'] : 'Chưa xác định';
+        $price = isset($params['price']) ? $params['price'] : 0;
+        $phone = isset($params['phone']) ? $params['phone'] : 'Không có';
+        $location = isset($params['location']) ? $params['location'] : 'vui lòng liên hệ';
+        $formality = isset($params['formality']) ? $params['formality'] : 'Không xác định';
+        $status = isset($params['status']) ? $params['status'] : 'Khác';
 
-        //        [BIKE]Sport BIKE[/BIKE]
-//[PRICE]10000[/PRICE]
-//[PHONE]0987654321[/PHONE]
-//[FORMALITY]98[/FORMALITY]
-//[LOCATION]8 hàng Than[/LOCATION]
-//[STATUS]Chưa bán[/STATUS]
-//        if (!isset($params['title']) || $params['title'] == '') {
-//            echo json_encode(array('code' => 5, 'message' => 'Missing params title'));
-//            return;
-//        }
-        $type = $params['type'];
-        $sessionhash = $params['sessionhash'];
-      //  $accessToken = $params['apiaccesstoken'];
-        $username = $params['username'];
-        $userid = $params['userid'];
-        $message = $params['message'];
-//        $title = $params['title'];
-        $subject = $params['subject'];
-        $price = isset($params['price'])? $params['price']: 0 ;
-        $phone = isset($params['phone'])?$params['phone']: 0 ;
-        $location = isset($params['location'])?$params['location']: '' ;
-        //Parameters
-        $uniqueId = uniqid();
-        $content = '';
+        $apiConfig = unserialize(base64_decode(($params['sessionhash'])));
+        $api = new Api($apiConfig, new GuzzleProvider(API_URL));
 
-        $apiConfig = new ApiConfig(API_KEY, $uniqueId, CLIENT_NAME, CLIENT_VERSION, PLATFORM_NAME, PLATFORM_VERSION);
-        $apiConnector = new GuzzleProvider(API_URL);
-        $api = new Api($apiConfig, $apiConnector);
-
-        $response = $api->callRequest('api_init', [
-            'clientname' => CLIENT_NAME,
-            'clientversion' => CLIENT_VERSION,
-            'platformname' => PLATFORM_NAME,
-            'platformversion' => PLATFORM_VERSION,
-            'uniqueid' => $uniqueId]);
-
-        // var_dump($response);die(1);
-
-        // Get token key
-        $accessToken = $response['apiaccesstoken'];
-
-        $apiConfig->setAccessToken($accessToken);
-        $api = new Api($apiConfig, $apiConnector);
-       // f = 17 can ban
-        $response = $api->callRequest('login_login', [
-        'vb_login_username' => 'ksoft11',
-            'vb_login_md5password' => '4297f44b13955235245b2497399d7a93'
-        ]);
-        //$currentLoggedInUserContext = new FetchCurrentUserInfo();
-        //$loginUserContext = new Login('ksoft11', '4297f44b13955235245b2497399d7a93');
-       // var_dump($currentLoggedInUserContext);die();
-        if($type == 1){
-            // Can ban
-            $f_id = 69;
-        }else{
-            $f_id = 17;
+        $info = '[BIKE]' . $bike . '[/BIKE]';
+        $info .= '[PRICE]' . $price . '[/PRICE]';
+        $info .= '[PHONE]' . $phone . '[/PHONE]';
+        $info .= '[LOCATION]' . $location . '[/LOCATION]';
+        $info .= '[FORMALITY]' . $formality . '[/FORMALITY]';
+        $info .= '[STATUS]' . $status . '[/STATUS]';
+        $info .= $params['message'];
+        if(isset($params['images'])){
+            foreach ($params['images'] as $item) {
+                $info .= '[IMG]' . $item['image_url'] . '/[IMG]';
+            }
         }
 
-        $info = '[PRICE]'.$price.'[/PRICE]';
-        $info = $info.'[PHONE]'.$phone.'[/PHONE]';
-        $info = $info.'[LOCATION]'.$location.'[/LOCATION]';
-        $message = $info.$message;
         $response = $api->callRequest('newthread_postthread', [
-            //'vb_login_username' => 'ksoft11',
-            'username' => $username,
-            'userid' => $userid,
-            'loggedinuser' => $userid,
-            //'posthash' => '16a952533527c31b94ac267fe3c31850',
-            //'securitytoken' => '1481159437-54655eab0d84752db00938a4aa7a3c53af9e82cb',
-
-            'sessionhash'=>$sessionhash,
-            'message'=>$message,
-//            'title'=>$title,
-            //'postnew'=>true,
-            'subject'=>$subject,
-            'postminchars'=>10,
-            'f' => $f_id,
-            'api_v'=> '1'
+            'message' => $info,
+            'subject' => $params['subject'],
+            'f' => $params['type'] == 1? 69:17,
+            'api_v' => '1'
         ], ConnectorInterface::METHOD_POST);
-       // var_dump($response);
-       // die;
 
-        //postfloodcheck  errorlist errors
-
-        //redirect_postthanks errormessage
-       // var_dump($response);die();
-        if(isset($response['response']->errormessage)) {
+        if (isset($response['response']->errormessage)) {
             if ($response['response']->errormessage == 'redirect_postthanks') {
                 echo json_encode(array('code' => 0, 'message' => 'Post successfull.'));
                 return;
             }
             //redirect_duplicatethread
             if ($response['response']->errormessage == 'redirect_duplicatethread') {
-                echo json_encode(array('code' => 0, 'message' => 'Post successfull.'));
+                echo json_encode(array('code' => 1, 'message' => 'Post duplicate thread.'));
                 return;
             }
             //redirect_postthanks_moderate

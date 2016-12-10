@@ -73,13 +73,12 @@ class LoginAction extends CAction
                 if ('redirect_login' == $result &&  $response['session']->userid !== '0') {
                     echo json_encode(array('code' => 0,
                         'message' => 'Login successful',
-                        'accessToken' => $accessToken,
-                        'sessionhash' =>  $response['session']->dbsessionhash,
+                        'sessionhash' => base64_encode(serialize($apiConfig)),
+                       // 'sessionhash' =>  $response['session']->dbsessionhash,
                         'result' =>  true,
                         'userid' =>  $response['session']->userid,
                         'username' =>  $response['response']->errormessage[1],
                     ));
-                    //var_dump($response);
                     return;
                 }
             }
