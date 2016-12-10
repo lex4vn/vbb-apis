@@ -33,7 +33,7 @@ class NewThreadAction extends CAction
             echo json_encode(array('code' => 5, 'message' => 'Missing params message'));
             return;
         }
-        if (!isset($params['username']) || $params['username'] == '') {
+        if ((!isset($params['username']) || $params['username'] == '') && $params['type'] == 1){
             echo json_encode(array('code' => 5, 'message' => 'Missing params username'));
             return;
         }
@@ -76,7 +76,7 @@ class NewThreadAction extends CAction
         }
 
         $response = $api->callRequest('newthread_postthread', [
-            'username' => $username,
+            'username' => isset($params['username'])? $params['username']:'',
             'message' => $info,
             'subject' => $params['subject'],
             'f' => $params['type'] == 1? 69:17,
