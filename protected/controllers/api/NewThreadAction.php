@@ -82,7 +82,7 @@ class NewThreadAction extends CAction
             'f' => $params['type'] == 1? 69:17,
             'api_v' => '1'
         ], ConnectorInterface::METHOD_POST);
-        var_dump($response);
+        //var_dump($response);
         if (isset($response['response']->errormessage)) {
             if ($response['response']->errormessage == 'redirect_postthanks') {
                 echo json_encode(array('code' => 0, 'message' => 'Post successfull.'));
