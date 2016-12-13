@@ -32,6 +32,7 @@ class ApiController extends Controller
             && $action->id != "listSubjectVideo"
             && $action->id != "listChapterVideo"
             && $action->id != "adsOncash"
+            && $action->id != "getBikeType"
             && $action->id != "getSchool"
             && $action->id != "getPass"
             && $action->id != "getForum"
@@ -86,6 +87,7 @@ class ApiController extends Controller
             'detailquestionBk' => 'protected.controllers.api.DetailquestionBkAction',
             'detailVideo' => 'protected.controllers.api.DetailVideoAction',
             'exam' => 'protected.controllers.api.ExamAction',
+            'getBikeType' => 'protected.controllers.api.GetBikeTypeAction',
             'getDeviceToken' => 'protected.controllers.api.GetdevicetokenAction',
             'getForum' => 'protected.controllers.api.GetForum',
             'getNotifi' => 'protected.controllers.api.GetNotifiAction',
