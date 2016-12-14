@@ -60,17 +60,17 @@ class NewThreadAction extends CAction
 
         $apiConfig = unserialize(base64_decode(($params['sessionhash'])));
         $api = new Api($apiConfig, new GuzzleProvider(API_URL));
-
-        $info = '[BIKE]' . $bike . '[/BIKE]';
+        $info = '[INFOR]';
+        $info .= '[BIKE]' . $bike . '[/BIKE]';
         $info .= '[PRICE]' . $price . '[/PRICE]';
         $info .= '[PHONE]' . $phone . '[/PHONE]';
         $info .= '[LOCATION]' . $location . '[/LOCATION]';
         $info .= '[FORMALITY]' . $formality . '[/FORMALITY]';
         $info .= '[STATUS]' . $status . '[/STATUS]';
+        $info .= '[/INFOR]';
         $info .= $params['message'];
         if(isset($params['images'])){
             foreach ($params['images'] as $item) {
-
                 $info .= '[IMG]' . $item['image_url'] . '[/IMG]';
             }
         }
