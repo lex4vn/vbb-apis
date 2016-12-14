@@ -45,6 +45,7 @@ class ApiController extends Controller
             && $action->id != "detailPost"
             && $action->id != "detailComments"
             && $action->id != "uploadImages"
+            && $action->id != "logout"
 
         ) {
             $sessionKey = isset($_POST['sessionkey']) ? $_POST['sessionkey'] : null;
@@ -116,6 +117,7 @@ class ApiController extends Controller
             'listSubjectVideo' => 'protected.controllers.api.ListSubjectVideoAction',
             'listVideo' => 'protected.controllers.api.ListVideoAction',
             'login' => 'protected.controllers.api.LoginAction',
+            'logout' => 'protected.controllers.api.LogoutAction',
             'loginFaceBook' => 'protected.controllers.api.LoginFaceBookAction',
             'loginFaceBookDemo' => 'protected.controllers.api.LoginFacebookDemo',
             'loginGoogle' => 'protected.controllers.api.LoginGoogleAction',
