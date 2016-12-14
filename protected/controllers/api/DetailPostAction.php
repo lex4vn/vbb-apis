@@ -44,20 +44,36 @@ class DetailPostAction extends CAction
         $response = $api->callRequest('showthread', [
             'threadid' => $threadId, 'api_v'=> '1'
         ], ConnectorInterface::METHOD_GET);
-
         if (isset($response['response'])) {
+            $bike = $this-> get_string_by_tag( $response["response"]->postbits->post->message_bbcode, '[BIKE]', '[/BIKE]');
+            $bike = (isset($bike) && $bike != '') ? $bike : 'chưa xác định';
+            $price = $this-> get_string_by_tag( $response["response"]->postbits->post->message_bbcode, '[PRICE]', '[/PRICE]');
+            $price = (isset($price) && $price != '') ? $price : 0;
+            $phone = $this-> get_string_by_tag( $response["response"]->postbits->post->message_bbcode, '[PHONE]', '[/PHONE]');
+            $phone = (isset($phone) && $phone != '') ? $phone : 'Không có';
+            $location = $this-> get_string_by_tag( $response["response"]->postbits->post->message_bbcode, '[LOCATION]', '[/LOCATION]');
+            $location = (isset($location) && $location != '') ? $location : 'vui lòng liên hệ';
+            $formality = $this-> get_string_by_tag( $response["response"]->postbits->post->message_bbcode, '[FORMALITY]', '[/FORMALITY]');
+            $formality = (isset($formality) && $formality != '')? $formality : 'Không xác định';
+            $status = $this-> get_string_by_tag( $response["response"]->postbits->post->message_bbcode, '[STATUS]', '[/STATUS]');
+            $status = (isset($status) && $status != '') ? $status : 'Khác';
             $result = array(
-                'username' => $response["response"]->postbits[0]->post->username,
-                'avatarurl' => $response["response"]->postbits[0]->post->avatarurl,
-                'onlinestatus' => $response["response"]->postbits[0]->post->onlinestatus,
-                'usertitle' => $response["response"]->postbits[0]->post->usertitle,
-                'postid' => $response["response"]->postbits[0]->post->postid, //first post id
-                'postdate' => $response["response"]->postbits[0]->post->postdate,
-                'title' => $response["response"]->postbits[0]->post->title,
-                'message' => $response["response"]->postbits[0]->post->message,
-                'ismypost' => $response["response"]->postbits[0]->post->userid == $userId,
-                'price' => '50000',
-                'address' => 'Ha Noi'
+                'username' => $response["response"]->postbits->post->username,
+                'avatarurl' => $response["response"]->postbits->post->avatarurl,
+                'onlinestatus' => $response["response"]->postbits->post->onlinestatus,
+                'usertitle' => $response["response"]->postbits->post->usertitle,
+                'postid' => $response["response"]->postbits->post->postid,
+                'postdate' => $response["response"]->postbits->post->postdate,
+                'title' => $response["response"]->postbits->post->title,
+                'bike' =>  $bike,
+                'price' => $price,
+                'phone' => $phone,
+                'location' => $location,
+                'formality' =>$formality,
+                'status' =>$status,
+                'image' => $this->get_string_by_tag( $response["response"]->postbits->post->message_bbcode, '[IMG]', '[/IMG]'),
+                'message' => $response["response"]->postbits->post->message,
+                'ismypost' => $response["response"]->postbits->post->userid == $userId,
             );
             echo json_encode(array('code' => 0,
                 'message' => 'get detail post success',
@@ -68,6 +84,13 @@ class DetailPostAction extends CAction
             echo json_encode(array('code' => 1, 'message' => 'Forum error'));
             return;
         }
-        // con thieu phan lay email, SĐT, check user hiện tại có phải là người đăng post hay là ban hay ko
+    }
+    function  get_string_by_tag($string, $start, $end){
+        $string = ' ' . $string;
+        $ini = strpos($string, $start);
+        if ($ini == 0) return '';
+        $ini += strlen($start);
+        $len = strpos($string, $end, $ini) - $ini;
+        return substr($string, $ini, $len);
     }
 }

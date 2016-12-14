@@ -42,12 +42,31 @@ class GetForumsByPage extends CAction
         if (isset($response['response'])) {
             $result = array();
             foreach ( $response["response"]->threadbits as $threadbits){
+                $bike = $this-> get_string_by_tag($threadbits->thread->preview, '[BIKE]', '[/BIKE]');
+                $bike = (isset($bike) && $bike != '') ? $bike : 'chưa xác định';
+                $price = $this-> get_string_by_tag($threadbits->thread->preview, '[PRICE]', '[/PRICE]');
+                $price = (isset($price) && $price != '') ? $price : 0;
+                $phone = $this-> get_string_by_tag($threadbits->thread->preview, '[PHONE]', '[/PHONE]');
+                $phone = (isset($phone) && $phone != '') ? $phone : 'Không có';
+                $location = $this-> get_string_by_tag($threadbits->thread->preview, '[LOCATION]', '[/LOCATION]');
+                $location = (isset($location) && $location != '') ? $location : 'vui lòng liên hệ';
+                $formality = $this-> get_string_by_tag($threadbits->thread->preview, '[FORMALITY]', '[/FORMALITY]');
+                $formality = (isset($formality) && $formality != '')? $formality : 'Không xác định';
+                $status = $this-> get_string_by_tag($threadbits->thread->preview, '[STATUS]', '[/STATUS]');
+                $status = (isset($status) && $status != '') ? $status : 'Khác';
                 $item = array(
                     'threadid' => $threadbits->thread->threadid,
                     'threadtitle' => $threadbits->thread->threadtitle,
                     'postuserid' => $threadbits->thread->postuserid,
                     'postusername' => $threadbits->thread->postusername,
-                    'preview' => $threadbits->thread->preview,
+                    'bike' =>  $bike,
+                    'price' => $price,
+                    'phone' => $phone,
+                    'location' => $location,
+                    'formality' =>$formality,
+                    'status' =>$status,
+                    'images' => $this->get_string_by_tag($threadbits->thread->preview, '[IMG]', '[/IMG]'),
+                    'preview'  => $threadbits->thread->preview
                 );
                 array_push($result, $item);
             }
@@ -60,5 +79,14 @@ class GetForumsByPage extends CAction
             echo json_encode(array('code' => 1, 'message' => 'Forum error'));
             return;
         }
+    }
+
+    function get_string_by_tag($string, $start, $end){
+        $string = ' ' . $string;
+        $ini = strpos($string, $start);
+        if ($ini == 0) return '';
+        $ini += strlen($start);
+        $len = strpos($string, $end, $ini) - $ini;
+        return substr($string, $ini, $len);
     }
 }
