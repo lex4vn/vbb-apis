@@ -23,56 +23,119 @@ class GetForum extends CAction
             'clientversion' => CLIENT_VERSION,
             'platformname' => PLATFORM_NAME,
             'platformversion' => PLATFORM_VERSION,
-            'api_v'=> '1',
+            'api_v' => '1',
             'uniqueid' => $uniqueId]);
 
         //var_dump($response);die(1);
         //var_dump($post_id);die(1);
         // Get token key
         $accessToken = $response['apiaccesstoken'];
-       // var_dump($accessToken);die(1);
+        // var_dump($accessToken);die(1);
         $apiConfig->setAccessToken($accessToken);
         $api = new Api($apiConfig, $apiConnector);
-        $response = $api->callRequest('forumdisplay', ['forumid' => $forumid, 'api_v'=> '1' ], ConnectorInterface::METHOD_GET);
+        $response = $api->callRequest('forumdisplay', ['forumid' => $forumid, 'api_v' => '1'], ConnectorInterface::METHOD_GET);
 
         //Thanh cong
         if (isset($response['response'])) {
-            $result = array();
-          //  var_dump($response['response']);
-        //    die(1);
-            foreach ( $response["response"]->threadbits as $threadbits){
-                $bike = $this-> get_string_by_tag($threadbits->thread->preview, '[BIKE]', '[/BIKE]');
-                $bike = (isset($bike) && $bike != '') ? $bike : 'chưa xác định';
-                $price = $this-> get_string_by_tag($threadbits->thread->preview, '[PRICE]', '[/PRICE]');
-                $price = (isset($price) && $price != '') ? $price : 0;
-                $phone = $this-> get_string_by_tag($threadbits->thread->preview, '[PHONE]', '[/PHONE]');
-                $phone = (isset($phone) && $phone != '') ? $phone : 'Không có';
-                $location = $this-> get_string_by_tag($threadbits->thread->preview, '[LOCATION]', '[/LOCATION]');
-                $location = (isset($location) && $location != '') ? $location : 'vui lòng liên hệ';
-                $formality = $this-> get_string_by_tag($threadbits->thread->preview, '[FORMALITY]', '[/FORMALITY]');
-                $formality = (isset($formality) && $formality != '')? $formality : 'Không xác định';
-                $status = $this-> get_string_by_tag($threadbits->thread->preview, '[STATUS]', '[/STATUS]');
-                $status = (isset($status) && $status != '') ? $status : 'Khác';
+            $items = array();
+            foreach ($response["response"]->threadbits as $threadbits) {
+                $content = $threadbits->thread->preview;
+                $regex = '#\[BIKE].*\[\/BIKE]#';
+                $hasBike = preg_match($regex, $content, $result);
+                $bike = '';
+                $price = '';
+                $address = '';
+                $formality = '';
+                $image = '';
+                $status = '';
+                if ($hasBike) {
+                    $content = preg_replace($regex, '', $content);
+                    if ($result) {
+                        $bike = preg_replace('/\[\/?BIKE\]/', '', $result[0]);
+                    }
+                }
+
+                $regex = '#\[PRICE].*\[\/PRICE]#';
+                $hasPrice = preg_match($regex, $content, $result);
+                if ($hasPrice) {
+                    $content = preg_replace($regex, '', $content);
+                    if ($result) {
+                        $price = preg_replace('/\[\/?PRICE\]/', '', $result[0]);
+                    }
+                }
+
+                $regex = '#\[LOCATION].*\[\/LOCATION]#';
+                $hasLocation = preg_match($regex, $content, $result);
+                if ($hasLocation) {
+                    $content = preg_replace($regex, '', $content);
+                    if ($result) {
+                        $address = preg_replace('/\[\/?LOCATION\]/', '', $result[0]);
+                    }
+                }
+                // Hinh thuc
+                $regex = '#\[FORMALITY].*\[\/FORMALITY]#';
+                $hasFormality = preg_match($regex, $content, $result);
+                if ($hasFormality) {
+                    $content = preg_replace($regex, '', $content);
+                    if ($result) {
+                        $formality = preg_replace('/\[\/?FORMALITY\]/', '', $result[0]);
+                    }
+                }
+                // Phone
+                $regex = '#\[PHONE].*\[\/PHONE]#';
+                $hasPhone = preg_match($regex, $content, $result);
+                if ($hasPhone) {
+                    $content = preg_replace($regex, '', $content);
+                    if ($result) {
+                        $phone = preg_replace('/\[\/?PHONE\]/', '', $result[0]);
+                    }
+                }
+                // Trang thai
+                $regex = '#\[STATUS].*\[\/STATUS]#';
+                $hasStatus = preg_match($regex, $content, $result);
+                if ($hasStatus) {
+                    $content = preg_replace($regex, '', $content);
+                    if ($result) {
+                        $status = preg_replace('/\[\/?STATUS\]/', '', $result[0]);
+                    }
+                }
+
+                // image
+                $regex = '#\[IMG].*?\[\/IMG]#';
+                $hasImage = preg_match($regex, $content, $result);
+                if ($hasImage) {
+                    $content = preg_replace($regex, '', $content);
+                    if ($result) {
+                        $image = preg_replace('/\[\/?IMG\]/', '', $result[0]);
+                    }
+                }
+                // TODO cat chuoi
+//                if (strlen($content) > 100)
+//                {
+//                   // $content = substr($content,0,97);
+//                    $content .= '...';
+//                }
+
                 $item = array(
                     'threadid' => $threadbits->thread->threadid,
                     'threadtitle' => $threadbits->thread->threadtitle,
                     'postuserid' => $threadbits->thread->postuserid,
                     'postusername' => $threadbits->thread->postusername,
-                    'bike' =>  $bike,
+                    'preview' => $content,
                     'price' => $price,
                     'phone' => $phone,
-                    'location' => $location,
-                    'formality' =>$formality,
-                    'status' =>$status,
-                    'images' => $this->get_string_by_tag($threadbits->thread->preview, '[IMG]', '[/IMG]'),
-                    'preview' => $threadbits->thread->preview
+                    'bike' => $bike,
+                    'address' => $address,
+                    'formality' => $formality,
+                    'image' => $image,
+                    'status' => $status,
                 );
-                array_push($result, $item);
+                array_push($items, $item);
             }
             echo json_encode(array('code' => 0,
                 'message' => 'get detail forum success',
                 'totalpages' => $response["response"]->pagenav->totalpages,
-                'listThread' => $result
+                'listThread' => $items
             ));
             return;
         } else {
@@ -81,33 +144,5 @@ class GetForum extends CAction
         }
 
     }
-    function  get_string_by_tag($string, $start, $end){
-        $string = ' ' . $string;
-        $ini = strpos($string, $start);
-        if ($ini == 0) return '';
-        $ini += strlen($start);
-        $len = strpos($string, $end, $ini) - $ini;
-        return substr($string, $ini, $len);
-    }
-    function  get_list_string_by_tag($string, $start, $end){
-        $string = ' ' . $string;
-        $StringLength =  strlen($string);
-        $ini = strpos($string, $start);
-        if ($ini == 0) return '';
-        $ini += strlen($start);
-        while($ini <= $StringLength){
-            $this->get_value($string, $start,$end,$ini);
-        }
-
-        $len = strpos($string, $end, $ini) - $ini;
-        $a = substr($string, $ini, $len);
-    }
-    function get_value($string,$start, $end, $ini){
-        $len = strpos($string, $end, $ini) - $ini;
-        $a = substr($string, $ini, $len);
-        $ini = $len + strlen($start);
-        return $a;
-    }
-
 }
 
