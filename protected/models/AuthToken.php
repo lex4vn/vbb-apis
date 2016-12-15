@@ -16,7 +16,7 @@ class AuthToken extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'authToken';
+		return 'authtoken';
 	}
 
 	/**
