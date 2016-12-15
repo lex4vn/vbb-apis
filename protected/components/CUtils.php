@@ -173,30 +173,25 @@ class CUtils
         unset(Yii::app()->request->cookies[$name]);
     }
 
-    public static function generateSessionKey($subscriber_id)
+    public static function generateSessionKey($user_id,$sessionhash)
     {
-        $str_session_tmp = $subscriber_id . "|" . microtime(true) . "|" . secret_key;
-        $sessionKey = self::encrypt($str_session_tmp, secret_key);
-        $session = AuthToken::model()->findByPk($subscriber_id);
-        $subscriber = Subscriber::model()->findByPk($subscriber_id);
-        if ($subscriber == null) {
+        $str_session_tmp = $user_id . "|" . microtime(true) . "|" . secret_key;
+        $sessionKey =self::encrypt($str_session_tmp, secret_key);
+        $session = AuthToken::model()->findByPk($user_id);
 
-        }
         if ($session == null) {
             $session = new AuthToken();
+            $session->user_id = $user_id;
+            $session->token = $sessionKey;
+            $session->sessionhash = $sessionhash;
+            $session->expiry_date = time() + 8640000;
+            $session->save();
+        }else{
+            $session->token = $sessionKey;
+            $session->sessionhash = $sessionhash;
+            $session->expiry_date = time() + 8640000;
+            $session->update();
         }
-        $session->subscriber_id = $subscriber_id;
-        if ($subscriber == null) {
-            return time();
-        }
-        if ($subscriber->type == 2) {
-            $session->expiry_date = time() + 15 * 60;
-        } else {
-            $session->expiry_date = time() + 365 * 24 * 60 * 60;
-        }
-        Yii::log("Generate Session Key user_id: $subscriber_id|" . $sessionKey . "\n");
-        $session->token = $sessionKey;
-        $session->save();
         return $sessionKey;
     }
 
@@ -212,20 +207,45 @@ class CUtils
             return false;
         }
         Yii::log("\ntoken: " . $session->token . " |expiry_date: " . $session->expiry_date . "|time: " . time());
-        $subscriber = Subscriber::model()->findByPk($session->subscriber_id);
         if ($session->token == $sessionKey && $session->expiry_date >= time()) {
             Yii::log("Authen session $session->token success! \n");
-            if ($subscriber->type == 2) {
-                $session->expiry_date = time() + 15 * 60;
-            } else {
-                $session->expiry_date = time() + 365 * 24 * 60 * 60;
-            }
+            $session->expiry_date = time() + 8640000;
             $session->save();
             return true;
         } else {
             Yii::log("Authen session $session->token fail! \n");
             return false;
         }
+    }
+
+    public static function getSessionHash($sessionKey = null)
+    {
+        if ($sessionKey == null)
+            return '';
+        $sessionKey = str_replace(' ', '+', $sessionKey);
+        $keyDecrypt = self::decrypt($sessionKey, secret_key);
+
+        $arrSsKey = explode("|", $keyDecrypt);
+        $session = AuthToken::model()->findByPk($arrSsKey[0]);
+
+        if ($session == null) {
+            return '';
+        }
+
+        if ($session->token == $sessionKey && $session->expiry_date >= time()) {
+            return $session->sessionhash;
+        } else {
+            return '';
+        }
+    }
+
+    public static function getSessionHashById($userid)
+    {
+        $session = AuthToken::model()->findByPk($userid);
+        if ($session == null) {
+            return '';
+        }
+        return $session->sessionhash;
     }
 
     public static function lime_encrypt($data, $key)
@@ -487,6 +507,24 @@ class CUtils
         return $valid_number;
     }
 
+    public static function getAccessToken()
+    {            //Parameters
+        $uniqueId = uniqid();
+        $content = '';
+
+        $apiConfig = new ApiConfig(API_KEY, $uniqueId, CLIENT_NAME, CLIENT_VERSION, PLATFORM_NAME, PLATFORM_VERSION);
+        $apiConnector = new GuzzleProvider(API_URL);
+        $api = new Api($apiConfig, $apiConnector);
+
+        $response = $api->callRequest('api_init', [
+            'clientname' => CLIENT_NAME,
+            'clientversion' => CLIENT_VERSION,
+            'platformname' => PLATFORM_NAME,
+            'platformversion' => PLATFORM_VERSION,
+            'uniqueid' => $uniqueId]);
+        // Get token key
+        return   $response['apiaccesstoken'];
+    }
 }
 
 ?>

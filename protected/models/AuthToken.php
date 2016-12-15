@@ -4,8 +4,9 @@
  * This is the model class for table "authToken".
  *
  * The followings are the available columns in table 'authToken':
- * @property integer $subscriber_id
+ * @property integer $user_id
  * @property string $token
+ * @property string $sessionhash
  * @property integer $expiry_date
  */
 class AuthToken extends CActiveRecord
@@ -26,12 +27,13 @@ class AuthToken extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('subscriber_id, token', 'required'),
-			array('subscriber_id, expiry_date', 'numerical', 'integerOnly'=>true),
+			array('user_id, token, sessionhash', 'required'),
+			array('user_id, expiry_date', 'numerical', 'integerOnly'=>true),
 			array('token', 'length', 'max'=>255),
+			array('sessionhash', 'length', 'max'=>1000),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('subscriber_id, token, expiry_date', 'safe', 'on'=>'search'),
+			array('user_id, token, sessionhash, expiry_date', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -52,8 +54,9 @@ class AuthToken extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'subscriber_id' => 'Subscriber',
+			'user_id' => 'User Id',
 			'token' => 'Token',
+			'sessionhash' => 'Sessionhash',
 			'expiry_date' => 'Expiry Date',
 		);
 	}
@@ -76,8 +79,9 @@ class AuthToken extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('subscriber_id',$this->subscriber_id);
+		$criteria->compare('user_id',$this->user_id);
 		$criteria->compare('token',$this->token,true);
+		$criteria->compare('sessionhash',$this->sessionhash,true);
 		$criteria->compare('expiry_date',$this->expiry_date);
 
 		return new CActiveDataProvider($this, array(

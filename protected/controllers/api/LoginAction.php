@@ -71,9 +71,10 @@ class LoginAction extends CAction
                     return;
                 }
                 if ('redirect_login' == $result &&  $response['session']->userid !== '0') {
+                    $sessionKey = CUtils::generateSessionKey($response['session']->userid,base64_encode(serialize($apiConfig)));
                     echo json_encode(array('code' => 0,
                         'message' => 'Login successful',
-                        'sessionhash' => base64_encode(serialize($apiConfig)),
+                        'sessionhash' => $sessionKey,
                         'result' =>  true,
                         'userid' =>  $response['session']->userid,
                         'username' =>  $response['response']->errormessage[1],

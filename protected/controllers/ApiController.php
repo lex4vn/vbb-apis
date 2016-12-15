@@ -42,22 +42,22 @@ class ApiController extends Controller
             && $action->id != "getForumsByPage"
             && $action->id != "showThreadByPage"
             && $action->id != "loginFace"
-            && $action->id != "detailPost"
             && $action->id != "detailComments"
+            && $action->id != "detailPost"
             && $action->id != "uploadImages"
             && $action->id != "logout"
-
         ) {
-            $sessionKey = isset($_POST['sessionkey']) ? $_POST['sessionkey'] : null;
+            $sessionKey = isset($_POST['sessionhash']) ? $_POST['sessionhash'] : null;
             if ($sessionKey == null) {
-                $sessionKey = isset($_GET['sessionkey']) ? $_GET['sessionkey'] : null;
+                $sessionKey = isset($_GET['sessionhash']) ? $_GET['sessionhash'] : null;
+            }
+            if($sessionKey == null){
+                echo json_encode(array('code' => 5, 'message' => 'Missing params sessionhash'));
+                return;
             }
             $sessionKey = str_replace(' ', '+', $sessionKey);
             Yii::log("\n Session key:" . $sessionKey);
-            if (!CUtils::checkAuthSessionKey($sessionKey)) {
-                ContentResponse::getErrorMessage(SESSION_KEY_INVALID, "cardCode");
-                return false;
-            }
+            return CUtils::checkAuthSessionKey($sessionKey);
         } else {
             return true;
         }

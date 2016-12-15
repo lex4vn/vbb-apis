@@ -4,93 +4,152 @@ class DetailPostAction extends CAction
 {
     public function run()
     {
-
-        //test
         header('Content-type: application/json');
         $params = $_GET;
-        $threadId = isset($_GET['threadId']) ? $_GET['threadId'] : null;
+        $threadId = isset($params['threadId']) ? $params['threadId'] : null;
+        $userid = isset($params['userid']) ? $params['userid'] : null;
         if ($threadId == null) {
-            echo json_encode(array('code' => 5, 'message' => 'Missing params thread id'));
+            echo json_encode(array('code' => 5, 'message' => 'Missing params threadId'));
             return;
         }
-        $userId = isset($_GET['userid']) ? $_GET['userid'] : null;
-        if ($userId == null) {
-            echo json_encode(array('code' => 5, 'message' => 'you need login'));
+        if ($userid == null) {
+            echo json_encode(array('code' => 5, 'message' => 'Missing params userid'));
             return;
         }
-        //Parameters
-        $uniqueId = uniqid();
-        $content = '';
+        $userId = $params['userid'];
+        // Get sessionhash from db
+        $sessionhash = CUtils::getSessionHashById($userId);
+        if ($sessionhash) {
+            $apiConfig = unserialize(base64_decode($sessionhash));
+            $api = new Api($apiConfig, new GuzzleProvider(API_URL));
+            $response = $api->callRequest('showthread', [
+                'threadid' => $threadId,
+                'api_v' => '1'
+            ], ConnectorInterface::METHOD_GET);
+           // var_dump($response);die();
+            if (isset($response['response'])) {
+                //var_dump($response['response']->postbits);die();
 
-        $apiConfig = new ApiConfig(API_KEY, $uniqueId, CLIENT_NAME, CLIENT_VERSION, PLATFORM_NAME, PLATFORM_VERSION);
-        $apiConnector = new GuzzleProvider(API_URL);
-        $api = new Api($apiConfig, $apiConnector);
+                $postbits = $response['response']->postbits;
+                //var_dump($postbits);die();
+                $post = $postbits->post;
 
-        $response = $api->callRequest('api_init', [
-            'clientname' => CLIENT_NAME,
-            'clientversion' => CLIENT_VERSION,
-            'platformname' => PLATFORM_NAME,
-            'platformversion' => PLATFORM_VERSION,
-            'uniqueid' => $uniqueId]);
+                //var_dump($post);die();
+                $content = $post->message_bbcode;
+                //var_dump($message);die();
+                $bike = '';
+                $price = '';
+                $address = '';
+                $formality = '';
+                $image = '';
+                $status = '';
 
-        // var_dump($response);die(1);
+                $regex = '#\[BIKE].*\[\/BIKE]#';
+                $hasBike = preg_match($regex, $content, $result);
+                if ($hasBike) {
+                    $content = preg_replace($regex, '', $content);
+                    if ($result) {
+                        $bike = preg_replace('/\[\/?BIKE\]/', '', $result[0]);
+                    }
+                }
 
-        // Get token key
-        $accessToken = $response['apiaccesstoken'];
+                $regex = '#\[PRICE].*\[\/PRICE]#';
+                $hasPrice = preg_match($regex, $content, $result);
+                if ($hasPrice) {
+                    $content = preg_replace($regex, '', $content);
+                    if ($result) {
+                        $price = preg_replace('/\[\/?PRICE\]/', '', $result[0]);
+                    }
+                }
 
-        $apiConfig->setAccessToken($accessToken);
-        $api = new Api($apiConfig, $apiConnector);
+                $regex = '#\[LOCATION].*\[\/LOCATION]#';
+                $hasLocation = preg_match($regex, $content, $result);
+                if ($hasLocation) {
+                    $content = preg_replace($regex, '', $content);
+                    if ($result) {
+                        $address = preg_replace('/\[\/?LOCATION\]/', '', $result[0]);
+                    }
+                }
+                // Hinh thuc
+                $regex = '#\[FORMALITY].*\[\/FORMALITY]#';
+                $hasFormality = preg_match($regex, $content, $result);
+                if ($hasFormality) {
+                    $content = preg_replace($regex, '', $content);
+                    if ($result) {
+                        $formality = preg_replace('/\[\/?FORMALITY\]/', '', $result[0]);
+                    }
+                }
+                // Phone
+                $regex = '#\[PHONE].*\[\/PHONE]#';
+                $hasPhone = preg_match($regex, $content, $result);
+                if ($hasPhone) {
+                    $content = preg_replace($regex, '', $content);
+                    if ($result) {
+                        $phone = preg_replace('/\[\/?PHONE\]/', '', $result[0]);
+                    }
+                }
+                // Trang thai
+                $regex = '#\[STATUS].*\[\/STATUS]#';
+                $hasStatus = preg_match($regex, $content, $result);
+                if ($hasStatus) {
+                    $content = preg_replace($regex, '', $content);
+                    if ($result) {
+                        $status = preg_replace('/\[\/?STATUS\]/', '', $result[0]);
+                    }
+                }
 
-        $response = $api->callRequest('showthread', [
-            'threadid' => $threadId, 'api_v'=> '1'
-        ], ConnectorInterface::METHOD_GET);
-        if (isset($response['response'])) {
-            $bike = $this-> get_string_by_tag( $response["response"]->postbits->post->message_bbcode, '[BIKE]', '[/BIKE]');
-            $bike = (isset($bike) && $bike != '') ? $bike : 'chưa xác định';
-            $price = $this-> get_string_by_tag( $response["response"]->postbits->post->message_bbcode, '[PRICE]', '[/PRICE]');
-            $price = (isset($price) && $price != '') ? $price : 0;
-            $phone = $this-> get_string_by_tag( $response["response"]->postbits->post->message_bbcode, '[PHONE]', '[/PHONE]');
-            $phone = (isset($phone) && $phone != '') ? $phone : 'Không có';
-            $location = $this-> get_string_by_tag( $response["response"]->postbits->post->message_bbcode, '[LOCATION]', '[/LOCATION]');
-            $location = (isset($location) && $location != '') ? $location : 'vui lòng liên hệ';
-            $formality = $this-> get_string_by_tag( $response["response"]->postbits->post->message_bbcode, '[FORMALITY]', '[/FORMALITY]');
-            $formality = (isset($formality) && $formality != '')? $formality : 'Không xác định';
-            $status = $this-> get_string_by_tag( $response["response"]->postbits->post->message_bbcode, '[STATUS]', '[/STATUS]');
-            $status = (isset($status) && $status != '') ? $status : 'Khác';
-            $result = array(
-                'username' => $response["response"]->postbits->post->username,
-                'avatarurl' => $response["response"]->postbits->post->avatarurl,
-                'onlinestatus' => $response["response"]->postbits->post->onlinestatus,
-                'usertitle' => $response["response"]->postbits->post->usertitle,
-                'postid' => $response["response"]->postbits->post->postid,
-                'postdate' => $response["response"]->postbits->post->postdate,
-                'title' => $response["response"]->postbits->post->title,
-                'bike' =>  $bike,
-                'price' => $price,
-                'phone' => $phone,
-                'location' => $location,
-                'formality' =>$formality,
-                'status' =>$status,
-                'image' => $this->get_string_by_tag( $response["response"]->postbits->post->message_bbcode, '[IMG]', '[/IMG]'),
-                'message' => $response["response"]->postbits->post->message,
-                'ismypost' => $response["response"]->postbits->post->userid == $userId,
-            );
-            echo json_encode(array('code' => 0,
-                'message' => 'get detail post success',
-                'detailsthread' => $result
-            ));
-            return;
+                // image
+                $regex = '#\[IMG].*\[\/IMG]#';
+                $hasImage = preg_match($regex, $content, $result);
+                if ($hasImage) {
+                    $content = preg_replace($regex, '', $content);
+                    if ($result) {
+                        $image = preg_replace('/\[\/?IMG\]/', '', $result[0]);
+                    }
+                }
+
+                $regex = '#\[INFOR].*\[\/INFOR]#';
+                $content = preg_replace($regex, '', $content);
+                $result = array(
+                    'username' => $post->username,
+                    'avatarurl' => API_URL.$post->avatarurl,
+                    'onlinestatus' => isset($post->onlinestatus)?$post->onlinestatus:'',
+                    'usertitle' => $post->usertitle,
+                    'postid' => $post->postid,
+                    'postdate' => $post->postdate,
+                    'title' => $post->title,
+                    'bike' => $bike,
+                    'price' => $price,
+                    'phone' => $phone,
+                    'location' => $address,
+                    'formality' => $formality,
+                    'status' => $status,
+                    'image' => $image,
+                    'message' => $content,
+                    'ismypost' => isset($post->userid)? $post->userid == $userId: false,
+                );
+                echo json_encode(array('code' => 0,
+                    'message' => 'Get detail post success',
+                    'detailsthread' => $result
+                ));
+                return;
+            } else {
+                echo json_encode(array('code' => 1, 'message' => 'Forum error'));
+                return;
+            }
         } else {
-            echo json_encode(array('code' => 1, 'message' => 'Forum error'));
+            echo json_encode(array('code' => 2, 'message' => 'User logged out'));
             return;
         }
     }
-    function  get_string_by_tag($string, $start, $end){
-        $string = ' ' . $string;
-        $ini = strpos($string, $start);
-        if ($ini == 0) return '';
-        $ini += strlen($start);
-        $len = strpos($string, $end, $ini) - $ini;
-        return substr($string, $ini, $len);
-    }
+
+//    function get_string_by_tag($string, $start, $end)
+//    {
+//        $string = ' ' . $string;
+//        $ini = strpos($string, $start);
+//        if ($ini == 0) return '';
+//        $ini += strlen($start);
+//        $len = strpos($string, $end, $ini) - $ini;
+//        return substr($string, $ini, $len);
+//    }
 }

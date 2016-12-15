@@ -5,7 +5,7 @@ class RegisterAction extends CAction
     public function run()
     {
         header('Content-type: application/json');
-        if(empty($_POST)) {
+        if (empty($_POST)) {
             $_POST = json_decode(file_get_contents('php://input'), true);
         }
         $params = $_POST;
@@ -13,7 +13,7 @@ class RegisterAction extends CAction
         $email = isset($params['email']) ? $params['email'] : null;
         $fullName = isset($params['fullname']) ? $params['fullname'] : null;
         $password = isset($params['password']) ? $params['password'] : null;
-        $phoneNumber = isset($params['phonenumber']) && !empty($params['phonenumber'])  ? $params['phonenumber'] : "0912345678";
+        $phoneNumber = isset($params['phonenumber']) && !empty($params['phonenumber']) ? $params['phonenumber'] : "0912345678";
         $job = isset($params['job']) ? $params['job'] : 'Nhân viên';
         $wife = isset($params['wife']) ? $params['wife'] : 'Vợ 2';
         $birthday = isset($params['birthday']) ? $params['birthday'] : null;
@@ -95,7 +95,7 @@ class RegisterAction extends CAction
             'birthdate' => $birthdate,
             'timezoneoptions' => TIME_ZONE_7,
             'userfield' => $userfield,
-            'api_v'=> '1'
+            'api_v' => '1'
         ]);
 
         if (!isset($response)) {
@@ -111,15 +111,25 @@ class RegisterAction extends CAction
         if (isset($response['response'])) {
             if (isset($response['response']->errormessage)) {
                 $result = $response['response']->errormessage[0];
+                //var_dump($response);die();
+                $responseSearch = $api->callRequest('api_usersearch', [
+                    'fragment' => $userName, 'api_v' => '1'
+                ]);
+                $userid = 0;
+                if (count($responseSearch) >= 3) {
+                    $userid = $responseSearch[0];
+                }
 
                 if ('registration_complete' == $result) {
+                    $sessionKey = CUtils::generateSessionKey($userid, base64_encode(serialize($apiConfig)));
                     echo json_encode(array('code' => 0,
-                        'sessionhash' => base64_encode(serialize($apiConfig)),
+                        'sessionhash' => $sessionKey,
                         'message' => 'Register successful',
                         'username' => $userName,
                         'email' => $email,
                         'birthdate' => $birthdate,
                         'fullName' => $fullName,
+                        'userid' => $userid,
                     ));
                     return;
                 }
