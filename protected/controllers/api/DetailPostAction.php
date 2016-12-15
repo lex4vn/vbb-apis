@@ -41,7 +41,7 @@ class DetailPostAction extends CAction
                 $price = '';
                 $address = '';
                 $formality = '';
-                $image = '';
+                $images = array();
                 $status = '';
 
                 $regex = '#\[BIKE].*\[\/BIKE]#';
@@ -104,7 +104,7 @@ class DetailPostAction extends CAction
                 if ($hasImage) {
                     $content = preg_replace($regex, '', $content);
                     if ($result) {
-                        $image = preg_replace('/\[\/?IMG\]/', '', $result[0]);
+                        $images[] = preg_replace('/\[\/?IMG\]/', '', $result[0]);
                     }
                 }
 
@@ -124,7 +124,7 @@ class DetailPostAction extends CAction
                     'location' => $address,
                     'formality' => $formality,
                     'status' => $status,
-                    'image' => $image,
+                    'images' => $images,
                     'message' => $content,
                     'ismypost' => isset($post->userid)? $post->userid == $userId: false,
                 );
