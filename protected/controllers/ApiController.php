@@ -53,6 +53,11 @@ class ApiController extends Controller
             if ($sessionKey == null) {
                 $sessionKey = isset($_GET['sessionhash']) ? $_GET['sessionhash'] : null;
             }
+            if ($sessionKey == null && empty($_POST)) {
+                $_POST = json_decode(file_get_contents('php://input'), true);
+            }
+            $params = $_POST;
+            $sessionKey = isset($params['sessionhash']) ? $params['sessionhash'] : null;
             if($sessionKey == null){
                 echo json_encode(array('code' => 5, 'message' => 'Missing params sessionhash'));
                 return;
@@ -111,7 +116,6 @@ class ApiController extends Controller
             'listBlog' => 'protected.controllers.api.ListBlogAction',
             'listCategoryBlog' => 'protected.controllers.api.CategoryBlogAction',
             'listChapterVideo' => 'protected.controllers.api.ListChapterVideoAction',
-            'listProfile' => 'protected.controllers.api.ListProfileAction',
             'listProfileBuddy' => 'protected.controllers.api.ListProfileBuddyAction',
             'listquestion' => 'protected.controllers.api.ListquestionAction',
             'listQuestionBank' => 'protected.controllers.api.ListQuestionBankAction',
@@ -127,6 +131,7 @@ class ApiController extends Controller
             'loginGoogleAndroid' => 'protected.controllers.api.LoginGoogleAndroidAction',
             'partner' => 'protected.controllers.api.PartnerAction',
             'pintop' => 'protected.controllers.api.PinTopAction',
+            'profile' => 'protected.controllers.api.ProfileAction',
             'question' => 'protected.controllers.api.QuestionAction',
             'questionPoint' => 'protected.controllers.api.QuestionPointAction',
             'questionServer' => 'protected.controllers.api.QuestionServerAction',
