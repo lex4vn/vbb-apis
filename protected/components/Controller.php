@@ -31,13 +31,5 @@ class Controller extends CController
 
     public function __construct($id, $module)
     {
-        if (Yii::app()->session['user_id']) {
-            $user_id = Yii::app()->session['user_id'];
-            $this->userName = Subscriber::model()->findByPk($user_id);
-        } else {
-            $user_id = null;
-            $this->userName = null;
-        }
-        Yii::app()->theme = 'web';
     }
 }

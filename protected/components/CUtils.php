@@ -226,6 +226,7 @@ class CUtils
         $keyDecrypt = self::decrypt($sessionKey, secret_key);
 
         $arrSsKey = explode("|", $keyDecrypt);
+        Yii::app()->session['user_id'] = $arrSsKey[0];
         $session = AuthToken::model()->findByPk($arrSsKey[0]);
 
         if ($session == null) {

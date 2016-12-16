@@ -1,6 +1,6 @@
 <?php
 
-class ApiController extends Controller
+class ApiController extends CController
 {
     const  API_KEY = 'voice_20131227';
 
