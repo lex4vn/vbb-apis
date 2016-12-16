@@ -45,8 +45,10 @@ class ApiController extends Controller
             && $action->id != "detailComments"
             && $action->id != "detailPost"
             && $action->id != "uploadImages"
+            && $action->id != "listProfileBuddy"
             && $action->id != "logout"
         ) {
+            //var_dump($_POST['sessionhash']);die();
             $sessionKey = isset($_POST['sessionhash']) ? $_POST['sessionhash'] : null;
             if ($sessionKey == null) {
                 $sessionKey = isset($_GET['sessionhash']) ? $_GET['sessionhash'] : null;
@@ -55,9 +57,9 @@ class ApiController extends Controller
                 echo json_encode(array('code' => 5, 'message' => 'Missing params sessionhash'));
                 return;
             }
-            $sessionKey = str_replace(' ', '+', $sessionKey);
-            Yii::log("\n Session key:" . $sessionKey);
-            return CUtils::checkAuthSessionKey($sessionKey);
+            //$sessionKey = str_replace(' ', '+', $sessionKey);
+            //Yii::log("\n Session key:" . $sessionKey);
+            return true;// CUtils::checkAuthSessionKey($sessionKey);
         } else {
             return true;
         }
@@ -110,6 +112,7 @@ class ApiController extends Controller
             'listCategoryBlog' => 'protected.controllers.api.CategoryBlogAction',
             'listChapterVideo' => 'protected.controllers.api.ListChapterVideoAction',
             'listProfile' => 'protected.controllers.api.ListProfileAction',
+            'listProfileBuddy' => 'protected.controllers.api.ListProfileBuddyAction',
             'listquestion' => 'protected.controllers.api.ListquestionAction',
             'listQuestionBank' => 'protected.controllers.api.ListQuestionBankAction',
             'listReport' => 'protected.controllers.api.ListReportAction',

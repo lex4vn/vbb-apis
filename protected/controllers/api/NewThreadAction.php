@@ -33,7 +33,7 @@ class NewThreadAction extends CAction
             echo json_encode(array('code' => 5, 'message' => 'Missing params message'));
             return;
         }
-        if ((!isset($params['username']) || $params['username'] == '') && $params['type'] == 1){
+        if ((!isset($params['username']) || $params['username'] == '') && $params['type'] == 1) {
             echo json_encode(array('code' => 5, 'message' => 'Missing params username'));
             return;
         }
@@ -57,47 +57,53 @@ class NewThreadAction extends CAction
         $location = isset($params['location']) ? $params['location'] : 'vui lòng liên hệ';
         $formality = isset($params['formality']) ? $params['formality'] : 'Không xác định';
         $status = isset($params['status']) ? $params['status'] : 'Khác';
+        $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
+        if ($sessionhash) {
+            $apiConfig = unserialize(base64_decode($params['sessionhash']));
+            $api = new Api($apiConfig, new GuzzleProvider(API_URL));
+            $info = '[INFOR]';
+            $info .= '[BIKE]' . $bike . '[/BIKE]';
+            $info .= '[PRICE]' . $price . '[/PRICE]';
+            $info .= '[PHONE]' . $phone . '[/PHONE]';
+            $info .= '[LOCATION]' . $location . '[/LOCATION]';
+            $info .= '[FORMALITY]' . $formality . '[/FORMALITY]';
+            $info .= '[STATUS]' . $status . '[/STATUS]';
+            $info .= '[/INFOR]';
+            $info .= $params['message'];
+            if (isset($params['images'])) {
+                foreach ($params['images'] as $item) {
+                    $info .= '[IMG]' . $item['image_url'] . '[/IMG]';
+                }
+            }
 
-        $apiConfig = unserialize(base64_decode(($params['sessionhash'])));
-        $api = new Api($apiConfig, new GuzzleProvider(API_URL));
-        $info = '[INFOR]';
-        $info .= '[BIKE]' . $bike . '[/BIKE]';
-        $info .= '[PRICE]' . $price . '[/PRICE]';
-        $info .= '[PHONE]' . $phone . '[/PHONE]';
-        $info .= '[LOCATION]' . $location . '[/LOCATION]';
-        $info .= '[FORMALITY]' . $formality . '[/FORMALITY]';
-        $info .= '[STATUS]' . $status . '[/STATUS]';
-        $info .= '[/INFOR]';
-        $info .= $params['message'];
-        if(isset($params['images'])){
-            foreach ($params['images'] as $item) {
-                $info .= '[IMG]' . $item['image_url'] . '[/IMG]';
+            $response = $api->callRequest('newthread_postthread', [
+                'username' => isset($params['username']) ? $params['username'] : '',
+                'message' => $info,
+                'subject' => $params['subject'],
+                'f' => $params['type'] == 1 ? 69 : 17,
+                'api_v' => '1'
+            ], ConnectorInterface::METHOD_POST);
+            //var_dump($response);
+            if (isset($response['response']->errormessage)) {
+                if ($response['response']->errormessage == 'redirect_postthanks') {
+                    echo json_encode(array('code' => 0, 'message' => 'Post successfull.'));
+                    return;
+                }
+                //redirect_duplicatethread
+                if ($response['response']->errormessage == 'redirect_duplicatethread') {
+                    echo json_encode(array('code' => 1, 'message' => 'Post duplicate thread.'));
+                    return;
+                }
+                //redirect_postthanks_moderate
+                if ($response['response']->errormessage == 'redirect_postthanks_moderate') {
+                    echo json_encode(array('code' => 0, 'message' => 'Post successfull. Please wait moderate acceptance'));
+                    return;
+                }
             }
-        }
-
-        $response = $api->callRequest('newthread_postthread', [
-            'username' => isset($params['username'])? $params['username']:'',
-            'message' => $info,
-            'subject' => $params['subject'],
-            'f' => $params['type'] == 1? 69:17,
-            'api_v' => '1'
-        ], ConnectorInterface::METHOD_POST);
-        //var_dump($response);
-        if (isset($response['response']->errormessage)) {
-            if ($response['response']->errormessage == 'redirect_postthanks') {
-                echo json_encode(array('code' => 0, 'message' => 'Post successfull.'));
-                return;
-            }
-            //redirect_duplicatethread
-            if ($response['response']->errormessage == 'redirect_duplicatethread') {
-                echo json_encode(array('code' => 1, 'message' => 'Post duplicate thread.'));
-                return;
-            }
-            //redirect_postthanks_moderate
-            if ($response['response']->errormessage == 'redirect_postthanks_moderate') {
-                echo json_encode(array('code' => 0, 'message' => 'Post successfull. Please wait moderate acceptance'));
-                return;
-            }
+        } else {
+            // Sessionhash is empty
+            echo json_encode(array('code' => 10, 'message' => 'User logged out'));
+            return;
         }
         echo json_encode(array('code' => 2, 'message' => 'Forum error'));
     }

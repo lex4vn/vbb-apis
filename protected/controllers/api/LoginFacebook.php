@@ -9,11 +9,11 @@ class LoginFacebook extends  CAction
         if(empty($_POST)) {
             $_POST = json_decode(file_get_contents('php://input'), true);
         }
-        $params = $_POST;
-        if (!isset($params['access_token']) || $params['access_token'] == '' ) {
-            echo json_encode(array('code' => 5, 'message' => 'Missing params username'));
-            return;
-        }
+//        $params = $_POST;
+//        if (!isset($params['access_token']) || $params['access_token'] == '' ) {
+//            echo json_encode(array('code' => 5, 'message' => 'Missing params username'));
+//            return;
+//        }
         $uniqueId = uniqid();
         $content = '';
 
@@ -26,7 +26,7 @@ class LoginFacebook extends  CAction
             'clientversion' => CLIENT_VERSION,
             'platformname' => PLATFORM_NAME,
             'platformversion' => PLATFORM_VERSION,
-            'api_v'=> '1',
+            'api_v'=> '4',
             'uniqueid' => $uniqueId]);
 
         //var_dump($response);die(1);
@@ -37,7 +37,9 @@ class LoginFacebook extends  CAction
         $apiConfig->setAccessToken($accessToken);
         $api = new Api($apiConfig, $apiConnector);
 
-
+        //$response = $api->callRequest('login_facebook', ['fb_userid'=>'742194869201205','api_v'=> '4'  ]);
+        $response = $api->callRequest('login_facebook', ['fb_userid'=>'1827488541','api_v'=> '4'  ]);
+        var_dump($response);die();
         $access_token = $params['access_token'];
 
         $ch = curl_init();
