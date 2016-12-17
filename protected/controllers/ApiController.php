@@ -35,7 +35,6 @@ class ApiController extends CController
             && $action->id != "getBikeType"
             && $action->id != "getSchool"
             && $action->id != "getPass"
-            && $action->id != "getForum"
             && $action->id != "searchUser"
             && $action->id != "showThread"
             && $action->id != "newThread"
@@ -133,6 +132,8 @@ class ApiController extends CController
             'partner' => 'protected.controllers.api.PartnerAction',
             'pintop' => 'protected.controllers.api.PinTopAction',
             'profile' => 'protected.controllers.api.ProfileAction',
+            'profilePost' => 'protected.controllers.api.ProfilePostAction',
+            'profileThreads' => 'protected.controllers.api.ProfileThreadsAction',
             'question' => 'protected.controllers.api.QuestionAction',
             'questionPoint' => 'protected.controllers.api.QuestionPointAction',
             'questionServer' => 'protected.controllers.api.QuestionServerAction',
