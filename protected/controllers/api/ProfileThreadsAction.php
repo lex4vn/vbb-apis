@@ -1,6 +1,6 @@
 <?php
 
-class ProfileAction extends CAction
+class ProfileThreadsAction extends CAction
 {
     public function run()
     {
@@ -14,8 +14,11 @@ class ProfileAction extends CAction
         if ($sessionhash) {
             $apiConfig = unserialize(base64_decode($sessionhash));
             $api = new Api($apiConfig, new GuzzleProvider(API_URL));
-            $response = $api->callRequest('member', [
-                'u'=> Yii::app()->session['user_id'],
+
+            $response = $api->callRequest('search_finduser', [
+                'userid'=> Yii::app()->session['user_id'],
+                'contenttype'=> 'vBForum_Thread',
+                'starteronly'=> 1,
                 'api_v' => '1'
             ], ConnectorInterface::METHOD_POST);
             var_dump($response);die();
