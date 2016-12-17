@@ -18,11 +18,34 @@ class ProfileAction extends CAction
                 'u'=> Yii::app()->session['user_id'],
                 'api_v' => '1'
             ], ConnectorInterface::METHOD_POST);
-            var_dump($response);die();
             // TODO
             if(isset($response['response'])){
-                $response['response']->HTML->buddycount;
-                $response['response']->HTML->buddylist;
+				$fields = $response['response']->blocks->aboutme->block_data->fields->category->fields;
+				$phonenumber = '';
+				$fullname = '';
+				foreach($fields as $field) {
+					if ($field->profilefield->title == "Họ và Tên") {
+						$fullname = $field->profilefield->value;
+					} else if ($field->profilefield->title == "Phone Number"){
+						$phonenumber = $field->profilefield->value;
+					}
+				}
+				
+				$profile = array(
+					'username' => $response['response']->prepared->username,
+					'fullname' => $fullname,
+					'phonenumber' => $phonenumber,
+					'birthday' => $response['response']->prepared->birthday,
+					'age' => $response['response']->prepared->age,
+					'displayemail' => $response['response']->prepared->displayemail,
+					'homepage' => $response['response']->prepared->homepage,
+					'usertitle' => $response['response']->prepared->usertitle,
+					'onlinestatus' => $response['response']->prepared->onlinestatus->onlinestatus == 1 ? "online" : "offline",
+					'joindate' => $response['response']->prepared->joindate,
+					'posts' => $response['response']->prepared->posts,
+					'avatarurl' => $response['response']->prepared->avatarurl
+					);
+				echo json_encode($profile);
 
             }else{
                 echo json_encode(array('code' => 2, 'message' => 'Forum error'));
