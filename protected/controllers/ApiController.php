@@ -55,6 +55,7 @@ class ApiController extends CController
                 $_POST = json_decode(file_get_contents('php://input'), true);
             }
             $params = $_POST;
+			//fix tam da abc
             $sessionKey = isset($params['sessionhash']) ? $params['sessionhash'] : $_GET['sessionhash'];
             if($sessionKey == null){
                 echo json_encode(array('code' => 5, 'message' => 'Missing params sessionhash'));
