@@ -44,9 +44,7 @@ class ApiController extends CController
             && $action->id != "detailComments"
             && $action->id != "detailPost"
             && $action->id != "uploadImages"
-            && $action->id != "listProfileBuddy"
             && $action->id != "logout"
-			&& $action->id != "profile"
         ) {
             //var_dump($_POST['sessionhash']);die();
             $sessionKey = isset($_POST['sessionhash']) ? $_POST['sessionhash'] : null;
