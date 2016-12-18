@@ -16,9 +16,8 @@ class DetailPostAction extends CAction
             echo json_encode(array('code' => 5, 'message' => 'Missing params userid'));
             return;
         }
-        $userId = $params['userid'];
-        // Get sessionhash from db
-        $sessionhash = CUtils::getSessionHashById($userId);
+        $params = $_GET;
+        $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
         if ($sessionhash) {
             $apiConfig = unserialize(base64_decode($sessionhash));
             $api = new Api($apiConfig, new GuzzleProvider(API_URL));
