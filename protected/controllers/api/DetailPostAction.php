@@ -112,7 +112,7 @@ class DetailPostAction extends CAction
                 $content = preg_replace($regex, '', $content);
                 $result = array(
                     'username' => $post->username,
-                    'avatarurl' => API_URL.$post->avatarurl,
+                    'avatarurl' =>  str_replace("amp;","",API_URL.$post->avatarurl),
                     'onlinestatus' => isset($post->onlinestatus)?$post->onlinestatus:'',
                     'usertitle' => $post->usertitle,
                     'postid' => $post->postid,
@@ -121,7 +121,7 @@ class DetailPostAction extends CAction
                     'bike' => $bike,
                     'price' => $price,
                     'phone' => $phone,
-                    'location' => $address,
+                    'address' => $address,
                     'formality' => $formality,
                     'status' => $status,
                     'images' => $images,

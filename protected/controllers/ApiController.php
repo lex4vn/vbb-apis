@@ -45,6 +45,8 @@ class ApiController extends CController
             && $action->id != "detailPost"
             && $action->id != "uploadImages"
             && $action->id != "logout"
+            && $action->id != "search"
+
         ) {
             //var_dump($_POST['sessionhash']);die();
             $sessionKey = isset($_POST['sessionhash']) ? $_POST['sessionhash'] : null;
@@ -159,6 +161,7 @@ class ApiController extends CController
             'loginFace' => 'protected.controllers.api.LoginFacebook',
             'detailPost' => 'protected.controllers.api.DetailPostAction',
             'detailComments' => 'protected.controllers.api.DetailCommentAction',
+            'search' => 'protected.controllers.api.SearchAction',
         );
     }
 
