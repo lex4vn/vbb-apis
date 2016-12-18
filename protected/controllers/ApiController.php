@@ -42,23 +42,20 @@ class ApiController extends CController
             && $action->id != "showThreadByPage"
             && $action->id != "loginFace"
             && $action->id != "detailComments"
-            && $action->id != "detailPost"
             && $action->id != "uploadImages"
             && $action->id != "logout"
             && $action->id != "search"
 
         ) {
-            //var_dump($_POST['sessionhash']);die();
             $sessionKey = isset($_POST['sessionhash']) ? $_POST['sessionhash'] : null;
             if ($sessionKey == null) {
                 $sessionKey = isset($_GET['sessionhash']) ? $_GET['sessionhash'] : null;
             }
             if ($sessionKey == null && empty($_POST)) {
-                $_POST = json_decode(file_get_contents('php://input'), true);
+                $params = json_decode(file_get_contents('php://input'), true);
+                $sessionKey = isset($params['sessionhash']) ? $params['sessionhash'] : null;
             }
-            $params = $_POST;
-			//fix tam da abc
-            $sessionKey = isset($params['sessionhash']) ? $params['sessionhash'] : $_GET['sessionhash'];
+
             if($sessionKey == null){
                 echo json_encode(array('code' => 5, 'message' => 'Missing params sessionhash'));
                 return;

@@ -7,17 +7,12 @@ class DetailPostAction extends CAction
         header('Content-type: application/json');
         $params = $_GET;
         $threadId = isset($params['threadId']) ? $params['threadId'] : null;
-        $userid = isset($params['userid']) ? $params['userid'] : null;
+
         if ($threadId == null) {
             echo json_encode(array('code' => 5, 'message' => 'Missing params threadId'));
             return;
         }
-        if ($userid == null) {
-            echo json_encode(array('code' => 5, 'message' => 'Missing params userid'));
-            return;
-        }
-        $params = $_GET;
-        $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
+        $sessionhash = CUtils::getSessionHash($params['sessionhash']);
         if ($sessionhash) {
             $apiConfig = unserialize(base64_decode($sessionhash));
             $api = new Api($apiConfig, new GuzzleProvider(API_URL));
@@ -98,13 +93,19 @@ class DetailPostAction extends CAction
                 }
 
                 // image
-                $regex = '#\[IMG].*?\[\/IMG]#';
+                $regex = '#\[IMG].*\[\/IMG]#';
                 $hasImage = preg_match($regex, $content, $result);
                 if ($hasImage) {
                     $content = preg_replace($regex, '', $content);
                     if ($result) {
-                        $images[] = preg_replace('/\[\/?IMG\]/', '', $result[0]);
+                        $images_array = explode('http://',preg_replace('/\[\/?IMG\]/', '', $result[0]));
                     }
+                }
+                foreach($images_array as $img){
+                    if(empty($img)){
+                        continue;
+                    }
+                    $images[] = 'http://'.$img;
                 }
 
                 $regex = '#\[INFOR].*\[\/INFOR]#';
@@ -125,7 +126,7 @@ class DetailPostAction extends CAction
                     'status' => $status,
                     'images' => $images,
                     'message' => $content,
-                    'ismypost' => isset($post->userid)? $post->userid == $userId: false,
+                    'ismypost' => isset($post->userid)? $post->userid == Yii::app()->session['user_id']: false,
                 );
                 echo json_encode(array('code' => 0,
                     'message' => 'Get detail post success',
