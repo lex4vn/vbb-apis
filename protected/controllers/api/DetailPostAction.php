@@ -98,7 +98,7 @@ class DetailPostAction extends CAction
                 }
 
                 // image
-                $regex = '#\[IMG].*\[\/IMG]#';
+                $regex = '#\[IMG].*?\[\/IMG]#';
                 $hasImage = preg_match($regex, $content, $result);
                 if ($hasImage) {
                     $content = preg_replace($regex, '', $content);
@@ -112,7 +112,7 @@ class DetailPostAction extends CAction
                 $result = array(
                     'username' => $post->username,
                     'avatarurl' =>  str_replace("amp;","",API_URL.$post->avatarurl),
-                    'onlinestatus' => isset($post->onlinestatus)?$post->onlinestatus:'',
+                    'onlinestatus' => isset($post->onlinestatus)?$post->onlinestatus->onlinestatus:'',
                     'usertitle' => $post->usertitle,
                     'postid' => $post->postid,
                     'postdate' => $post->postdate,
