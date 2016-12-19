@@ -16,8 +16,10 @@ class ProfilePostAction extends CAction
             $api = new Api($apiConfig, new GuzzleProvider(API_URL));
 
             $response = $api->callRequest('search_finduser', [
-                'userid'=> Yii::app()->session['user_id'],
-                'contenttype'=> 'vBForum_Post',
+                'searchid'=> '241452',
+                'searchuser'=> Yii::app()->session['user_id'],
+                'type'=> array(1),
+                'contenttypeid'=> 3,
                 'showposts'=> 1,
                 'api_v' => '1'
             ], ConnectorInterface::METHOD_POST);

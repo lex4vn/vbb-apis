@@ -14,26 +14,18 @@ class ApiController extends CController
         // TODO check exist in array
         if (
             $action->id != "listReport"
-            && $action->id != "htmlContent"
-            && $action->id != "level"
-            && $action->id != "class"
             && $action->id != "loginGoogleAndroid"
             && $action->id != "loginGoogle"
             && $action->id != "test"
             && $action->id != "test2"
             && $action->id != "test3"
-            && $action->id != "partner"
             && $action->id != "loginFaceBook"
             && $action->id != "listCommentInPost"
             && $action->id != "resetPass"
             && $action->id != "login"
             && $action->id != "register"
             && $action->id != "debug"
-            && $action->id != "listSubjectVideo"
-            && $action->id != "listChapterVideo"
-            && $action->id != "adsOncash"
             && $action->id != "getBikeType"
-            && $action->id != "getSchool"
             && $action->id != "getPass"
             && $action->id != "searchUser"
             && $action->id != "showThread"
@@ -44,7 +36,6 @@ class ApiController extends CController
             && $action->id != "detailComments"
             && $action->id != "uploadImages"
             && $action->id != "logout"
-            && $action->id != "search"
 
         ) {
             $sessionKey = isset($_POST['sessionhash']) ? $_POST['sessionhash'] : null;
@@ -74,10 +65,7 @@ class ApiController extends CController
         // Sort by ASC
         return array(
             'accessKey' => 'protected.controllers.api.AccessSessionKeyAction',
-            'adsOncash' => 'protected.controllers.api.AdsOncashAction',
             'androidInAppPurchase' => 'protected.controllers.api.AndroidInAppPurchaseAction',
-            'answer' => 'protected.controllers.api.AnswerAction',
-            'banner' => 'protected.controllers.api.BannerAction',
             'cancelService' => 'protected.controllers.api.CancelserivceAction',
             'class' => 'protected.controllers.api.ClassAction',
             'confilmLogin' => 'protected.controllers.api.ConfilmLoginAction',
@@ -87,18 +75,11 @@ class ApiController extends CController
             'changeLevel' => 'protected.controllers.api.ChangeLevelAction',
             'changepassword' => 'protected.controllers.api.ChangePassAction',
             'debug' => 'protected.controllers.api.DebugAction',
-            'detailBlog' => 'protected.controllers.api.DetailBlogAction',
-            'detailquestion' => 'protected.controllers.api.DetailquestionAction',
-            'detailQuestionBank' => 'protected.controllers.api.DetailQuestionBankAction',
-            'detailquestionBk' => 'protected.controllers.api.DetailquestionBkAction',
-            'detailVideo' => 'protected.controllers.api.DetailVideoAction',
-            'exam' => 'protected.controllers.api.ExamAction',
             'getBikeType' => 'protected.controllers.api.GetBikeTypeAction',
             'getDeviceToken' => 'protected.controllers.api.GetdevicetokenAction',
             'getForum' => 'protected.controllers.api.GetForum',
             'getNotifi' => 'protected.controllers.api.GetNotifiAction',
             'getPass' => 'protected.controllers.api.GetPassAction',
-            'getSchool' => 'protected.controllers.api.GetSchoolAction',
             'gettrans' => 'protected.controllers.api.TransactionDetailAction',
             'history' => 'protected.controllers.api.HistoryAction',
             'holdQuestion' => 'protected.controllers.api.HoldQuestionAction',
@@ -107,8 +88,6 @@ class ApiController extends CController
             'insertAvatar' => 'protected.controllers.api.InsertAvatarAction',
             'insertComment' => 'protected.controllers.api.InsertCommentAction',
             'iosInAppPurchase' => 'protected.controllers.api.IosInAppPurchaseAction',
-            'level' => 'protected.controllers.api.LevelAction',
-            'likeQuestion' => 'protected.controllers.api.LikequestionAction',
             'listCommentInPost' => 'protected.controllers.api.ListCommentInPost',
             'listApp' => 'protected.controllers.api.ListAppAction',
             'listBlog' => 'protected.controllers.api.ListBlogAction',
@@ -116,26 +95,16 @@ class ApiController extends CController
             'listChapterVideo' => 'protected.controllers.api.ListChapterVideoAction',
             'listProfileBuddy' => 'protected.controllers.api.ListProfileBuddyAction',
             'listquestion' => 'protected.controllers.api.ListquestionAction',
-            'listQuestionBank' => 'protected.controllers.api.ListQuestionBankAction',
             'listReport' => 'protected.controllers.api.ListReportAction',
-            'listservice' => 'protected.controllers.api.ListserviceAction',
-            'listSubjectVideo' => 'protected.controllers.api.ListSubjectVideoAction',
-            'listVideo' => 'protected.controllers.api.ListVideoAction',
             'login' => 'protected.controllers.api.LoginAction',
             'logout' => 'protected.controllers.api.LogoutAction',
             'loginFaceBook' => 'protected.controllers.api.LoginFaceBookAction',
             'loginFaceBookDemo' => 'protected.controllers.api.LoginFacebookDemo',
             'loginGoogle' => 'protected.controllers.api.LoginGoogleAction',
             'loginGoogleAndroid' => 'protected.controllers.api.LoginGoogleAndroidAction',
-            'partner' => 'protected.controllers.api.PartnerAction',
-            'pintop' => 'protected.controllers.api.PinTopAction',
             'profile' => 'protected.controllers.api.ProfileAction',
             'profilePost' => 'protected.controllers.api.ProfilePostAction',
             'profileThreads' => 'protected.controllers.api.ProfileThreadsAction',
-            'question' => 'protected.controllers.api.QuestionAction',
-            'questionPoint' => 'protected.controllers.api.QuestionPointAction',
-            'questionServer' => 'protected.controllers.api.QuestionServerAction',
-            'questionTeacher' => 'protected.controllers.api.QuestionTeacherAction',
             'register' => 'protected.controllers.api.RegisterAction',
             'registerService' => 'protected.controllers.api.RegisterserivceAction',
             'report' => 'protected.controllers.api.ReportAction',
@@ -149,8 +118,6 @@ class ApiController extends CController
             'typeAccount' => 'protected.controllers.api.TypeAccountAction',
             'updateProfile' => 'protected.controllers.api.UpdateProfileAction',
             'updateStatus' => 'protected.controllers.api.UpdateStatusAction',
-            'useCard' => 'protected.controllers.api.UseCardAction',
-            'useCardNet2e' => 'protected.controllers.api.UseCardNet2EAction',
             'showThread' => 'protected.controllers.api.ShowThreadAction',
             'newThread' => 'protected.controllers.api.NewThreadAction',
             'getForumsByPage' => 'protected.controllers.api.GetForumsByPage',

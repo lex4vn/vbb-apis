@@ -5,21 +5,41 @@ class SearchAction extends CAction
     public function run()
     {
         header('Content-type: application/json');
-        $params = $_POST;
-        if (!isset($params['txtSearch']) || $params['txtSearch'] == '') {
-            echo json_encode(array('code' => 5, 'message' => 'Text to search cannot be empty'));
+        $params = $_GET;
+        if (!isset($params['search']) || $params['search'] == '') {
+            echo json_encode(array('code' => 5, 'message' => 'Missing params search'));
             return;
         }
-        $params = $_POST;
         $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
         if ($sessionhash) {
             $apiConfig = unserialize(base64_decode($sessionhash));
             $api = new Api($apiConfig, new GuzzleProvider(API_URL));
-            $response = $api->callRequest('search_showresults', [
-                'fragment' => $params['txtSearch'], 'forumid' => '17', 'api_v' => '1'
+
+            // search_type = 1: Bai viet, 3: Chuyen muc
+            // Forumchoice = 17: Can mua, 69: Can ban
+            //api: search_doprefs
+            $response = $api->callRequest('search_process', [
+                'search_type' => '3',
+                'query' => $params['search'],
+                'forumchoice' => '17',
+                'api_v' => '1'
             ], ConnectorInterface::METHOD_POST);
-            var_dump($response);
-            die(1);
+
+            // TODO
+            //words_very_common: tu khoa ngan qua
+           var_dump($response);die();
+
+            $searchId = '0';
+            if(isset($response['response']) &&  'search' == $response['response']->errormessage){
+                $searchId = $response['show']->searchid;
+            }
+           // var_dump($searchId);die();
+            $response = $api->callRequest('search_showresults', [
+                'searchid'=> $searchId,
+                'api_v' => '1'
+            ], ConnectorInterface::METHOD_POST);
+            var_dump($response);die(1);
+
             if (isset($response['userid']) && isset($response['username'])) {
                 echo json_encode(array('code' => 0, 'message' => 'Successful', 'userid' => $response['userid'], 'username' => $response['username']));
                 return;

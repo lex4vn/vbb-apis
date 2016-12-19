@@ -21,6 +21,18 @@ class ProfileThreadsAction extends CAction
                 'starteronly'=> 1,
                 'api_v' => '1'
             ], ConnectorInterface::METHOD_POST);
+
+            //var_dump($response);die();
+            $searchId = '0';
+            if(isset($response['response']) &&  'search' == $response['response']->errormessage){
+                $searchId = $response['show']->searchid;
+            }
+            //var_dump($searchId);die();
+            $response = $api->callRequest('search_showresults', [
+                'searchid'=> $searchId,
+                'api_v' => '1'
+            ], ConnectorInterface::METHOD_POST);
+
             var_dump($response);die();
             // TODO
             if(isset($response['response'])){
