@@ -240,6 +240,18 @@ class CUtils
         }
     }
 
+    public static function deleteSessionHash($sessionKey = null)
+    {
+        if ($sessionKey == null)
+            return '';
+        $sessionKey = str_replace(' ', '+', $sessionKey);
+        $keyDecrypt = self::decrypt($sessionKey, secret_key);
+
+        $arrSsKey = explode("|", $keyDecrypt);
+        Yii::app()->session['user_id'] = $arrSsKey[0];
+        AuthToken::model()->deleteByPk($arrSsKey[0]);
+    }
+
     public static function getSessionHashById($userid)
     {
         $session = AuthToken::model()->findByPk($userid);

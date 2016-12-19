@@ -43,6 +43,7 @@ class LogoutAction extends CAction
             if (isset($response['response']->errormessage)) {
                 $result = $response['response']->errormessage[0];
                 if ('cookieclear' == $result ) {
+                    CUtils::deleteSessionHash(($params['sessionhash']));
                     echo json_encode(array('code' => 0,
                         'message' => 'logout successful.'
                     ));
