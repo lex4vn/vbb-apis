@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Dell
- * Date: 12/14/2016
- * Time: 8:05 PM
- */
+
 class LogoutAction extends CAction
 {
     public function run()

@@ -126,6 +126,7 @@ class ApiController extends CController
             'detailPost' => 'protected.controllers.api.DetailPostAction',
             'detailComments' => 'protected.controllers.api.DetailCommentAction',
             'search' => 'protected.controllers.api.SearchAction',
+            'searchResult' => 'protected.controllers.api.SearchResult',
         );
     }
 
