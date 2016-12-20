@@ -13,41 +13,30 @@ class ShowThreadByPage extends CAction
         $params = $_GET;
         $threadId = isset($_GET['threadId']) ? $_GET['threadId'] : null;
         if ($threadId == null) {
-            echo json_encode(array('code' => 5, 'message' => 'Missing params thread id'));
+            echo json_encode(array('code' => 5, 'message' => 'Missing params threadId'));
             return;
         }
         $pageNumber = isset($_GET['pageNumber']) ? $_GET['pageNumber'] : null;
-        var_dump($pageNumber);
+        //var_dump($pageNumber);
         if ($pageNumber == null) {
             $pageNumber = 1;
         }
-        //Parameters
-        $uniqueId = uniqid();
-        $content = '';
 
-        $apiConfig = new ApiConfig(API_KEY, $uniqueId, CLIENT_NAME, CLIENT_VERSION, PLATFORM_NAME, PLATFORM_VERSION);
-        $apiConnector = new GuzzleProvider(API_URL);
-        $api = new Api($apiConfig, $apiConnector);
+        $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
+        if ($sessionhash) {
+            $apiConfig = unserialize(base64_decode($sessionhash));
+            $api = new Api($apiConfig, new GuzzleProvider(API_URL));
 
-        $response = $api->callRequest('api_init', [
-            'clientname' => CLIENT_NAME,
-            'clientversion' => CLIENT_VERSION,
-            'platformname' => PLATFORM_NAME,
-            'platformversion' => PLATFORM_VERSION,
-            'uniqueid' => $uniqueId]);
-
-        // var_dump($response);die(1);
-
-        // Get token key
-        $accessToken = $response['apiaccesstoken'];
-
-        $apiConfig->setAccessToken($accessToken);
-        $api = new Api($apiConfig, $apiConnector);
-
-        $response = $api->callRequest('showthread', [
-            'threadid' => $threadId, 'api_v'=> '1', 'pagenumber' => $pageNumber
-        ], ConnectorInterface::METHOD_GET);
-        var_dump($response);
-        die;
+            $response = $api->callRequest('showthread', [
+                'threadid' => $threadId,
+                'pagenumber' => $pageNumber,
+                'api_v'=> '1'
+            ], ConnectorInterface::METHOD_GET);
+            //var_dump($response);die();
+        }else{
+            // Sessionhash is empty
+            echo json_encode(array('code' => 10, 'message' => 'User logged out'));
+            return;
+        }
     }
 }
