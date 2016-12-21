@@ -26,6 +26,7 @@ class GetForum extends CAction
                     $regex = '#\[BIKE].*\[\/BIKE]#';
                     $hasBike = preg_match($regex, $content, $result);
                     $bike = '';
+                    $phone = '';
                     $price = '';
                     $address = '';
                     $formality = '';
@@ -92,12 +93,6 @@ class GetForum extends CAction
                             $image = preg_replace('/\[\/?IMG\]/', '', $result[0]);
                         }
                     }
-                    // TODO cat chuoi
-//                if (strlen($content) > 100)
-//                {
-//                   // $content = substr($content,0,97);
-//                    $content .= '...';
-//                }
 
                     $item = array(
                         'threadid' => $threadbits->thread->threadid,

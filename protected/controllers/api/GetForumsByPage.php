@@ -29,6 +29,7 @@ class GetForumsByPage extends CAction
                     $regex = '#\[BIKE].*\[\/BIKE]#';
                     $hasBike = preg_match($regex, $content, $result);
                     $bike = '';
+                    $phone = '';
                     $price = '';
                     $address = '';
                     $formality = '';
