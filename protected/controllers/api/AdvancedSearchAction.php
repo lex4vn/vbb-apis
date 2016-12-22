@@ -1,30 +1,70 @@
 <?php
 
-class SearchResult extends CAction
+class AdvancedSearchAction extends CAction
 {
     public function run()
     {
         header('Content-type: application/json');
-        $params = $_GET;
-        if (!isset($params['searchid']) || $params['searchid'] == '') {
-            echo json_encode(array('code' => 5, 'message' => 'Missing params searchid'));
+        if (empty($_POST)) {
+            $_POST = json_decode(file_get_contents('php://input'), true);
+        }
+        $params = $_POST;
+        if (!isset($params['type']) || $params['type'] == '') {
+            echo json_encode(array('code' => 5, 'message' => 'Missing params type'));
             return;
         }
-
-        $pageNumber = isset($_GET['pagenumber']) ? $_GET['pagenumber'] : null;
-        if ($pageNumber == null) {
-            $pageNumber = 1;
+        if (!($params['type'] == 1 || $params['type'] == 2)) {
+            echo json_encode(array('code' => 5, 'message' => 'Params type can be 1 or 2. Therein 1 is need to buy. 2 is need to sell.'));
+            return;
+        }
+        if (!isset($params['price_min']) || $params['price_min'] == '') {
+            echo json_encode(array('code' => 5, 'message' => 'Missing params price_min'));
+            return;
+        }
+        if (!isset($params['price_max']) || $params['price_max'] == '') {
+            echo json_encode(array('code' => 5, 'message' => 'Missing params price_max'));
+            return;
+        }
+        if ($params['price_max'] < $params['price_min']) {
+            echo json_encode(array('code' => 5, 'message' => 'Param price_max must greater than price_min'));
+            return;
+        }
+        if (!isset($params['bike']) || $params['bike'] == '') {
+            echo json_encode(array('code' => 5, 'message' => 'Missing params bike'));
+            return;
+        }
+        if (!isset($params['status']) || $params['status'] == '') {
+            echo json_encode(array('code' => 5, 'message' => 'Missing params status'));
+            return;
         }
         $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
         if ($sessionhash) {
             $apiConfig = unserialize(base64_decode($sessionhash));
             $api = new Api($apiConfig, new GuzzleProvider(API_URL));
-            $response = $api->callRequest('search_showresults', [
-                'searchid'=> $params['searchid'],
-                'pagenumber' => $pageNumber,
+
+            // search_type = 1: Bai viet, 3: Chuyen muc
+            // Forumchoice = 17: Can mua, 69: Can ban
+            //api: search_doprefs
+            $response = $api->callRequest('search_process', [
+                'search_type' => '3',
+                'query' => '[BIKE]'.$params['bike'].'[/BIKE]',
+                'forumchoice' => $params['type'] == 1 ? 69 : 17,
                 'api_v' => '1'
             ], ConnectorInterface::METHOD_POST);
 
+            $searchid = 0;
+            if (isset($response['response']) && 'search' == $response['response']->errormessage) {
+                $searchid = $response['show']->searchid;
+            } else {
+                echo json_encode(array('code' => 1, 'message' => 'No results'));
+                return;
+            }
+            $response = $api->callRequest('search_showresults', [
+                'searchid' => $searchid,
+                //'pagenumber' => $pageNumber,
+                'api_v' => '1'
+            ], ConnectorInterface::METHOD_POST);
+            //var_dump($response);die();
             if (isset($response['response'])) {
                 $items = array();
                 foreach ($response["response"]->searchbits as $searchbits) {
@@ -99,9 +139,15 @@ class SearchResult extends CAction
                             $image = preg_replace('/\[\/?IMG\]/', '', $result[0]);
                         }
                     }
-
+                    $regex = '#\[INFOR].*\[\/INFOR]#';
+                    $content = preg_replace($regex, '', $content);
+                    //var_dump($status.$bike.$price);die();
+                    if ($params['status'] != trim($status) || trim($bike) != $params['bike'] || intval($price) > $params['price_max'] || intval($price) < $params['price_min']) {
+                        continue;
+                    }
+                    //var_dump($content);die();
                     $item = array(
-                        'threadid' => $searchbits->thread->threadid,
+                       'threadid' => $searchbits->thread->threadid,
                         'threadtitle' => $searchbits->thread->threadtitle,
                         'postuserid' => $searchbits->thread->postuserid,
                         'postusername' => $searchbits->thread->postusername,
@@ -116,23 +162,25 @@ class SearchResult extends CAction
                     );
                     array_push($items, $item);
                 }
-                echo json_encode(array('code' => 0,
-                    'message' => 'get detail forum success',
-                    'totalpages' => $response["response"]->pagenav->totalpages,
-                    'listThread' => $items
-                ));
-                return;
+                if($items){
+                    echo json_encode(array('code' => 0,
+                        'message' => 'Search successful',
+                        // 'totalpages' => $response["response"]->pagenav->totalpages,
+                        'listThread' => $items
+                    ));
+                    return;
+                }else{
+                    echo json_encode(array('code' => 1, 'message' => 'No results'));
+                    return;
+                }
+
+
             } else {
-                echo json_encode(array('code' => 1, 'message' => 'Forum error'));
+                // Sessionhash is empty
+                echo json_encode(array('code' => 10, 'message' => 'User logged out'));
                 return;
             }
-
-        }else {
-            // Sessionhash is empty
-            echo json_encode(array('code' => 10, 'message' => 'User logged out'));
-            return;
         }
 
     }
-
 }

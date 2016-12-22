@@ -102,6 +102,9 @@ class ApiController extends CController
             'loginFaceBookDemo' => 'protected.controllers.api.LoginFacebookDemo',
             'loginGoogle' => 'protected.controllers.api.LoginGoogleAction',
             'loginGoogleAndroid' => 'protected.controllers.api.LoginGoogleAndroidAction',
+            'messages' => 'protected.controllers.api.MessagesAction',
+            'messagesBox' => 'protected.controllers.api.MessagesBoxAction',
+            'messageSend' => 'protected.controllers.api.MessageSendAction',
             'profile' => 'protected.controllers.api.ProfileAction',
             'profilePost' => 'protected.controllers.api.ProfilePostAction',
             'profileThreads' => 'protected.controllers.api.ProfileThreadsAction',
@@ -125,6 +128,7 @@ class ApiController extends CController
             'loginFace' => 'protected.controllers.api.LoginFacebook',
             'detailPost' => 'protected.controllers.api.DetailPostAction',
             'detailComments' => 'protected.controllers.api.DetailCommentAction',
+            'advancedSearch' => 'protected.controllers.api.AdvancedSearchAction',
             'search' => 'protected.controllers.api.SearchAction',
             'searchResult' => 'protected.controllers.api.SearchResult',
         );
