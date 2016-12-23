@@ -37,6 +37,7 @@ class AdvancedSearchAction extends CAction
             echo json_encode(array('code' => 5, 'message' => 'Missing params status'));
             return;
         }
+        //var_dump($params);die();
         $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
         if ($sessionhash) {
             $apiConfig = unserialize(base64_decode($sessionhash));
@@ -46,12 +47,13 @@ class AdvancedSearchAction extends CAction
             // Forumchoice = 17: Can mua, 69: Can ban
             //api: search_doprefs
             $response = $api->callRequest('search_process', [
-                'search_type' => '3',
-                'query' => '[BIKE]'.$params['bike'].'[/BIKE]',
+                'search_type' => '1',
+                'query' => $params['bike'],
                 'forumchoice' => $params['type'] == 1 ? 69 : 17,
+                'titleonly' => '0',
                 'api_v' => '1'
             ], ConnectorInterface::METHOD_POST);
-
+            //var_dump($response);die();
             $searchid = 0;
             if (isset($response['response']) && 'search' == $response['response']->errormessage) {
                 $searchid = $response['show']->searchid;
@@ -59,15 +61,19 @@ class AdvancedSearchAction extends CAction
                 echo json_encode(array('code' => 1, 'message' => 'No results'));
                 return;
             }
+            //var_dump($searchid);die();
             $response = $api->callRequest('search_showresults', [
                 'searchid' => $searchid,
                 //'pagenumber' => $pageNumber,
                 'api_v' => '1'
             ], ConnectorInterface::METHOD_POST);
             //var_dump($response);die();
+            $items = array();
             if (isset($response['response'])) {
-                $items = array();
                 foreach ($response["response"]->searchbits as $searchbits) {
+                    if(!isset($searchbits->thread))
+                        continue;
+                    //var_dump($searchbits->thread);die();
                     $content = $searchbits->thread->preview;
                     $regex = '#\[BIKE].*\[\/BIKE]#';
                     $hasBike = preg_match($regex, $content, $result);
@@ -141,13 +147,14 @@ class AdvancedSearchAction extends CAction
                     }
                     $regex = '#\[INFOR].*\[\/INFOR]#';
                     $content = preg_replace($regex, '', $content);
-                    //var_dump($status.$bike.$price);die();
+                    //var_dump($status.$bike.$price);
+                    //die();
                     if ($params['status'] != trim($status) || trim($bike) != $params['bike'] || intval($price) > $params['price_max'] || intval($price) < $params['price_min']) {
-                        continue;
+                        //continue;
                     }
                     //var_dump($content);die();
                     $item = array(
-                       'threadid' => $searchbits->thread->threadid,
+                        'threadid' => $searchbits->thread->threadid,
                         'threadtitle' => $searchbits->thread->threadtitle,
                         'postuserid' => $searchbits->thread->postuserid,
                         'postusername' => $searchbits->thread->postusername,
@@ -160,26 +167,33 @@ class AdvancedSearchAction extends CAction
                         'image' => $image,
                         'status' => $status,
                     );
+                    //var_dump($item);die();
+
                     array_push($items, $item);
                 }
-                if($items){
+               // var_dump($items);
+               // die();
+                if ($items) {
                     echo json_encode(array('code' => 0,
                         'message' => 'Search successful',
                         // 'totalpages' => $response["response"]->pagenav->totalpages,
                         'listThread' => $items
                     ));
                     return;
-                }else{
+                } else {
                     echo json_encode(array('code' => 1, 'message' => 'No results'));
                     return;
                 }
 
 
             } else {
-                // Sessionhash is empty
-                echo json_encode(array('code' => 10, 'message' => 'User logged out'));
+                echo json_encode(array('code' => 1, 'message' => 'Forum error'));
                 return;
             }
+        } else {
+            // Sessionhash is empty
+            echo json_encode(array('code' => 10, 'message' => 'User logged out'));
+            return;
         }
 
     }
