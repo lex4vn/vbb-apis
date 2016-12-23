@@ -31,9 +31,13 @@ class DetailPostAction extends CAction
                 $pagenumber = $response['response']-> pagenumber;
                 $perpage = $response['response']-> perpage;
                 $postbits = $response['response']->postbits;
-                //var_dump(count($postbits));die();
+               //var_dump($response);die();
                 $comments = array();
                 foreach($postbits as $postbit){
+                    if(!isset($postbit->post)){
+                        continue;
+                    }
+                    //var_dump($postbit);die();
                     $post_item = $postbit->post;
                     //var_dump($post);die();
                     if($page <= 1){
