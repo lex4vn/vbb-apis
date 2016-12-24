@@ -26,25 +26,30 @@ class DetailPostAction extends CAction
             //var_dump($response);die();
             $is_first_page = false;
             if (isset($response['response'])) {
-                //var_dump($response['response']->postbits);die();
+
                 $totalposts = $response['response']-> totalposts;
                 $pagenumber = $response['response']-> pagenumber;
                 $perpage = $response['response']-> perpage;
                 $postbits = $response['response']->postbits;
-               //var_dump($response);die();
+
                 $comments = array();
+
+
+
+				if(!is_array ($postbits)){
+					$postbits = array();
+					array_push($postbits,$response['response']->postbits);
+				}
+
                 foreach($postbits as $postbit){
-                    if(!isset($postbit->post)){
-                        continue;
-                    }
-                    //var_dump($postbit);die();
                     $post_item = $postbit->post;
-                    //var_dump($post);die();
+
                     if($page <= 1){
                         $is_first_page = true;
-                        //var_dump($post);die();
-                        $post = $postbit->post;
 
+
+                        
+                        $post = $postbit->post;
                         $bike = '';
                         $price = '';
                         $phone = '';
@@ -54,7 +59,7 @@ class DetailPostAction extends CAction
                         $status = '';
 
                         $content = $post_item->message_bbcode;
-                        //var_dump($post);die();
+
 
                         $regex = '#\[BIKE].*\[\/BIKE]#';
                         $hasBike = preg_match($regex, $content, $result);
@@ -109,27 +114,34 @@ class DetailPostAction extends CAction
                                 $status = preg_replace('/\[\/?STATUS\]/', '', $result[0]);
                             }
                         }
-
+				
                         // image
                         $regex = '#\[IMG].*\[\/IMG]#';
                         // Remove break line
                         $content_image =preg_replace("/[\n\r]/","",$content);
                         $hasImage = preg_match($regex, $content_image, $result);
-                        //var_dump($content);die();
+
+
+						//var_dump($hasImage);
+						//var_dump($result);die();
                         if ($hasImage) {
-                            //var_dump($result);die();
                             $content = preg_replace($regex, '', $content);
                             if ($result) {
                                 //var_dump($result);die();
                                 $images_array = explode('http',preg_replace('/\[\/?IMG\]/', '', $result[0]));
+
+
+								foreach($images_array as $img){
+									if(empty($img)){
+										continue;
+									}
+									$images[] = 'http'.$img;
+								}
                             }
                         }
-                        foreach($images_array as $img){
-                            if(empty($img)){
-                                continue;
-                            }
-                            $images[] = 'http'.$img;
-                        }
+						//var_dump("NO IMAGE");
+						//var_dump($result);die();
+                        
 
                         $regex = '#\[INFOR].*\[\/INFOR]#';
                         $content = preg_replace($regex, '', $content);
