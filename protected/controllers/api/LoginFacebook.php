@@ -1,19 +1,19 @@
 <?php
 
-class LoginFacebook extends  CAction
+class LoginFacebook extends CAction
 {
     public function run()
     {
         header('Content-type: application/json');
         //Parameters
-        if(empty($_POST)) {
+        if (empty($_POST)) {
             $_POST = json_decode(file_get_contents('php://input'), true);
         }
-//        $params = $_POST;
-//        if (!isset($params['access_token']) || $params['access_token'] == '' ) {
-//            echo json_encode(array('code' => 5, 'message' => 'Missing params username'));
-//            return;
-//        }
+        $params = $_POST;
+        if (!isset($params['fb_access_token']) || $params['fb_access_token'] == '') {
+            echo json_encode(array('code' => 5, 'message' => 'Missing params fb_access_token'));
+            return;
+        }
         $uniqueId = uniqid();
         $content = '';
 
@@ -26,21 +26,15 @@ class LoginFacebook extends  CAction
             'clientversion' => CLIENT_VERSION,
             'platformname' => PLATFORM_NAME,
             'platformversion' => PLATFORM_VERSION,
-            'api_v'=> '4',
             'uniqueid' => $uniqueId]);
 
-        //var_dump($response);die(1);
-        //var_dump($post_id);die(1);
         // Get token key
         $accessToken = $response['apiaccesstoken'];
         // var_dump($accessToken);die(1);
         $apiConfig->setAccessToken($accessToken);
         $api = new Api($apiConfig, $apiConnector);
 
-        //$response = $api->callRequest('login_facebook', ['fb_userid'=>'742194869201205','api_v'=> '4'  ]);
-        $response = $api->callRequest('login_facebook', ['fb_userid'=>'1827488541','api_v'=> '4'  ]);
-        var_dump($response);die();
-        $access_token = $params['access_token'];
+        $access_token = $params['fb_access_token'];
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://graph.facebook.com/me?access_token=$access_token");
@@ -51,99 +45,108 @@ class LoginFacebook extends  CAction
         curl_close($ch);
 
         $user = json_decode($response);
-        if($user){
-            $f_id = $user->id;
-            // search user id and accesstoken in table user
-            $response = $api->callRequest('searchFaceBook', ['fid' => $f_id,  'api_v'=> '1'  ]);
-            if (isset($response['response'])) {
-                $user = json_decode($response);
-                $response = $api->callRequest('login_login', [
-                    'vb_login_username' => $user -> username,
-                    'vb_login_md5password' => $access_token
-                ]);
-
+        //var_dump($response);die();
+        if ($user) {
+            if (isset($user->error)) {
+                echo json_encode(array('code' => 4, 'result' => false, 'message' => 'Error validating access token: Session has expired.'));
+                return;
+            }
+            if (isset($user->id)) {
+                $response = $api->callRequest('login_facebook', [
+                    'fbuserid' => $user->id,
+                    'api_v' => '4'
+                ], ConnectorInterface::METHOD_POST);
+                $error = false;
                 if (isset($response['response'])) {
                     if (isset($response['response']->errormessage)) {
                         $result = $response['response']->errormessage[0];
-                        if ('badlogin_strikes_passthru' == $result) {
-                            echo json_encode(array('code' => 2,'result' =>  false,'message' => 'Wrong username or password.'));
-                            return;
-                        }
-                        if ('strikes' == $result) {
-                            echo json_encode(array('code' => 2,'result' =>  false,
-                                'message' => 'Wrong username or password. You have used up your failed login quota! Please wait 15 minutes before trying again. Don\'t forget that the password is case sensitive.',
-                            ));
-                            return;
-                        }
-                        if ('redirect_login' == $result &&  $response['session']->userid !== '0') {
+                        //var_dump($result);die();
+                        if ('redirect_login' == $result && $response['session']->userid !== '0') {
+                            $sessionKey = CUtils::generateSessionKey($response['session']->userid,base64_encode(serialize($apiConfig)));
                             echo json_encode(array('code' => 0,
                                 'message' => 'Login successful',
-                                'sessionhash' =>  $response['session']->dbsessionhash,
-                                'result' =>  true,
-                                'userid' =>  $response['session']->userid,
-                                'username' =>  $response['response']->errormessage[1],
+                                'sessionhash' =>$sessionKey,
+                                'result' => true,
+                                'userid' => $response['session']->userid,
+                                'username' => $response['response']->errormessage[1],
                             ));
                             return;
                         }
+
+                        if ('badlogin_facebook' == $result) {
+                            echo json_encode(array('code' => 2, 'result' => false, 'message' => 'Please register with facebook account'));
+                            return;
+                            // register new user by facebook
+                            //$this->registerUserByFacebook($user,$accessToken,$api);
+                        }
+
+                    }else{
+                        $error = true;
                     }
-                }else{
-                    echo json_encode(array('code' => 1, 'result' =>  false,'message' => 'Forum error'));
+                }
+
+                if($error) {
+                    echo json_encode(array('code' => 1, 'result' => false, 'message' => 'Forum error'));
                     return;
                 }
 
-            }else{
-                // register new user by facebook
-                $uid = isset($user->id) ? $user->id : '';
-                $fname = isset($user->name) ? $user->name : '';
-                $fbirthday = isset($user->birthday) ? $user->birthday : '';
-                $fmail = isset($user->email) ? $user->email : '';
-                $fgender = isset($user->gender) ? $user->gender : '';
-                $access_token = $accessToken;
-                //
+            } else {
+                echo json_encode(array('code' => 3, 'result' => false, 'message' => 'Please check app facebook with access token.'));
+                return;
             }
-        }else{
-            echo json_encode(array('code' => 0, 'message' => 'cannot get information from facebook.'));
-            return;
-        }
-        var_dump($user);
-        die(1);
-        $idFaceBook = 'EAACEdEose0cBABGLrAWQp2ObXEw3NsnZCeoEQo2HOSpl4QuUwFdklPQfS0PeZCHGqE7a4AksYOnN5FbALuUrpeKKwtGHbcxgKZBnPjZAbvC4aWxYcS6424x1sOoZBxDOOcZBamAz1dh6LvxOewNh1VN8L4omneqHY5WTaOBi9Q1L1SDW3Io8o2';
-        $userId = '742194869201205';
-        $response = $api->callRequest('login_facebook', ['userid' => $userId , 'api_v'=> '4' ]);
-        var_dump($response);
-        die(1);
-        //Thanh cong
-        if (isset($response['response'])) {
-
-        } else {
-            echo json_encode(array('code' => 1, 'message' => 'Forum error'));
-            return;
         }
     }
-    public function registerUserByFacebook($user, $accessToken, $api){
-        $userName = $user ->id;
-        $email = $user ->email;
-        $fullName = $user ->last_name + " " +  $user -> first_name;
-        $password = $accessToken;
-        $birthDay = isset($user ->birthday) ? $user ->birthday : "0912345678";
+
+    public function registerUserByFacebook($user, $accessToken, $api)
+    {
+        //var_dump($user);die();
+        $fullName = $user->name;
+        $userName = isset($user->id) ? $user->id : null;
+        $email = isset($user->email) ? $user->email : null;
+        $birthday = isset($user->birthday) ? $user->birthday : null;
+        if ($userName == null) {
+            echo json_encode(array('code' => 5, 'message' => 'Missing username'));
+            return;
+        }
+
+        if ($email == null) {
+            echo json_encode(array('code' => 5, 'message' => 'Missing email'));
+            return;
+        }
+
+        if ($fullName == null) {
+            echo json_encode(array('code' => 5, 'message' => 'Missing fullname'));
+            return;
+        }
+
+        if ($birthday == null) {
+            echo json_encode(array('code' => 5, 'message' => 'Missing birthday'));
+            return;
+        }
+        $password = 'faccebook';
+
+        $phoneNumber = "0912345678";
+        $job = 'Nhân viên';
+        $wife = 'Vợ 2';
+
         $userfield = [];
-        $userfield["field5"] = $user ->name;
-        $userfield["field6"] = $user ->birthday;
+        $userfield["field5"] = $fullName;
+        $userfield["field6"] = $birthday;
         //Nghe nghiep
-        $userfield["field7"] = "";
-        $userfield["field8"] = "";
+        $userfield["field7"] = $job;
+        $userfield["field8"] = $phoneNumber;
 
         // Xe - vo 2
-        $userfield["field9"] = "";
+        $userfield["field9"] = $wife;
         $userfield["field10"] = "Tổ đội";
 
-        $month = date("m", strtotime($birthDay));
+        $month = date("m", strtotime($birthday));
 
         // Get day
-        $day = date("d", strtotime($birthDay));
+        $day = date("d", strtotime($birthday));
 
         // Get year
-        $year = date("Y", strtotime($birthDay));
+        $year = date("Y", strtotime($birthday));
 
         $birthdate = $day . '/' . $month . '/' . $year;
 
@@ -160,9 +163,9 @@ class LoginFacebook extends  CAction
             'birthdate' => $birthdate,
             'timezoneoptions' => TIME_ZONE_7,
             'userfield' => $userfield,
-            'api_v'=> '1'
+            'api_v' => '1'
         ]);
-
+        //var_dump($response);die();
         if (!isset($response)) {
             echo json_encode(array('code' => 1, 'message' => 'Forum error'));
             return;
