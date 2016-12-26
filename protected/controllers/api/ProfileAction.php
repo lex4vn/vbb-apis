@@ -30,18 +30,18 @@ class ProfileAction extends CAction
 						$phonenumber = $field->profilefield->value;
 					}
 				}
-				
+
 				$profile = array(
 					'username' => $response['response']->prepared->username,
 					'fullname' => $fullname,
 					'phonenumber' => $phonenumber,
-					'birthday' => $response['response']->prepared->birthday,
+					'birthday' => date('d/m/Y',strtotime($response['response']->prepared->birthday)),
 					'age' => $response['response']->prepared->age,
 					'displayemail' => $response['response']->prepared->displayemail,
 					'homepage' => $response['response']->prepared->homepage,
 					'usertitle' => $response['response']->prepared->usertitle,
 					'onlinestatus' => $response['response']->prepared->onlinestatus->onlinestatus == 1 ? "online" : "offline",
-					'joindate' => $response['response']->prepared->joindate,
+					'joindate' => date('d/m/Y',strtotime($response['response']->prepared->joindate)),
 					'posts' => $response['response']->prepared->posts,
 					'avatarurl' => $response['response']->prepared->avatarurl
 					);
