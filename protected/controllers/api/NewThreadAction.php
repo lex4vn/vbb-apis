@@ -59,7 +59,7 @@ class NewThreadAction extends CAction
         $status = isset($params['status']) ? $params['status'] : 'Khác';
         $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
         if ($sessionhash) {
-            $apiConfig = unserialize(base64_decode($params['sessionhash']));
+            $apiConfig = unserialize(base64_decode($sessionhash));
             $api = new Api($apiConfig, new GuzzleProvider(API_URL));
             $info = '[INFOR]';
             $info .= '[BIKE]' . $bike . '[/BIKE]';

@@ -123,6 +123,7 @@ class ApiController extends CController
             'updateStatus' => 'protected.controllers.api.UpdateStatusAction',
             'showThread' => 'protected.controllers.api.ShowThreadAction',
             'newThread' => 'protected.controllers.api.NewThreadAction',
+            'newPost' => 'protected.controllers.api.NewPostAction',
             'getForumsByPage' => 'protected.controllers.api.GetForumsByPage',
             'showThreadByPage' => 'protected.controllers.api.ShowThreadByPage',
             'loginFace' => 'protected.controllers.api.LoginFacebook',
