@@ -10,18 +10,26 @@
 class UpdateProfileAction extends CAction{
     public function run(){
         header('Content-type: application/json');
+		if(empty($_POST)) {
+            $_POST = json_decode(file_get_contents('php://input'), true);
+        }
         $params = $_POST;
+		
+		//$sessionhash = CUtils::getSessionHash(($params['sessionhash']));
+		
         if(!isset($params['user_id'])){
             if(!isset($params['user_id'])){
                 echo json_encode(array('code' => 1, 'message' => 'Missing params user_id'));
                 return;
             }
         }
-        if (!Subscriber::model()->exists('id = '. $params['user_id'])){
+		if (!Subscriber::model()->exists('id = '. $params['user_id'])){
             echo json_encode(array('code' => 1, 'message' => 'user_id is not exist'));
             return;
         }
+		
         $subs = Subscriber::model()->findByPk($params['user_id']);
+		var_dump($subs); die();
         if(isset($params['phone_number'])){
            $subs->phone_number = $params['phone_number'];
         }
@@ -62,22 +70,20 @@ class UpdateProfileAction extends CAction{
                     'is_active' => 1
                 )
             );
-           echo json_encode(array(
-               'code' => 0,
-               'item'=>array(
-                   'id'=>$subs->id,
-                   'username'=> !empty($name) ? $name : 'Noname',
-                   'url_avatar'=> $url_avatar,
-                   'phone_number'=> !empty($subs->phone_number) ? (string)$subs->phone_number : '',
-                   'lastname'=> !empty($subs->lastname) ? $subs->lastname : '',
-                   'firstname'=> !empty($subs->firstname) ? $subs->firstname : '',
-                   'fcoin'=> !empty($subs->fcoin) ? $subs->fcoin : '',
-                   'type'=> !empty($subs->type) ? $subs->type : '',
-                   'service_id' => !empty($usingService['service_id']) ? $usingService['service_id'] : 0,
-                   'email' => $mail,
-                   'service_expiry_date' => !empty($usingService['expiry_date']) ? date('Y-m-d', strtotime($usingService['expiry_date'])) : ''
-               ),
-           ));
+			$userfield = [];
+			$userfield["field5"] = !empty($name) ? $name : 'Noname';
+			
+			$userfield["field8"] = !empty($subs->phone_number) ? (string)$subs->phone_number : '';
+			
+			$response = $api->callRequest('profile_updateprofile', [
+                    'userfield' => $userfield
+               ]);
+			var_dump($response); die();
+			$email_result = $api->callRequest('profile_updateprofile', [
+                    'currentpassword' => '123123', 
+					'newpassword' => $mail
+               ]);
+			
             return;  
         }
     }
