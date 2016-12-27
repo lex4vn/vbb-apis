@@ -14,77 +14,55 @@ class UpdateProfileAction extends CAction{
             $_POST = json_decode(file_get_contents('php://input'), true);
         }
         $params = $_POST;
+
+		if(empty($params['md5_password']) || !isset($params['md5_password'])) {
+			echo json_encode(array('code' => 1, 'message' => 'Missing params md5_password'));
+			return;
+		}
+		$md5_password = $params['md5_password'];
+		if(empty($params['lastname']) || !isset($params['lastname'])) {
+			echo json_encode(array('code' => 1, 'message' => 'Missing params lastname'));
+			return;
+		}
+		if(empty($params['firstname']) || !isset($params['firstname'])) {
+			echo json_encode(array('code' => 1, 'message' => 'Missing params firstname'));
+			return;
+		}
+        $lastname = $params['lastname'];
+        $firstname = $params['firstname'];
+		$phonenumber =  !empty($params['phonenumber']) ? $params['phonenumber'] : '';
+        $name = $firstname . ' ' . $lastname;
 		
-		//$sessionhash = CUtils::getSessionHash(($params['sessionhash']));
-		
-        if(!isset($params['user_id'])){
-            if(!isset($params['user_id'])){
-                echo json_encode(array('code' => 1, 'message' => 'Missing params user_id'));
-                return;
-            }
-        }
-		if (!Subscriber::model()->exists('id = '. $params['user_id'])){
-            echo json_encode(array('code' => 1, 'message' => 'user_id is not exist'));
-            return;
-        }
-		
-        $subs = Subscriber::model()->findByPk($params['user_id']);
-		var_dump($subs); die();
-        if(isset($params['phone_number'])){
-           $subs->phone_number = $params['phone_number'];
-        }
-        if(isset($params['lastname'])){
-           $subs->lastname = $params['lastname'];
-        }
-        if(isset($params['firstname'])){
-           $subs->firstname = $params['firstname'];
-        }
-        if(isset($params['email'])){
-           $subs->email = $params['email'];
-        }
-        if(isset($params['class_id'])){
-           $subs->class_id = $params['class_id'];
-        }
-        if(!$subs->save()){
-           echo json_encode(array('code' => 1, 'message' => 'Cannot update profile'));
-            return; 
-        }else{
-//            $subs = (array)$subs;
-            if($subs->url_avatar != null){
-                if($subs->password == 'faccebook' || $subs->password == 'Google'){
-                    $url_avatar = $subs->url_avatar;
-                }else{
-                    $url_avatar = IPSERVER . $subs->url_avatar;
-                }
-//                $url_avatar = IPSERVER.$subs->url_avatar;
-            }else{
-                $url_avatar = '';
-            }
-            $lastname = !empty($subs->lastname) ? $subs->lastname : '';
-            $firstname = !empty($subs->firstname) ? $subs->firstname : '';
-            $name = $firstname . ' ' . $lastname;
-            $mail = !empty($subs->email) ? $subs->email : "";
-            $usingService = ServiceSubscriberMapping::model()->findByAttributes(
-                array(
-                    'subscriber_id' => $subs->id,
-                    'is_active' => 1
-                )
-            );
+		$sessionhash = CUtils::getSessionHash(($params['sessionhash']));
+		if ($sessionhash) {
 			$userfield = [];
-			$userfield["field5"] = !empty($name) ? $name : 'Noname';
+			if (!empty($name)) {
+				
+				$userfield["field5"] = $name;
+			}
 			
-			$userfield["field8"] = !empty($subs->phone_number) ? (string)$subs->phone_number : '';
-			
+			if (!empty($phonenumber )) {
+				$userfield["field8"] = $phonenumber;
+			}
+			var_dump($userfield);
+			$apiConfig = unserialize(base64_decode($sessionhash));
+			$api = new Api($apiConfig, new GuzzleProvider(API_URL));
 			$response = $api->callRequest('profile_updateprofile', [
-                    'userfield' => $userfield
-               ]);
-			var_dump($response); die();
-			$email_result = $api->callRequest('profile_updateprofile', [
-                    'currentpassword' => '123123', 
-					'newpassword' => $mail
-               ]);
+                 'userfield' => $userfield
+            ]);
+
+			if (!isset($response) || !isset($response['response']) || $response["response"]->errormessage[0]) {
+				echo json_encode(array('code' => 1, 'message' => 'Forum error'));
+				return;
+			}
 			
-            return;  
-        }
+			$responsemessage = $response["response"]->errormessage[0];
+			var_dump(strcasecmp ($responsemessage, "redirect_updatethanks") == 0);
+			if(strcasecmp ($responsemessage, "redirect_updatethanks") == 0) {
+				echo json_encode(array('code' => 0, 'message' => 'Profile update successfully'));
+			} else {
+				echo json_encode(array('code' => 1, 'message' => $responsemessage));
+			}
+		}
     }
 }
