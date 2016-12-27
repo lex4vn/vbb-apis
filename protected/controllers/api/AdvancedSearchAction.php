@@ -17,10 +17,7 @@ class AdvancedSearchAction extends CAction
             echo json_encode(array('code' => 5, 'message' => 'Params type can be 1 or 2. Therein 1 is need to buy. 2 is need to sell.'));
             return;
         }
-        if (!isset($params['price_min']) || $params['price_min'] == '') {
-            echo json_encode(array('code' => 5, 'message' => 'Missing params price_min'));
-            return;
-        }
+
         if (!isset($params['price_max']) || $params['price_max'] == '') {
             echo json_encode(array('code' => 5, 'message' => 'Missing params price_max'));
             return;
@@ -149,7 +146,8 @@ class AdvancedSearchAction extends CAction
                     $content = preg_replace($regex, '', $content);
                     //var_dump($status.$bike.$price);
                     //die();
-                    if (trim($bike) != $params['bike'] || intval($price) > $params['price_max'] || intval($price) < $params['price_min']) {
+                    $price_min = isset($params['price_min'])? $params['price_min']:0;
+                    if (trim($bike) != $params['bike'] || intval($price) > $params['price_max'] || intval($price) < $price_min) {
                         continue;
                     }
                     //var_dump($searchbits->thread);die();
