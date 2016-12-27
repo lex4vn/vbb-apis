@@ -132,6 +132,7 @@ class ApiController extends CController
             'advancedSearch' => 'protected.controllers.api.AdvancedSearchAction',
             'search' => 'protected.controllers.api.SearchAction',
             'searchResult' => 'protected.controllers.api.SearchResult',
+            'updateProfilePic' => 'protected.controllers.api.UpdateProfilePic',
         );
     }
 
