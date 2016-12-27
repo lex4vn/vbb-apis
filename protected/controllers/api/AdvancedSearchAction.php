@@ -33,8 +33,8 @@ class AdvancedSearchAction extends CAction
             echo json_encode(array('code' => 5, 'message' => 'Missing params bike'));
             return;
         }
-        if (!isset($params['status']) || $params['status'] == '') {
-            echo json_encode(array('code' => 5, 'message' => 'Missing params status'));
+        if (!isset($params['brand']) || $params['brand'] == '') {
+            echo json_encode(array('code' => 5, 'message' => 'Missing params brand'));
             return;
         }
         //var_dump($params);die();
@@ -48,7 +48,7 @@ class AdvancedSearchAction extends CAction
             //api: search_doprefs
             $response = $api->callRequest('search_process', [
                 'search_type' => '1',
-                'query' => $params['bike'],
+                'query' => $params['brand'],
                 'forumchoice' => $params['type'] == 1 ? 69 : 17,
                 'titleonly' => '0',
                 'api_v' => '1'
@@ -149,8 +149,8 @@ class AdvancedSearchAction extends CAction
                     $content = preg_replace($regex, '', $content);
                     //var_dump($status.$bike.$price);
                     //die();
-                    if ($params['status'] != trim($status) || trim($bike) != $params['bike'] || intval($price) > $params['price_max'] || intval($price) < $params['price_min']) {
-                        //continue;
+                    if (trim($bike) != $params['bike'] || intval($price) > $params['price_max'] || intval($price) < $params['price_min']) {
+                        continue;
                     }
                     //var_dump($content);die();
                     $item = array(
