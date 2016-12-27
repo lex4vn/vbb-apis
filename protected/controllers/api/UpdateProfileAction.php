@@ -20,44 +20,45 @@ class UpdateProfileAction extends CAction{
 			return;
 		}
 		$md5_password = $params['md5_password'];
-		if(empty($params['lastname']) || !isset($params['lastname'])) {
-			echo json_encode(array('code' => 1, 'message' => 'Missing params lastname'));
+		$name = "";
+		if(empty($params['lastname']) &&  empty($params['firstname'])) {
+			//do nothing
+		} else if (!empty($params['lastname']) &&  !empty($params['firstname'])) {
+			$lastname = $params['lastname'];
+			$firstname = $params['firstname'];
+			 $name = $firstname . ' ' . $lastname;
+		} else if(empty($params['lastname']) || !isset($params['lastname'])) {
+			echo json_encode(array('code' => 1, 'message' => 'firstname and lastname must be both set or empty'));
+			return;
+		} else if(empty($params['firstname']) || !isset($params['firstname'])) {
+			echo json_encode(array('code' => 1, 'message' => 'firstname and lastname must be both set or empty'));
 			return;
 		}
-		if(empty($params['firstname']) || !isset($params['firstname'])) {
-			echo json_encode(array('code' => 1, 'message' => 'Missing params firstname'));
-			return;
-		}
-        $lastname = $params['lastname'];
-        $firstname = $params['firstname'];
 		$phonenumber =  !empty($params['phonenumber']) ? $params['phonenumber'] : '';
-        $name = $firstname . ' ' . $lastname;
+       
 		
 		$sessionhash = CUtils::getSessionHash(($params['sessionhash']));
 		if ($sessionhash) {
 			$userfield = [];
 			if (!empty($name)) {
-				
 				$userfield["field5"] = $name;
 			}
 			
 			if (!empty($phonenumber )) {
 				$userfield["field8"] = $phonenumber;
 			}
-			var_dump($userfield);
+			
 			$apiConfig = unserialize(base64_decode($sessionhash));
 			$api = new Api($apiConfig, new GuzzleProvider(API_URL));
 			$response = $api->callRequest('profile_updateprofile', [
                  'userfield' => $userfield
             ]);
-
-			if (!isset($response) || !isset($response['response']) || $response["response"]->errormessage[0]) {
+			if (!isset($response) || !isset($response['response']) || !isset($response["response"]->errormessage[0])) {
 				echo json_encode(array('code' => 1, 'message' => 'Forum error'));
 				return;
 			}
 			
 			$responsemessage = $response["response"]->errormessage[0];
-			var_dump(strcasecmp ($responsemessage, "redirect_updatethanks") == 0);
 			if(strcasecmp ($responsemessage, "redirect_updatethanks") == 0) {
 				echo json_encode(array('code' => 0, 'message' => 'Profile update successfully'));
 			} else {
