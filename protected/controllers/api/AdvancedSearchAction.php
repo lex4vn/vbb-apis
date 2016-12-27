@@ -152,12 +152,13 @@ class AdvancedSearchAction extends CAction
                     if (trim($bike) != $params['bike'] || intval($price) > $params['price_max'] || intval($price) < $params['price_min']) {
                         continue;
                     }
-                    //var_dump($content);die();
+                    //var_dump($searchbits->thread);die();
                     $item = array(
                         'threadid' => $searchbits->thread->threadid,
                         'threadtitle' => $searchbits->thread->threadtitle,
                         'postuserid' => $searchbits->thread->postuserid,
                         'postusername' => $searchbits->thread->postusername,
+                        'postdate' => $searchbits->thread->startdate,
                         'preview' => $content,
                         'price' => $price,
                         'phone' => $phone,
