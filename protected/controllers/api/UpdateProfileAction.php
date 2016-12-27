@@ -59,7 +59,6 @@ class UpdateProfileAction extends CAction{
 			}
 			
 			$responsemessage = $response["response"]->errormessage[0];
-			var_dump(strcasecmp ($responsemessage, "redirect_updatethanks") == 0);
 			if(strcasecmp ($responsemessage, "redirect_updatethanks") == 0) {
 				echo json_encode(array('code' => 0, 'message' => 'Profile update successfully'));
 			} else {
