@@ -121,7 +121,7 @@ class SearchAction extends CAction
                             'formality' => $formality,
                             'image' => $image,
                             'status' => $status,
-                            'type' => $forumid == 17 ? 0 : 1 ,
+                            'type' => $forumid == 17 ? 2 : 1 ,
                         );
                         array_push($items, $item);
                     }
