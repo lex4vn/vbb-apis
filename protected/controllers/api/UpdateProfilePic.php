@@ -17,15 +17,20 @@ class UpdateProfilePic extends CAction{
             echo json_encode(array('code' => 5, 'message' => 'Missing params avatarurl'));
             return;
         }
-       $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
+        $data = $params['image'];
+        $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
          if ($sessionhash) {
             $apiConfig = unserialize(base64_decode($sessionhash));
             $api = new Api($apiConfig, new GuzzleProvider(API_URL));
             $response = $api->callRequest('profile_updateprofilepic', 
-                ['deleteprofilepic ' => true, 'avatarurl' => $params['avatarurl'], 'upload' => $params['image'],'api_v' => '1'], ConnectorInterface::METHOD_POST);
-            var_dump($response);
-            die(1);
+                ['deleteprofilepic' => true, 'avatarurl' => $params['avatarurl'], 'upload' => $data,'api_v' => '1'], ConnectorInterface::METHOD_POST);
             if(isset($response['response'])){
+                 $responsemessage = $response['response'] -> errormessage[0];
+                if(strcasecmp ($responsemessage, "redirect_updatethanks") == 0){
+                    echo json_encode(array('code' => 0, 'message' => 'Profile picture update successfully'));
+                } else {
+                    echo json_encode(array('code' => 1, 'message' => $responsemessage));
+                }
             }else{
                 echo json_encode(array('code' => 2, 'message' => 'Forum error'));
                 return;
