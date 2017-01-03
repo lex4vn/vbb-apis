@@ -48,6 +48,11 @@ class ProfileThreadsAction extends CAction
                 if($threads){
                     $items = array();
                     foreach($threads as $thread){
+                        $id = $thread->thread->forumid;
+                        if($id != 69 && $id != 17){
+                            continue;
+                        }
+                        $id = $id == 69? 1:2;
                         //var_dump($thread);die();
                         $content = $thread->thread->preview;
                         $regex = '#\[BIKE].*\[\/BIKE]#';
@@ -134,6 +139,7 @@ class ProfileThreadsAction extends CAction
                             'formality' => $formality,
                             'image' => $image,
                             'status' => $status,
+                            'type' => $id,
                         );
                         array_push($items, $item);
                     }
