@@ -43,7 +43,7 @@ class ProfileAction extends CAction
 					'onlinestatus' => $response['response']->prepared->onlinestatus->onlinestatus == 1 ? "online" : "offline",
 					'joindate' => date('d/m/Y',strtotime($response['response']->prepared->joindate)),
 					'posts' => $response['response']->prepared->posts,
-					'avatarurl' => $response['response']->prepared->avatarurl
+					'avatarurl' =>str_replace("amp;","",API_URL.$response['response']->prepared->avatarurl)
 					);
 				echo json_encode($profile);
 
