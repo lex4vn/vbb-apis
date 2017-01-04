@@ -108,6 +108,7 @@ class GetForumsByPage extends CAction
                         'threadtitle' => $threadbits->thread->threadtitle,
                         'postuserid' => $threadbits->thread->postuserid,
                         'postusername' => $threadbits->thread->postusername,
+                        'post_url' => API_URL.'showthread.php?t='.$threadbits->thread->threadid,
                         'preview' => $content,
                         'price' => $price,
                         'phone' => $phone,
