@@ -31,6 +31,7 @@ class DetailPostAction extends CAction
                 $pagenumber = $response['response']-> pagenumber;
                 $perpage = $response['response']-> perpage;
                 $postbits = $response['response']->postbits;
+                $firstPostID = $response['response']->LASTPOSTID;
 
                 $comments = array();
 
@@ -40,15 +41,11 @@ class DetailPostAction extends CAction
 					$postbits = array();
 					array_push($postbits,$response['response']->postbits);
 				}
-
+                //var_dump($response['response']);die();
                 foreach($postbits as $postbit){
                     $post_item = $postbit->post;
 
-                    if($page <= 1){
-                        $is_first_page = true;
-
-
-                        
+                    if($firstPostID == $post_item->postid){
                         $post = $postbit->post;
                         $bike = '';
                         $price = '';
@@ -161,7 +158,7 @@ class DetailPostAction extends CAction
                         $comments[] = $comment;
                     }
                 }
-                if($is_first_page){
+               // if($is_first_page){
                     $results = array(
                         'username' => $post->username,
                         'userid' => $post->userid,
@@ -169,6 +166,7 @@ class DetailPostAction extends CAction
                         'onlinestatus' => isset($post->onlinestatus)?$post->onlinestatus->onlinestatus:'',
                         'usertitle' => $post->usertitle,
                         'postid' => $post->postid,
+                        'post_url' => API_URL.'showthread.php?t='.$threadId,
                         'postdate' => $post->postdate,
                         'title' => $post->title,
                         'bike' => $bike,
@@ -185,14 +183,14 @@ class DetailPostAction extends CAction
                         'perpage' => $perpage,
                         'comments' => $comments
                     );
-                }else{
-                    $results = array(
-                        'totalposts' => $totalposts,
-                        'pagenumber' => $pagenumber,
-                        'perpage' => $perpage,
-                        'comments' => $comments
-                    );
-                }
+//                }else{
+//                    $results = array(
+//                        'totalposts' => $totalposts,
+//                        'pagenumber' => $pagenumber,
+//                        'perpage' => $perpage,
+//                        'comments' => $comments
+//                    );
+//                }
 
                 echo json_encode(array('code' => 0,
                     'message' => 'Get detail post success',
