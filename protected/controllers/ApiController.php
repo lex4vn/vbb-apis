@@ -65,6 +65,7 @@ class ApiController extends CController
         // Sort by ASC
         return array(
             'accessKey' => 'protected.controllers.api.AccessSessionKeyAction',
+            'addFriend' => 'protected.controllers.api.AddFriendAction',
             'androidInAppPurchase' => 'protected.controllers.api.AndroidInAppPurchaseAction',
             'cancelService' => 'protected.controllers.api.CancelserivceAction',
             'class' => 'protected.controllers.api.ClassAction',
