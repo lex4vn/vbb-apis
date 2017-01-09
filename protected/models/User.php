@@ -1,13 +1,21 @@
 <?php
 
 /**
- * This is the model class for table "tbl_user".
+ * This is the model class for table "user".
  *
- * The followings are the available columns in table 'tbl_user':
- * @property integer $id
+ * The followings are the available columns in table 'user':
+ * @property integer $userid
  * @property string $username
  * @property string $password
- * @property string $email
+ * @property string $device_token
+ * @property integer $device_type
+ * @property string $googleid
+ * @property string $gg_access_token
+ * @property string $facebookid
+ * @property string $fb_access_token
+ * @property integer $status
+ * @property string $create_date
+ * @property string $modify_date
  */
 class User extends CActiveRecord
 {
@@ -16,7 +24,7 @@ class User extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'tbl_user';
+		return 'user';
 	}
 
 	/**
@@ -27,11 +35,15 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('username, password, email', 'required'),
-			array('username, password, email', 'length', 'max'=>128),
+			array('userid', 'required'),
+			array('userid, device_type, status', 'numerical', 'integerOnly'=>true),
+			array('username', 'length', 'max'=>50),
+			array('password, device_token', 'length', 'max'=>100),
+			array('googleid, facebookid', 'length', 'max'=>30),
+			array('gg_access_token, fb_access_token, create_date, modify_date', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, username, password, email', 'safe', 'on'=>'search'),
+			array('userid, username, password, device_token, device_type, googleid, gg_access_token, facebookid, fb_access_token, status, create_date, modify_date', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -52,10 +64,18 @@ class User extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
+			'userid' => 'Userid',
 			'username' => 'Username',
 			'password' => 'Password',
-			'email' => 'Email',
+			'device_token' => 'Device Token',
+			'device_type' => '1 ios, 2 android',
+			'googleid' => 'Googleid',
+			'gg_access_token' => 'Gg Access Token',
+			'facebookid' => 'Facebookid',
+			'fb_access_token' => 'Fb Access Token',
+			'status' => 'Status',
+			'create_date' => 'Create Date',
+			'modify_date' => 'Modify Date',
 		);
 	}
 
@@ -77,10 +97,18 @@ class User extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
+		$criteria->compare('userid',$this->userid);
 		$criteria->compare('username',$this->username,true);
 		$criteria->compare('password',$this->password,true);
-		$criteria->compare('email',$this->email,true);
+		$criteria->compare('device_token',$this->device_token,true);
+		$criteria->compare('device_type',$this->device_type);
+		$criteria->compare('googleid',$this->googleid,true);
+		$criteria->compare('gg_access_token',$this->gg_access_token,true);
+		$criteria->compare('facebookid',$this->facebookid,true);
+		$criteria->compare('fb_access_token',$this->fb_access_token,true);
+		$criteria->compare('status',$this->status);
+		$criteria->compare('create_date',$this->create_date,true);
+		$criteria->compare('modify_date',$this->modify_date,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -97,13 +125,4 @@ class User extends CActiveRecord
 	{
 		return parent::model($className);
 	}
-	public function validatePassword($password)
-    {
-        return crypt($password,$this->password)===$this->password;
-    }
- 
-    public function hashPassword($password)
-    {
-        return crypt($password, $this->generateSalt());
-    }
 }

@@ -36,6 +36,7 @@ class ApiController extends CController
             && $action->id != "detailComments"
             && $action->id != "uploadImages"
             && $action->id != "logout"
+            && $action->id != "addDevicetoken"
 
         ) {
             $sessionKey = isset($_POST['sessionhash']) ? $_POST['sessionhash'] : null;
@@ -66,6 +67,7 @@ class ApiController extends CController
         return array(
             'accessKey' => 'protected.controllers.api.AccessSessionKeyAction',
             'addFriend' => 'protected.controllers.api.AddFriendAction',
+            'addDevicetoken' => 'protected.controllers.api.AddDeviceToken',
             'androidInAppPurchase' => 'protected.controllers.api.AndroidInAppPurchaseAction',
             'cancelService' => 'protected.controllers.api.CancelserivceAction',
             'class' => 'protected.controllers.api.ClassAction',
