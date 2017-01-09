@@ -58,6 +58,8 @@ class NewPostAction extends CAction
                     echo json_encode(array('code' => 0, 'message' => 'Post successfull. Please wait moderate acceptance'));
                     return;
                 }
+                echo json_encode(array('code' => 1, 'message' => $response['response']->errormessage));
+                return;
             }
         } else {
             // Sessionhash is empty
