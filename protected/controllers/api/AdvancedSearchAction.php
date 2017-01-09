@@ -22,10 +22,7 @@ class AdvancedSearchAction extends CAction
             echo json_encode(array('code' => 5, 'message' => 'Missing params bike'));
             return;
         }
-        if (!isset($params['brand']) || $params['brand'] == '') {
-            echo json_encode(array('code' => 5, 'message' => 'Missing params brand'));
-            return;
-        }
+
         //var_dump($params);die();
         $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
         if ($sessionhash) {
