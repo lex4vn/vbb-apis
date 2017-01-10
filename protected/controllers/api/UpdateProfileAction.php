@@ -20,20 +20,8 @@ class UpdateProfileAction extends CAction{
 			return;
 		}
 		$md5_password = $params['md5_password'];
-		$name = "";
-		if(empty($params['lastname']) &&  empty($params['firstname'])) {
-			//do nothing
-		} else if (!empty($params['lastname']) &&  !empty($params['firstname'])) {
-			$lastname = $params['lastname'];
-			$firstname = $params['firstname'];
-			 $name = $firstname . ' ' . $lastname;
-		} else if(empty($params['lastname']) || !isset($params['lastname'])) {
-			echo json_encode(array('code' => 1, 'message' => 'firstname and lastname must be both set or empty'));
-			return;
-		} else if(empty($params['firstname']) || !isset($params['firstname'])) {
-			echo json_encode(array('code' => 1, 'message' => 'firstname and lastname must be both set or empty'));
-			return;
-		}
+		$name = !empty($params['fullname']) ? $params['fullname'] : '';
+		
 		$phonenumber =  !empty($params['phonenumber']) ? $params['phonenumber'] : '';
        
 		
@@ -64,6 +52,8 @@ class UpdateProfileAction extends CAction{
 			} else {
 				echo json_encode(array('code' => 1, 'message' => $responsemessage));
 			}
+		} else {
+			echo json_encode(array('code' => 10, 'message' => 'User logged out'));
 		}
     }
 }
