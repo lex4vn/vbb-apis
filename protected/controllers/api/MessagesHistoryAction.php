@@ -45,7 +45,7 @@ class MessagesHistoryAction extends CAction
                                 'messageid' => $messagesBit->pm->pmid,
                                 'sender_id' => $messagesBit->userbit[0]->userid,
                                 'sender_name' => $messagesBit->userbit[0]->username,
-                                'senddate' => date('m/d/Y h:i:s', strtotime($messagesBit->pm->senddate . ' ' . $messagesBit->pm->sendtime)),
+                                'senddate' => $messagesBit->pm->senddate . ' ' . $messagesBit->pm->sendtime,
                                 'statusicon' => $messagesBit->pm->statusicon,
                                 'receipt_id' => Yii::app()->session['user_id'],
                                 'content' => $messagesBit->pm->title,
