@@ -104,6 +104,7 @@ class ApiController extends CController
             'loginGoogle' => 'protected.controllers.api.LoginGoogleAction',
             'messages' => 'protected.controllers.api.MessagesAction',
             'messagesBox' => 'protected.controllers.api.MessagesBoxAction',
+            'messagesHistory' => 'protected.controllers.api.MessagesHistoryAction',
             'messageSend' => 'protected.controllers.api.MessageSendAction',
             'profile' => 'protected.controllers.api.ProfileAction',
             'profilePost' => 'protected.controllers.api.ProfilePostAction',
