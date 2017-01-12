@@ -173,9 +173,9 @@ class CUtils
         unset(Yii::app()->request->cookies[$name]);
     }
 
-    public static function generateSessionKey($user_id,$sessionhash)
+    public static function generateSessionKey($user_id,$user_name,$sessionhash)
     {
-        $str_session_tmp = $user_id . "|" . microtime(true) . "|" . secret_key;
+        $str_session_tmp = $user_id . "|" .$user_name."|". microtime(true) . "|" . secret_key;
         $sessionKey =self::encrypt($str_session_tmp, secret_key);
         $session = AuthToken::model()->findByPk($user_id);
 
@@ -227,6 +227,7 @@ class CUtils
 
         $arrSsKey = explode("|", $keyDecrypt);
         Yii::app()->session['user_id'] = $arrSsKey[0];
+        Yii::app()->session['username'] = $arrSsKey[1];
         $session = AuthToken::model()->findByPk($arrSsKey[0]);
 
         if ($session == null) {

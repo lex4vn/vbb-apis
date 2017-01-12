@@ -24,7 +24,7 @@ class User extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'vpi_user';
+		return 'api_user';
 	}
 
 	/**

@@ -5,7 +5,7 @@
  *
  * The followings are the available columns in table 'chat':
  * @property integer $id
- * @property integer $from
+ * @property integer $fromid
  * @property string $fromuser
  * @property integer $to
  * @property string $touser
@@ -20,7 +20,7 @@ class Chat extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'vpi_chat';
+		return 'api_chat';
 	}
 
 	/**
@@ -31,12 +31,12 @@ class Chat extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('from, fromuser, to, touser, message, read, time', 'required'),
-			array('from, to, read', 'numerical', 'integerOnly'=>true),
+			array('fromid, fromuser, to, touser, message, read, time', 'required'),
+			array('fromid, to, read', 'numerical', 'integerOnly'=>true),
 			array('fromuser, touser', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, from, fromuser, to, touser, message, read, time', 'safe', 'on'=>'search'),
+			array('id, fromid, fromuser, to, touser, message, read, time', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,7 +58,7 @@ class Chat extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'from' => 'From',
+			'fromid' => 'From',
 			'fromuser' => 'Fromuser',
 			'to' => 'To',
 			'touser' => 'Touser',
@@ -87,7 +87,7 @@ class Chat extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('from',$this->from);
+		$criteria->compare('fromid',$this->from);
 		$criteria->compare('fromuser',$this->fromuser,true);
 		$criteria->compare('to',$this->to);
 		$criteria->compare('touser',$this->touser,true);
