@@ -30,7 +30,7 @@ class AddDeviceToken extends CAction
             return;
         }
 
-        $user = User::model()->findByPk($params['userid']);
+        $user = User::model()->findByAttributes(array('userid'=>$params['userid']));
         if($user == null){
             $user = new User();
             $user->userid = $params['userid'];
@@ -41,7 +41,7 @@ class AddDeviceToken extends CAction
             $user->device_type = $params['device_type'];
         }
         if($user->save()){
-            echo json_encode(array('code' => 0, 'message' => 'Add device tokent successfull.'));
+            echo json_encode(array('code' => 0, 'message' => 'Add device token successfull.'));
         }else{
             echo json_encode(array('code' => 1, 'message' => 'Cannot add device token.'));
         }
