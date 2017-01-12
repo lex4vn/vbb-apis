@@ -538,6 +538,38 @@ class CUtils
         // Get token key
         return   $response['apiaccesstoken'];
     }
+	
+	public static function  send_notification($message, $id) {
+		//day la url cua service, anh cho no thanh constant nhe
+		$url = 'https://fcm.googleapis.com/fcm/send';
+		$fields = array (
+				'registration_ids' => $id,
+				'data' => array (
+						"message" => $message
+				)
+		);
+		$fields = json_encode ( $fields );
+		$headers = array (
+				//day la server key cho ios, anh cho no thanh constant nhe
+				'Authorization: key=AAAADBi4nxg:APA91bHUvoNgm3lO6F4Ge1YTLfT9vOboWnQd5dAmRgZHX07AUA1c2OSbnWyfOB3qKSj68E-vRVpw917uT0DaHW2c3YTuGSMA8-ZEV8IwmQRWqxOrbIxSaZ71cy1BLFoN9fGlWWGaRwOo',
+				'Content-Type: application/json'
+		);
+		$ch = curl_init ();
+		curl_setopt ( $ch, CURLOPT_CUSTOMREQUEST, "POST"); 
+		curl_setopt ( $ch, CURLOPT_URL, $url );
+		curl_setopt ( $ch, CURLOPT_POST, true );
+		curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+		curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+		curl_setopt ( $ch, CURLOPT_SSL_VERIFYHOST, 0 );
+		curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, false );
+		$result = curl_exec ( $ch );
+		if($result == false) {
+			die("Curl failed: ".curl_error($ch));
+		}
+		echo $result;
+		curl_close ( $ch );
+	}
 }
 
 ?>
