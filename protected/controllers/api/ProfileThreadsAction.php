@@ -33,8 +33,9 @@ class ProfileThreadsAction extends CAction
                 'api_v' => '1'
             ], ConnectorInterface::METHOD_POST);
 
-           // var_dump($response);die();
+            //var_dump($response);die();
             if(isset($response['response'])){
+
                 //var_dump($response['response']);die();
                 if(isset($response['response']->errormessage)) {
                     $errormessage = $response['response']->errormessage;
@@ -42,6 +43,11 @@ class ProfileThreadsAction extends CAction
                         echo json_encode(array('code' => 1, 'message' => 'No results'));
                         return;
                     }
+                    if ($errormessage && isset($errormessage[0]) && $errormessage[0] == 'nopermission_loggedout') {
+                        echo json_encode(array('code' => 10, 'message' => 'User logged out'));
+                        return;
+                    }
+
                 }
                 $threads = $response['response']->searchbits;
                 //var_dump($threads);die();
