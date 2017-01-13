@@ -121,7 +121,7 @@ class RegisterAction extends CAction
                 }
 
                 if ('registration_complete' == $result) {
-                    $sessionKey = CUtils::generateSessionKey($userid, base64_encode(serialize($apiConfig)));
+                    $sessionKey = CUtils::generateSessionKey($userid, $userName, base64_encode(serialize($apiConfig)));
                     echo json_encode(array('code' => 0,
                         'sessionhash' => $sessionKey,
                         'message' => 'Register successful',

@@ -75,7 +75,7 @@ class LoginGoogleAction extends CAction
                 $result = $response['response']->errormessage[0];
                 //var_dump($result);die();
                 if ('redirect_login' == $result && $response['session']->userid !== '0') {
-                    $sessionKey = CUtils::generateSessionKey($response['session']->userid, base64_encode(serialize($apiConfig)));
+                    $sessionKey = CUtils::generateSessionKey($response['session']->userid, $response['response']->errormessage[1],base64_encode(serialize($apiConfig)));
                     echo json_encode(array('code' => 0,
                         'message' => 'Login successful',
                         'sessionhash' => $sessionKey,
