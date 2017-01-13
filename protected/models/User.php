@@ -38,7 +38,8 @@ class User extends CActiveRecord
 			array('userid', 'required'),
 			array('userid, device_type, status', 'numerical', 'integerOnly'=>true),
 			array('username', 'length', 'max'=>50),
-			array('password, device_token', 'length', 'max'=>100),
+			array('password', 'length', 'max'=>100),
+			array('device_token', 'length', 'max'=>300),
 			array('googleid, facebookid', 'length', 'max'=>30),
 			array('gg_access_token, fb_access_token, create_date, modify_date', 'safe'),
 			// The following rule is used by search().
