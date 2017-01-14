@@ -127,7 +127,7 @@ class NewThreadAction extends CAction
                 $userid = $user->userid;
 				
                 $user = User::model()->findByAttributes(array('userid'=>$userid));
-                if(isset($user)) {
+                if(isset($user) && isset($user->device_token)) {
                     $tokens[] = $user->device_token;
                 }
 				

@@ -81,6 +81,16 @@ class ChatAction extends CAction
                             ),
                         )
                     );
+					
+					//send notification
+					$fromuser = Yii::app()->session['username'];
+					$message = "New message from ".$fromuser;
+					$recipient = User::model()->findByAttributes(array('userid'=>$recipient_id));
+					$tokens = array();
+					if(isset($recipient) && isset($recipient->device_token)) {
+						$tokens[] = $recipient->device_token;
+					}
+					CUtils::send_notification($message, $tokens);
                     return;
                 }else{
                     echo json_encode(array('code' => 5, 'message' => 'Message failed'));
