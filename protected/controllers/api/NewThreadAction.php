@@ -75,7 +75,6 @@ class NewThreadAction extends CAction
                     $info .= '[IMG]' . $item['image_url'] . '[/IMG]';
                 }
             }
-
             $response = $api->callRequest('newthread_postthread', [
                 'username' => isset($params['username']) ? $params['username'] : '',
                 'message' => $info,
@@ -83,10 +82,12 @@ class NewThreadAction extends CAction
                 'f' => $params['type'] == 1 ? 69 : 17,
                 'api_v' => '1'
             ], ConnectorInterface::METHOD_POST);
+			$this->send_notification($sessionhash);
             //var_dump($response);
             if (isset($response['response']->errormessage)) {
                 if ($response['response']->errormessage == 'redirect_postthanks') {
                     echo json_encode(array('code' => 0, 'message' => 'Post successfull.'));
+					$this->send_notification("Your friend: .... just posted a thread: " +  $params['subject'],$sessionhash);
                     return;
                 }
                 //redirect_duplicatethread
@@ -97,6 +98,8 @@ class NewThreadAction extends CAction
                 //redirect_postthanks_moderate
                 if ($response['response']->errormessage == 'redirect_postthanks_moderate') {
                     echo json_encode(array('code' => 0, 'message' => 'Post successfull. Please wait moderate acceptance'));
+                    //send notification to all friends
+
                     return;
                 }
                 echo json_encode(array('code' => 1, 'message' => $response['response']->errormessage));
@@ -108,5 +111,29 @@ class NewThreadAction extends CAction
             return;
         }
         echo json_encode(array('code' => 2, 'message' => 'Forum error'));
+    }
+
+    private function send_notification($sessionhash, $msg) {
+        $apiConfig = unserialize(base64_decode($sessionhash));
+        $api = new Api($apiConfig, new GuzzleProvider(API_URL));
+        $response = $api->callRequest('profile_buddylist', [
+            'api_v' => '1'
+        ], ConnectorInterface::METHOD_POST);
+        if(isset($response['response'])){
+            $tokens = array();
+            foreach ($response['response']->HTML->buddylist as $buddy){
+                $user = $buddy->user;
+                
+                $userid = $user->userid;
+				
+                $user = User::model()->findByAttributes(array('userid'=>$userid));
+                if(isset($user)) {
+                    $tokens[] = $user->device_token;
+                }
+				
+            }
+           CUtils::send_notification($msg, $tokens);
+        }
+		 
     }
 }
