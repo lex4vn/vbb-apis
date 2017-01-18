@@ -13,7 +13,7 @@ class SearchUserAction extends CAction
 			return;
 		}
 		$isEmail = filter_var($params['username'], FILTER_VALIDATE_EMAIL);
-		
+
         //Parameters
         $uniqueId = uniqid();
         $content = '';
@@ -51,7 +51,7 @@ class SearchUserAction extends CAction
                 echo json_encode(array('code' => 1, 'message' => 'Email is not registered.'));
                 return;
             }
-        } 
+        }
 		$response = $api->callRequest('api_usersearch', [
 			'fragment' => $params['username'],'api_v'=> '1'
 		]);

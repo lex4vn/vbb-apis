@@ -15,7 +15,7 @@ class MessagesBoxAction extends CAction
             $api = new Api($apiConfig, new GuzzleProvider(API_URL));
 
             $response = $api->callRequest('private_showpm', ['api_v' => '1'], ConnectorInterface::METHOD_GET);
-            var_dump($response);die();
+           // var_dump($response);die();
             //Thanh cong
             if (isset($response['response'])) {
                 $items = array();

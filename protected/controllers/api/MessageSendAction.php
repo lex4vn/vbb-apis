@@ -27,34 +27,31 @@ class MessageSendAction extends CAction
 
         $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
         if ($sessionhash) {
-            $apiConfig = unserialize(base64_decode($sessionhash));
-            $api = new Api($apiConfig, new GuzzleProvider(API_URL));
+            $comment = new Chat();
+            $comment->from = Yii::app()->session['user_id'];
+            $comment->to = 0;
+            $comment->touser =$params['recipient']; // username
+            $comment->message = $params['message'];
+            $comment->read = 0;
+            $comment->time = date('Y-m-d H:i:s');
 
-            $response = $api->callRequest('private_insertpm', [
-                'recipients' => $params['recipient'],
-                'title' => $params['title'],
-                //'content' => 'abcdeddadaaa',
-                'message' => $params['message'],
-                'api_v' => '1'
-            ], ConnectorInterface::METHOD_POST);
-            //var_dump($response);
-            //die();
-            if (isset($response['response'])) {
-                $res = $response['response'];
-                if (isset($res->errormessage) && $res->errormessage == 'pm_messagesent') {
-                    echo json_encode(array('code' => 0,
+
+            if($comment->save()){
+                echo json_encode(
+                    array(
+                        'code' => 0,
                         'message' => 'Send message successful',
-                    ));
-                    return;
-                }
-                if (isset($res->postpreview) && isset($res->postpreview->errorlist)) {
-                    echo json_encode(array('code' => 2,
-                        'message' => 'Please try later. Maybe you send many times.',
-                    ));
-                    return;
-                }
-            } else {
-                echo json_encode(array('code' => 1, 'message' => 'Forum error'));
+                        'item' => array(
+                            'id' => $comment->id,
+                            'time' => $comment->time,
+                            'message' => $comment->content,
+                            'recipient' => $comment->touser
+                        ),
+                    )
+                );
+                return;
+            }else{
+                echo json_encode(array('code' => 5, 'message' => 'Message failed'));
                 return;
             }
         } else {
