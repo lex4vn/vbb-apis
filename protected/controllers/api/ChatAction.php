@@ -99,9 +99,16 @@ class ChatAction extends CAction
             }else if($type==2){
                 // Get history
                 $criteria = new CDbCriteria;
-                $criteria->condition = '(fromid = '.Yii::app()->session['user_id'].' and touser = "'.$sender.'")';
-                $criteria->condition += ' or (to = '.Yii::app()->session['user_id'].' and fromuser = "'.$sender.'")';
+                $criteria->alias  = 't';
+                $criteria->select = 't.*';
+                $criteria->condition = '(fromid = :userid and touser = :sender) or (t.to = :touserid and fromuser = :fromuser)';
+                $criteria->params = array(
+                    ':userid'=>Yii::app()->session['user_id'],
+                    ':sender'=>$sender,
+                    ':touserid'=>Yii::app()->session['user_id'],
+                    ':fromuser'=>$sender);
                 $criteria->order = 'time desc';
+              //  var_dump($criteria);die();
             }else{
                 // Get message all message
                 $criteria = new CDbCriteria;
