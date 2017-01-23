@@ -138,7 +138,33 @@ class DetailPostAction extends CAction
                         }
 						//var_dump("NO IMAGE");
 						//var_dump($result);die();
-                        
+
+// image
+                        $regex = '#\[img].*\[\/img]#';
+                        // Remove break line
+                        $content_image =preg_replace("/[\n\r]/","",$content);
+                        $hasImage = preg_match($regex, $content_image, $result);
+
+
+                        //var_dump($hasImage);
+                        //var_dump($result);die();
+                        if ($hasImage) {
+                            $content = preg_replace($regex, '', $content);
+                            if ($result) {
+                                //var_dump($result);die();
+                                $images_array = explode('http',preg_replace('/\[\/?img\]/', '', $result[0]));
+
+
+                                foreach($images_array as $img){
+                                    if(empty($img)){
+                                        continue;
+                                    }
+                                    $images[] = 'http'.$img;
+                                }
+                            }
+                        }
+                        //var_dump("NO IMAGE");
+                        //var_dump($result);die();
 
                         $regex = '#\[INFOR].*\[\/INFOR]#';
                         $content = preg_replace($regex, '', $content);
