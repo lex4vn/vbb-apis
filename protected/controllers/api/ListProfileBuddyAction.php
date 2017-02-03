@@ -19,10 +19,16 @@ class ListProfileBuddyAction extends CAction
                // 'userid'=> 123,
                 'api_v' => '1'
             ], ConnectorInterface::METHOD_POST);
-            
-			
+
+			//var_dump($response);die();
             if(isset($response['response'])){
 				$result = array();
+				$buddycount = $response['response']->HTML->buddycount;
+				//var_dump($buddycount);die();
+				if($buddycount == 0){
+					echo json_encode(array('code' => 3, 'message' => 'List friend is empty.'));
+					return;
+				}
 				foreach ($response['response']->HTML->buddylist as $buddy){
 					$user = $buddy->user;
 					$userid = $user->userid;
