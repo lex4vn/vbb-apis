@@ -49,6 +49,7 @@ class ListProfileBuddyAction extends CAction
 							}
 						}
 						$item = array(
+							'userid' => $user->userid,
 							'username' => $user->username,
 							'avatarurl' => $user->avatarurl,
 							'fullname' => $fullname,
@@ -60,7 +61,10 @@ class ListProfileBuddyAction extends CAction
 					} 
                
 				}
-				echo json_encode($result);
+				echo json_encode(array('code' => 0,
+					'message' => 'Get list friend success',
+					'listfriend' => $result
+				));
             }else{
                 echo json_encode(array('code' => 2, 'message' => 'Forum error'));
                 return;
