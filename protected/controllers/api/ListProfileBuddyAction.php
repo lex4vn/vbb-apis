@@ -51,7 +51,7 @@ class ListProfileBuddyAction extends CAction
 						$item = array(
 							'userid' => $user->userid,
 							'username' => $user->username,
-							'avatarurl' => $user->avatarurl,
+							'avatarurl' => $profile['response']->prepared->avatarurl,
 							'fullname' => $fullname,
 							'phonenumber' => $phonenumber,
 							'onlinestatus' => $profile['response']->prepared->onlinestatus->onlinestatus == 1 ? "online" : "offline",
