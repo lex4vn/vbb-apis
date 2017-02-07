@@ -57,6 +57,8 @@ class AddFriendAction extends CAction
                     echo json_encode(array('code' => 1, 'message' => 'Please add user id'));
                     return;
                 }
+                echo json_encode(array('code' => 1, 'message' => $mess));
+                return;
             }
         } else {
             // Sessionhash is empty
