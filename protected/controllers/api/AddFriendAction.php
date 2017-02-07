@@ -37,14 +37,14 @@ class AddFriendAction extends CAction
                 if ($mess == 'redirect_addlist_contact') {
                     echo json_encode(array('code' => 0, 'message' => 'Add '.$response['response']->errormessage[1].' to friend list successfull.'));
 					//send notification
-					$fromuser = Yii::app()->session['username'];
-					$message = $fromuser." just sent you a friend request.";
-					$recipient = User::model()->findByAttributes(array('userid'=>$params['userid']));
-					$tokens = array();
-					if(isset($recipient) && isset($recipient->device_token)) {
-						$tokens[] = $recipient->device_token;
-					}
-					CUtils::send_notification($message, $tokens);
+//					$fromuser = Yii::app()->session['username'];
+//					$message = $fromuser." just sent you a friend request.";
+//					$recipient = User::model()->findByAttributes(array('userid'=>$params['userid']));
+//					$tokens = array();
+//					if(isset($recipient) && isset($recipient->device_token)) {
+//						$tokens[] = $recipient->device_token;
+//					}
+//					CUtils::send_notification($message, $recipient);
                     return;
                 }
 
