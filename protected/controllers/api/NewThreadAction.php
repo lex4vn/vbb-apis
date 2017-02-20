@@ -55,7 +55,7 @@ class NewThreadAction extends CAction
         $price = isset($params['price']) ? $params['price'] : 0;
         $phone = isset($params['phone']) ? $params['phone'] : 'Không có';
         $location = isset($params['location']) ? $params['location'] : 'vui lòng liên hệ';
-        $formality = isset($params['formality']) ? $params['formality'] : 'Không xác định';
+        $formality = isset($params['                                        ']) ? $params['formality'] : 'Không xác định';
         $status = isset($params['status']) ? $params['status'] : 'Khác';
         $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
         if ($sessionhash) {

@@ -56,13 +56,13 @@ class AddPostAction extends CAction
         $phone = isset($params['phone']) ? $params['phone'] : 'Không có';
         $location = isset($params['location']) ? $params['location'] : 'vui lòng liên hệ';
         $formality = isset($params['formality']) ? $params['formality'] : '0';
-        $status = isset($params['status']) ? $params['status'] : 'Khác';
+        $status = isset($params['status']) ? $params['status'] : '1';
         $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
         if ($sessionhash) {
             
             $post = new Post();
             $post->subject = $params['subject'];
-            $post->title_ascii = $params['subject'];
+            //$post->title_ascii = mb_strtolower(CVietnameseTools::makeCodeName2($params['subject']));
             $post->bike = $bike;
             $post->price = $price;
             $post->phone = $phone;
@@ -71,12 +71,24 @@ class AddPostAction extends CAction
             $post->status = $status;
             $post->create_date = date('Y-m-d H:i:s');
             $post->modify_date = date('Y-m-d H:i:s');
+
+
+           // var_dump($post);die;
             if (!$post->save()){
                 echo json_encode(array('code' => 1, 'message' => 'Error! Could not add new a post!'));
                 return;
             }
+
+            if (isset($params['images'])) {
+                foreach ($params['images'] as $item) {
+                    $postImage = new PostImages();
+                    $postImage->base_url = IMAGES_PATH.$item;
+                    $postImage->post_id = $post->id;
+                }
+            }
+
             echo json_encode(array('code' => 0, 'message' => 'Post successfull.'));
-            $this->send_notification("Your friend: .... just posted a thread: " +  $params['subject'],$sessionhash);
+            //$this->send_notification("Your friend: .... just posted a thread: " +  $params['subject'],$sessionhash);
             return;
         } else {
             // Sessionhash is empty
