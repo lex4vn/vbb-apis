@@ -49,20 +49,17 @@ class PostAction extends CAction
                 );
             }
             $user = User::model()->findByPk($post['postuserid']);
-            //var_dump('test');
             $user_title = 'User';
             $avatarurl = '';
-            //var_dump($post['postuserid']);
-            //die();
-            if(isset($user)){
+            if($user == null){
+                // sync user from forum
+                echo json_encode(array('code' => 1, 'message' => 'Forum error'));
+                return;
+            }else{
                 $user_title = $user['username'];// TODO add user_title
                 $avatarurl = $user['avatar'];
-
-            }else{
-                // sync user from forum
             }
-            //var_dump('test');
-            //var_dump($user);die();
+
             $results = array(
                 'username' => $post['postusername'],
                 'userid' => $post['postuserid'],
