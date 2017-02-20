@@ -80,8 +80,9 @@ class LoginAction extends CAction
                         'username' =>  $response['response']->errormessage[1],
                     ));
 
+                    $user_id = $response['session']->userid;
                     $response = $api->callRequest('member', [
-                        'u'=> Yii::app()->session['user_id'],
+                        'u'=> $user_id,
                         'api_v' => '1'
                     ], ConnectorInterface::METHOD_POST);
 
@@ -110,7 +111,7 @@ class LoginAction extends CAction
                             $status = $response['response']->prepared->onlinestatus->onlinestatus == 1 ? "1" : "0";
                         }
 
-                        $user = User::model()->findByPk(Yii::app()->session['user_id']);
+                        $user = User::model()->findByPk($user_id);
                         if($user == null){
                             $user = new User();
                             $user->userid = Yii::app()->session['user_id'];
