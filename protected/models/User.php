@@ -1,12 +1,15 @@
 <?php
 
 /**
- * This is the model class for table "user".
+ * This is the model class for table "api_user".
  *
- * The followings are the available columns in table 'user':
+ * The followings are the available columns in table 'api_user':
  * @property integer $userid
  * @property string $username
+ * @property string $usertitle
+ * @property string $phonenumber
  * @property string $password
+ * @property string $avatar
  * @property string $device_token
  * @property integer $device_type
  * @property string $googleid
@@ -35,16 +38,18 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('userid', 'required'),
+			array('userid, usertitle, phonenumber', 'required'),
 			array('userid, device_type, status', 'numerical', 'integerOnly'=>true),
 			array('username', 'length', 'max'=>50),
-			array('password', 'length', 'max'=>100),
+			array('usertitle, password', 'length', 'max'=>100),
+			array('phonenumber', 'length', 'max'=>20),
+			array('avatar', 'length', 'max'=>200),
 			array('device_token', 'length', 'max'=>300),
 			array('googleid, facebookid', 'length', 'max'=>30),
 			array('gg_access_token, fb_access_token, create_date, modify_date', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('userid, username, password, device_token, device_type, googleid, gg_access_token, facebookid, fb_access_token, status, create_date, modify_date', 'safe', 'on'=>'search'),
+			array('userid, username, usertitle, phonenumber, password, avatar, device_token, device_type, googleid, gg_access_token, facebookid, fb_access_token, status, create_date, modify_date', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,7 +72,10 @@ class User extends CActiveRecord
 		return array(
 			'userid' => 'Userid',
 			'username' => 'Username',
+			'usertitle' => 'Usertitle',
+			'phonenumber' => 'Phonenumber',
 			'password' => 'Password',
+			'avatar' => 'Avatar',
 			'device_token' => 'Device Token',
 			'device_type' => '1 ios, 2 android',
 			'googleid' => 'Googleid',
@@ -100,7 +108,10 @@ class User extends CActiveRecord
 
 		$criteria->compare('userid',$this->userid);
 		$criteria->compare('username',$this->username,true);
+		$criteria->compare('usertitle',$this->usertitle,true);
+		$criteria->compare('phonenumber',$this->phonenumber,true);
 		$criteria->compare('password',$this->password,true);
+		$criteria->compare('avatar',$this->avatar,true);
 		$criteria->compare('device_token',$this->device_token,true);
 		$criteria->compare('device_type',$this->device_type);
 		$criteria->compare('googleid',$this->googleid,true);

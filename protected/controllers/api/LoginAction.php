@@ -79,6 +79,55 @@ class LoginAction extends CAction
                         'userid' =>  $response['session']->userid,
                         'username' =>  $response['response']->errormessage[1],
                     ));
+
+                    $response = $api->callRequest('member', [
+                        'u'=> Yii::app()->session['user_id'],
+                        'api_v' => '1'
+                    ], ConnectorInterface::METHOD_POST);
+
+                    if(isset($response['response'])){
+
+                        $phonenumber = '';
+                        if(isset($response['response']->blocks)) {
+                            $fields = $response['response']->blocks->aboutme->block_data->fields->category->fields;
+                            foreach ($fields as $field) {
+                                if ($field->profilefield->title == "Phone Number") {
+                                    $phonenumber = $field->profilefield->value;
+                                }
+                            }
+                        }
+                        $username = '';
+                        if(isset($response['response']->errormessage[1])) {
+                            $username = $response['response']->errormessage[1];
+                        }
+
+                        $usertitle = '';
+                        $avatar = '';
+                        $status = '';
+                        if(isset($response['response']->prepared)) {
+                            $usertitle = $response['response']->prepared->usertitle;
+                            $avatar = str_replace("amp;","",API_URL.$response['response']->prepared->avatarurl);
+                            $status = $response['response']->prepared->onlinestatus->onlinestatus == 1 ? "1" : "0";
+                        }
+
+                        $user = User::model()->findByPk(Yii::app()->session['user_id']);
+                        if($user == null){
+                            $user = new User();
+                            $user->userid = Yii::app()->session['user_id'];
+                            $user->username = $username;
+                            $user->phonenumber =  $phonenumber;
+                            $user->usertitle = $usertitle;
+                            $user->avatar = $avatar;
+                            $user->status = $status;
+                        }else{
+                            $user->phonenumber =  $phonenumber;
+                            $user->usertitle = $usertitle;
+                            $user->avatar = $avatar;
+                            $user->status = $status;
+                        }
+                        $user->save();
+                    }
+
                     return;
                 }
             }
