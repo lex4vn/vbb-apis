@@ -80,7 +80,10 @@ class ApiController extends CController
             'debug' => 'protected.controllers.api.DebugAction',
             'getBikeType' => 'protected.controllers.api.GetBikeTypeAction',
             'getDeviceToken' => 'protected.controllers.api.GetdevicetokenAction',
-            'getForum' => 'protected.controllers.api.GetForum',
+            //2 getForum tested
+            'getForumv1' => 'protected.controllers.api.GetForum',
+            'getForum' => 'protected.controllers.api.ListPost',
+
             'getForumPage' => 'protected.controllers.api.GetForumByPage',
             'getNotifi' => 'protected.controllers.api.GetNotifiAction',
             'getPass' => 'protected.controllers.api.GetPassAction',
@@ -110,7 +113,10 @@ class ApiController extends CController
             'messageSend' => 'protected.controllers.api.MessageSendAction',
             'profile' => 'protected.controllers.api.ProfileAction',
             'profilePost' => 'protected.controllers.api.ProfilePostAction',
-            'profileThreads' => 'protected.controllers.api.ProfileThreadsAction',
+            // 1 profile thread tested
+            'profileThreads1' => 'protected.controllers.api.ProfileThreadsAction',
+            'profileThreads' => 'protected.controllers.api.ProfilePostAction',
+
             'register' => 'protected.controllers.api.RegisterAction',
             'registerService' => 'protected.controllers.api.RegisterserivceAction',
             'report' => 'protected.controllers.api.ReportAction',
@@ -124,13 +130,21 @@ class ApiController extends CController
             'typeAccount' => 'protected.controllers.api.TypeAccountAction',
             'updateProfile' => 'protected.controllers.api.UpdateProfileAction',
             'updateStatus' => 'protected.controllers.api.UpdateStatusAction',
-            'showThread' => 'protected.controllers.api.ShowThreadAction',
-            'newThread' => 'protected.controllers.api.NewThreadAction',
-            'newPost' => 'protected.controllers.api.NewPostAction',
+            // 4. new thread
+            'newThread1' => 'protected.controllers.api.NewThreadAction',
+            'newThread' => 'protected.controllers.api.AddPostAction',
+            // 5. new comment
+            'newPost1' => 'protected.controllers.api.NewPostAction',
+            'newPost' => 'protected.controllers.api.AddCommentAction',
+
             'getForumsByPage' => 'protected.controllers.api.GetForumsByPage',
             'showThreadByPage' => 'protected.controllers.api.ShowThreadByPage',
             'loginFace' => 'protected.controllers.api.LoginFacebook',
-            'detailPost' => 'protected.controllers.api.DetailPostAction',
+
+            // 3. detailPost
+            'detailPost1' => 'protected.controllers.api.DetailPostAction',
+            'detailPost' => 'protected.controllers.api.PostAction',
+
             'detailFriend' => 'protected.controllers.api.DetailFriendAction',
             'detailComments' => 'protected.controllers.api.DetailCommentAction',
             'advancedSearch' => 'protected.controllers.api.AdvancedSearchAction',

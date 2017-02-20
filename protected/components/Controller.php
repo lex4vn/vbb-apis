@@ -31,5 +31,38 @@ class Controller extends CController
 
     public function __construct($id, $module)
     {
+		$domain = $_SERVER['HTTP_HOST'];
+		$this->detect = Yii::app()->mobileDetect;
+		if ($this->detect->isTablet()) {
+			$this->tablet = TRUE;
+			Yii::app()->theme = "advance";
+		} else
+			if ($this->detect->isMobile()) {
+				if ($this->detect->version('Windows Phone')) {
+					Yii::app()->theme = 'advance';
+				} elseif ($this->detect->is('Opera')) {
+					Yii::app()->theme = 'advance';
+				} else if ($this->detect->is('AndroidOS')) {
+					if ($this->detect->version('Android') < 3.0) {
+						Yii::app()->theme = 'advance';
+					} else {
+						Yii::app()->theme = 'advance';
+					}
+				} else if ($this->detect->is('iOS')) {
+					if ($this->detect->getIOSGrade() === 'B') {
+						Yii::app()->theme = 'advance';
+					} else {
+						Yii::app()->theme = 'advance';
+					}
+				} else {
+					if ($this->detect->mobileGrade() === 'A') {
+						Yii::app()->theme = 'advance';
+					} else {
+						Yii::app()->theme = 'advance';
+					}
+				}
+			} else {
+				Yii::app()->theme = 'advance';
+			}
     }
 }
