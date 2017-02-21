@@ -15,7 +15,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta content="width=device-width, initial-scale=1" name="viewport" id="viewport"/>
     <title><?php echo $this->titlePage; ?></title>
-    <link rel="icon" href="<?php echo Yii::app()->theme->baseUrl . '/FileManager/favicon.jpg' ?>"/>
+    <link rel="icon" href="<?php echo Yii::app()->theme->baseUrl . '/FileManager/favicon.png' ?>"/>
     <!-- Bootstrap -->
     <link href="<?php echo Yii::app()->theme->baseUrl ?>/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="<?php echo Yii::app()->theme->baseUrl ?>/css/bootstrap-select.css" rel="stylesheet"/>

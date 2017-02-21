@@ -114,7 +114,7 @@ class LoginAction extends CAction
                         $user = User::model()->findByPk($user_id);
                         if($user == null){
                             $user = new User();
-                            $user->userid = Yii::app()->session['user_id'];
+                            $user->userid = $user_id;
                             $user->username = $username;
                             $user->phonenumber =  $phonenumber;
                             $user->usertitle = $usertitle;
