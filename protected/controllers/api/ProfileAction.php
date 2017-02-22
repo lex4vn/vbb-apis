@@ -23,13 +23,17 @@ class ProfileAction extends CAction
 				$fields = $response['response']->blocks->aboutme->block_data->fields->category->fields;
 				$phonenumber = '';
 				$fullname = '';
-				foreach($fields as $field) {
-					if ($field->profilefield->title == "Họ và Tên") {
-						$fullname = $field->profilefield->value;
-					} else if ($field->profilefield->title == "Phone Number"){
-						$phonenumber = $field->profilefield->value;
+				if(isset($fields)){
+
+					foreach($fields as $field) {
+						if ($field->profilefield->title == "Họ và Tên") {
+							$fullname = $field->profilefield->value;
+						} else if ($field->profilefield->title == "Phone Number"){
+							$phonenumber = $field->profilefield->value;
+						}
 					}
 				}
+
 
 				$profile = array(
 					'username' => $response['response']->prepared->username,

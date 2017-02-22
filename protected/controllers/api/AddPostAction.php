@@ -59,7 +59,7 @@ class AddPostAction extends CAction
         $status = isset($params['status']) ? $params['status'] : '1';
         $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
         if ($sessionhash) {
-            
+
             $post = new Post();
             $post->subject = $params['subject'];
             //$post->title_ascii = mb_strtolower(CVietnameseTools::makeCodeName2($params['subject']));
@@ -71,21 +71,31 @@ class AddPostAction extends CAction
             $post->status = $status;
             $post->create_date = date('Y-m-d H:i:s');
             $post->modify_date = date('Y-m-d H:i:s');
+            if($post->status == 2){
+                $thumb = '';
+                if (isset($params['images'])) {
+                    foreach ($params['images'] as $index=>$item) {
+                        if($index == 0){
+                            $thumb = IMAGES_PATH.$item;
+                        }
+                        $postImage = new PostImages();
+                        $postImage->base_url = IMAGES_PATH.$item;
+                        $postImage->post_id = $post->id;
+                    }
+                }
+                $post->thumb =$thumb;
 
-
-           // var_dump($post);die;
+                if(empty($thumb)){
+                    echo json_encode(array('code' => 1, 'message' => 'Bạn cần thêm ít nhất 1 tấm ảnh!'));
+                    return;
+                }
+            }
             if (!$post->save()){
-                echo json_encode(array('code' => 1, 'message' => 'Error! Could not add new a post!'));
+                echo json_encode(array('code' => 1, 'message' =>'Đã có lỗi khi đăng bài'));
                 return;
             }
 
-            if (isset($params['images'])) {
-                foreach ($params['images'] as $item) {
-                    $postImage = new PostImages();
-                    $postImage->base_url = IMAGES_PATH.$item;
-                    $postImage->post_id = $post->id;
-                }
-            }
+
 
             echo json_encode(array('code' => 0, 'message' => 'Post successfull.'));
             //$this->send_notification("Your friend: .... just posted a thread: " +  $params['subject'],$sessionhash);
@@ -107,17 +117,17 @@ class AddPostAction extends CAction
             $tokens = array();
             foreach ($response['response']->HTML->buddylist as $buddy){
                 $user = $buddy->user;
-                
+
                 $userid = $user->userid;
-				
+
                 $user = User::model()->findByAttributes(array('userid'=>$userid));
                 if(isset($user) && isset($user->device_token)) {
                     $tokens[] = $user->device_token;
                 }
-				
+
             }
-           CUtils::send_notification($msg, $tokens);
+            CUtils::send_notification($msg, $tokens);
         }
-		 
+
     }
 }
