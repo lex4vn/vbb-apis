@@ -512,24 +512,6 @@ where cm.post_id=$post_id and cm.status = 1 order by cm.id desc";
         ));
     }
 
-    public function actionLoadSubject()
-    {
-        $class_id = $_POST['class_id'];
-        $query = "select * from subject_category where class_id = $class_id and type = 1";
-        $connection = Yii::app()->db;
-        $command = $connection->createCommand($query);
-        $subject = $command->queryAll();
-        $html = '';
-        if (count($subject) > 0) {
-            for ($i = 0; $i < count($subject); $i++) {
-                $html .= '<option value="' . $subject[$i]['id'] . '">' . $subject[$i]['subject_name'] . '</option>';
-            }
-        } else {
-            $html .= '<option value="-1">Chưa cập nhật</option>';
-        }
-        echo $html;
-    }
-
     public function actionCheckSocket()
     {
         $test = $_POST['json'];
@@ -540,79 +522,6 @@ where cm.post_id=$post_id and cm.status = 1 order by cm.id desc";
             echo 2;
             die;
         }
-    }
-
-    public function actionHoldPost()
-    {
-        $postId = $_POST['postId'];
-        $user_id = $_POST['user_id'];
-        $status = '';
-        if ($user_id == -1) {
-            $status = 0;
-            echo $status;
-            die;
-        }
-        $time = time();
-        $criteria = new CDbCriteria;
-        $criteria->condition = "end_time > $time";
-        $criteria->compare('post_id', $postId);
-        $arrHoldPost = HoldPost::model()->findAll($criteria);
-        if (count($arrHoldPost) > 0) {
-            $check = new CDbCriteria;
-            $check->condition = "subscriber_id = $user_id and end_time > $time";
-            $check->compare('post_id', $postId);
-            $checkUser = HoldPost::model()->findAll($check);
-            if (count($checkUser) > 0) {
-                $status = 3;
-                echo $status;
-                die;
-            } else {
-                $status = 1;
-                echo $status;
-                die;
-            }
-        }
-        $checkGhim = new CDbCriteria;
-        $checkGhim->condition = "end_time > $time";
-        $checkGhim->compare('subscriber_id', $user_id);
-        $checkOnemore = HoldPost::model()->findAll($checkGhim);
-        if (count($checkOnemore) > 0) {
-            $status = 4;
-            echo $status;
-            die;
-        }
-        $post = Post::model()->findByPk($postId);
-        $level = Level::model()->findByPk($post->level_id);
-        $moreTime = $level->time * 60;
-        $holdPost = new HoldPost();
-        $holdPost->post_id = $postId;
-        $holdPost->subscriber_id = $user_id;
-        $holdPost->start_time = time();
-        $holdPost->end_time = time() + $moreTime;
-        if (!$holdPost->save()) {
-            echo '<pre>';
-            var_dump($holdPost->getErrors());
-        }
-        $status = $moreTime;
-        echo $status;
-        die;
-    }
-
-    public function actionDeleteholdPost($id)
-    {
-        $postId = $_POST['postId'];
-        $user_id = Yii::app()->session['user_id'];
-        $time = time();
-        if ($user_id == -1) {
-            $this->redirect(Yii::app()->baseUrl . 'account');
-        }
-        $result = HoldPost::model()->findByAttributes(array('post_id' => $postId, 'subscriber_id' => $user_id), "end_time > $time");
-        $result->end_time = $time;
-        $result->save();
-        $subscriber = Subscriber::model()->findByPk($user_id);
-        $subscriber->point -= 1;
-        $subscriber->save();
-        $this->redirect(Yii::app()->baseUrl . 'post/' . $id);
     }
 
     public function actionPostSubject($id)
@@ -699,93 +608,6 @@ where cm.post_id=$post_id and cm.status = 1 order by cm.id desc";
         ));
     }
 
-    public function checkTheePost($sub_name, $post, $user_id, $level = null, $transaction)
-    {
-        $time = date('Y-m-d H:i:s');
-//        $goldTime = GoldTime::model()->findByAttributes(array('subscriber_id'=>$user_id, 'type'=>1), 'times < 2');
-        if (CUtils::promitionFreeCode($user_id)) {
-            $post = $this->promitionFreeCode40($post, $transaction, $user_id);
-            return $post;
-        }
-        if (CUtils::promitionFreeGold($user_id)) {
-            $post = $this->promitionFreeGold($post, $transaction, $user_id);
-            return $post;
-        }
-        Yii::log("\n Vao case nay roi: " . $sub_name->partner_id);
-        if (CUtils::promitionFreePost($user_id, 'net2e')) {
-            Yii::log("\n Vao case nay roi: " . $sub_name->partner_id);
-            $post = $this->FreePost($post, $transaction, $user_id);
-            return $post;
-        }
-        Yii::log("\n IDDDDDDDDDDDDDDDDDDDDDDDDDD: WAPPPPPPPPPP " . $post->type);
-        $criteria = new CDbCriteria;
-        $criteria->condition = "expiry_date > '$time'";
-        $criteria->compare('is_active', 1);
-        $criteria->compare('subscriber_id', $user_id);
-        $usingService = ServiceSubscriberMapping::model()->findAll($criteria);
-        if (count($usingService) > 0) {
-            $subFree = CheckFreeContent::model()->findByAttributes(array('subscriber_id' => $user_id));
-            if ($subFree != null) {
-                if ($subFree->total < 3) {
-                    $subFree->total += 1;
-                    $subFree->save();
-                    $post->type = 1; //Câu hỏi free
-                    $post->level_id = 1; //Câu hỏi free
-                    $transaction->status = 1;
-                    $transaction->cost = 0;
-                    $transaction->save();
-                } else {
-                    $sub_name->fcoin -= $level->fcoin;
-                    $sub_name->save();
-                    $post->type = 2; //Câu hỏi mất phí
-                    $transaction->status = 1;
-                    $transaction->save();
-                }
-                $post->save();
-            } else {
-                $checkFreeContent = new CheckFreeContent();
-                $checkFreeContent->subscriber_id = $user_id;
-                $checkFreeContent->total = 1;
-                $checkFreeContent->create_date = time();
-                $checkFreeContent->save();
-                $post->type = 1;
-                $post->level_id = 1;
-                $post->save();
-                $transaction->status = 1;
-                $transaction->cost = 0;
-                $transaction->save();
-            }
-        } else {
-            Yii::log("\n Vao case nay roi ko ,mua goi cuoc: ");
-            $sub_name->fcoin -= $level->fcoin;
-            $sub_name->save();
-            $post->type = 2;
-            $transaction->status = 1;
-            $transaction->save();
-            $post->save();
-        }
-        return $post;
-    }
-
-    function actionUnholdPost()
-    {
-        $postId = $_POST['postId'];
-        $user_id = $_POST['user_id'];
-        $time = time();
-        if ($user_id == -1) {
-            echo 0;
-            die;
-        }
-        $result = HoldPost::model()->findByAttributes(array('post_id' => $postId, 'subscriber_id' => $user_id), "end_time > $time");
-        $result->end_time = $time;
-        $result->save();
-        $subscriber = Subscriber::model()->findByPk($user_id);
-        $subscriber->point -= 1;
-        $subscriber->save();
-        echo 1;
-        die;
-    }
-
     function ak_img_resize($target, $newcopy, $w, $h, $ext)
     {
         Yii::log('--------------1--------------');
@@ -819,125 +641,6 @@ where cm.post_id=$post_id and cm.status = 1 order by cm.id desc";
         imagecopyresampled($tci, $img, 0, 0, 0, 0, $w, $h, $w_orig, $h_orig);
         Yii::log('--------------10--------------');
         imagejpeg($tci, $newcopy, 80);
-    }
-
-    public function actionViewUnit()
-    {
-        $uid = $_POST['uid'];
-        $postID = $_POST['postID'];
-        $subscriber = Subscriber::model()->findByPk($uid);
-        $subscriber->fcoin -= 1;
-        $subscriber->save();
-        return;
-    }
-
-    public function actionFail()
-    {
-        $this->titlePage = 'Câu hỏi  | PKL';
-        $id = $_REQUEST['id'];
-        if (!isset($id)) {
-            $this->redirect(Yii::app()->homeurl);
-        }
-        $postCheck = Post::model()->findByPk($id);
-        if ($postCheck == null || $postCheck->status == 9 || $postCheck->status == 10 || $postCheck->status == 11 || $postCheck->status == 12) {
-            $this->redirect(Yii::app()->homeurl);
-        }
-        if (!Yii::app()->session['user_id']) {
-            $this->redirect(Yii::app()->homeurl . 'account');
-        }
-        $checkSubject = SubscriberCheckTest::model()->findByAttributes(array('subject_id' => $postCheck->category_id), 'point >= 18');
-        if ($checkSubject == null && $this->userName->type == 2) {
-            $this->redirect(Yii::app()->homeurl);
-        }
-        $query = "select *, qm.post_id, q.id, q.status as status_q from post q join post_image qm on qm.post_id = q.id where q.id = $id";
-        $connection = Yii::app()->db;
-        $command = $connection->createCommand($query);
-        $post = $command->queryRow();
-        $class_id = $post['class_id'];
-        $category_id = $post['category_id'];
-        $subcriber_id = $post['subscriber_id'];
-        if (!Yii::app()->session['user_id']) {
-            $checkLike = 0;
-            $user_id = null;
-            $post['check_like'] = 0;
-        } else {
-            $user_id = Yii::app()->session['user_id'];
-            $checkLike = Like::model()->findByAttributes(
-                array(
-                    'post_id' => $id,
-                    'subscriber_id' => Yii::app()->session['user_id']
-                )
-            );
-            if (count($checkLike) > 0) {
-                $post['check_like'] = 1;
-            } else {
-                $post['check_like'] = 0;
-            }
-        }
-        $class_name = Class1::model()->findByAttributes(array('id' => $class_id, 'status' => 1));
-        $level = Level::model()->findByPk($post['level_id']);
-        $subjectCategory = SubjectCategory::model()->findByAttributes(array('id' => $category_id, 'status' => 1));
-        $post['class_name'] = $class_name['class_name'];
-        $post['subject_name'] = $subjectCategory['subject_name'];
-        $Subcriber = Subscriber::model()->findByPk($subcriber_id);
-        if ($Subcriber['url_avatar'] != null) {
-//            $url_avatar = IPSERVER.$Subcriber['url_avatar'];
-            if ($Subcriber['password'] == 'faccebook' || $Subcriber['password'] == 'Google') {
-                $url_avatar = $Subcriber['url_avatar'];
-            } else {
-                $url_avatar = IPSERVER . $Subcriber['url_avatar'];
-            }
-        } else {
-            $url_avatar = '';
-        }
-        $post['subscriber_name'] = $Subcriber['lastname'] . ' ' . $Subcriber['firstname'];
-        $post['sub_id'] = $Subcriber['id'];
-        $post['url_avatar'] = $url_avatar;
-        //answer
-//        $query = "select *, ai.answer_id, a.id, a.post_id, ai.status, ai.title from answer a join answer_image ai on ai.answer_id = a.id where a.post_id = $id and ai.status <> 4 order by a.id desc";
-        $query = "select * from answer where post_id = $id and status =4 order by id desc";
-        $connection = Yii::app()->db;
-        $command = $connection->createCommand($query);
-        $answer = $command->queryRow();
-//        echo '<pre>';print_r($answer);die;
-        $success = '';
-        $checkLike = '';
-        $subUser = '';
-        $reply = '';
-        $arrHoldPost = '';
-        $url_images = array();
-        $subUser = Subscriber::model()->findByPk($answer['subscriber_id']);
-        $answer_id = $answer['id'];
-        if ($user_id != null) {
-            if ($answer != '') {
-                $query = "select * from answer_image where answer_id = $answer_id order by id asc";
-                $image = AnswerImage::model()->findAllBySql($query);
-                //
-                for ($j = 0; $j < count($image); $j++) {
-                    $url_images[$j]['images'] = IPSERVER . $image[$j]['base_url'];
-                    if ($image[$j]['width'] != null) {
-                        $url_images[$j]['width'] = $image[$j]['width'];
-                    } else {
-                        $url_images[$j]['width'] = 0;
-                    }
-                    if ($image[$j]['height'] != null) {
-                        $url_images[$j]['height'] = $image[$j]['height'];
-                    } else {
-                        $url_images[$j]['height'] = 0;
-                    }
-                }
-                $answer['url_images'] = $url_images;
-                $success = 5;
-            }
-            $time = time();
-            $criteria = new CDbCriteria;
-            $criteria->condition = "end_time > $time";
-            $criteria->compare('post_id', $id);
-            $arrHoldPost = HoldPost::model()->findAll($criteria);
-        } else {
-            $answer['url_images'] = $url_images;
-        }
-        $this->render('post/detail', array('post' => $post, 'answer' => $answer, 'checkLike' => $checkLike, 'success' => $success, 'subUser' => $subUser, 'id' => $id, 'reply' => $reply, 'arrHoldPost' => $arrHoldPost, 'level' => $level));
     }
 
     public function actionList()
@@ -975,8 +678,6 @@ where cm.post_id=$post_id and cm.status = 1 order by cm.id desc";
         } else {
             $this->redirect(Yii::app()->user->returnUrl);
         }
-
-
     }
 
     public function actionSell()
@@ -1000,5 +701,18 @@ where cm.post_id=$post_id and cm.status = 1 order by cm.id desc";
           //  'subject' => $subject,
           //  'level' => $level
         ));
+    }
+
+    /**
+     * This is the action to handle external exceptions.
+     */
+    public function actionError()
+    {
+        if ($error = Yii::app()->errorHandler->error) {
+            if (Yii::app()->request->isAjaxRequest)
+                echo $error['message'];
+            else
+                $this->render('error', $error);
+        }
     }
 }

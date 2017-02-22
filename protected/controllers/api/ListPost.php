@@ -20,8 +20,17 @@ class ListPost extends CAction
         if ($sessionhash) {
 
             $type = $forumid == 69 ? 1 : 2;
+
+            $criteria = new CDbCriteria;
+            $criteria->addCondition("type = ".$type);
+            //$criteria->order = 'modify_date DESC';
             $offset = ($page - 1) * $limit;
-            $posts = Post::model()->getPosts(0,$limit, $offset, $type, 1);
+            $criteria->limit = $limit;
+            $criteria->offset = $offset;
+
+            $arr_option['criteria'] = $criteria;
+
+            $posts = new CActiveDataProvider('Post', $arr_option);
 
             $items = array();
             foreach ($posts['data'] as $post) {
