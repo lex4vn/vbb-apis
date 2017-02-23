@@ -1,6 +1,6 @@
 <?php
 
-class ListPost extends CAction
+class ListPostAction extends CAction
 {
     public function run()
     {
@@ -30,10 +30,21 @@ class ListPost extends CAction
 
             $arr_option['criteria'] = $criteria;
 
-            $posts = new CActiveDataProvider('Post', $arr_option);
+            //$posts = new CActiveDataProvider('Post', $arr_option);
+            $posts = Yii::app()->db->createCommand()
+                ->select('*')
+                ->from('post t')
+                ->where('t.status=1 and t.type='.$type)
+                //->group('m.question_id')
+                //->order('t.modify_date desc')
+                ->limit($limit)
+                ->offset($offset)
+                ->queryAll();
+
 
             $items = array();
-            foreach ($posts['data'] as $post) {
+            //var_dump($posts);die;
+            foreach ($posts as $post) {
                 $item = array(
                     'threadid' => $post['id'],
                     'threadtitle' => $post['subject'],
@@ -53,7 +64,7 @@ class ListPost extends CAction
             }
             echo json_encode(array('code' => 0,
                 'message' => 'get list forum success',
-                'totalpages' => $posts['total'],
+                'totalpages' => count($posts),
                 'listThread' => $items
             ));
             return;

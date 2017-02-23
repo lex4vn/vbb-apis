@@ -82,7 +82,7 @@ class ApiController extends CController
             'getDeviceToken' => 'protected.controllers.api.GetdevicetokenAction',
             //2 getForum tested
             'getForumv1' => 'protected.controllers.api.GetForum',
-            'getForum' => 'protected.controllers.api.ListPost',
+            'getForum' => 'protected.controllers.api.ListPostAction',
 
             'getForumPage' => 'protected.controllers.api.GetForumByPage',
             'getNotifi' => 'protected.controllers.api.GetNotifiAction',
