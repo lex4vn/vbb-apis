@@ -53,8 +53,8 @@ class PostAction extends CAction
             $avatarurl = '';
             if($user == null){
                 // sync user from forum
-                echo json_encode(array('code' => 1, 'message' => 'Forum error'));
-                return;
+                //echo json_encode(array('code' => 1, 'message' => 'Forum error'));
+                //return;
             }else{
                 $user_title = $user['username'];// TODO add user_title
                 $avatarurl = $user['avatar'];

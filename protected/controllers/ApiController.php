@@ -80,9 +80,18 @@ class ApiController extends CController
             'debug' => 'protected.controllers.api.DebugAction',
             'getBikeType' => 'protected.controllers.api.GetBikeTypeAction',
             'getDeviceToken' => 'protected.controllers.api.GetdevicetokenAction',
+
+            // 1 profile thread tested
+            'profileThreads1' => 'protected.controllers.api.ProfileThreadsAction',
+            'profileThreads' => 'protected.controllers.api.ProfilePostAction',
+
             //2 getForum tested
             'getForumv1' => 'protected.controllers.api.GetForum',
             'getForum' => 'protected.controllers.api.ListPostAction',
+
+            // 3. detailPost
+            'detailPost1' => 'protected.controllers.api.DetailPostAction',
+            'detailPost' => 'protected.controllers.api.PostAction',
 
             'getForumPage' => 'protected.controllers.api.GetForumByPage',
             'getNotifi' => 'protected.controllers.api.GetNotifiAction',
@@ -113,9 +122,7 @@ class ApiController extends CController
             'messageSend' => 'protected.controllers.api.MessageSendAction',
             'profile' => 'protected.controllers.api.ProfileAction',
             'profilePost' => 'protected.controllers.api.ProfilePostAction',
-            // 1 profile thread tested
-            'profileThreads1' => 'protected.controllers.api.ProfileThreadsAction',
-            'profileThreads' => 'protected.controllers.api.ProfilePostAction',
+
 
             'register' => 'protected.controllers.api.RegisterAction',
             'registerService' => 'protected.controllers.api.RegisterserivceAction',
@@ -141,9 +148,7 @@ class ApiController extends CController
             'showThreadByPage' => 'protected.controllers.api.ShowThreadByPage',
             'loginFace' => 'protected.controllers.api.LoginFacebook',
 
-            // 3. detailPost
-            'detailPost1' => 'protected.controllers.api.DetailPostAction',
-            'detailPost' => 'protected.controllers.api.PostAction',
+
 
             'detailFriend' => 'protected.controllers.api.DetailFriendAction',
             'detailComments' => 'protected.controllers.api.DetailCommentAction',
