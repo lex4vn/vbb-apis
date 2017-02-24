@@ -11,6 +11,9 @@ class ApiController extends CController
 
     public function beforeAction($action)
     {
+        Yii::log($action->id);
+        Yii::log('===========================GET============'.$_GET);
+        Yii::log('===========================POST============'.$_POST);
         // TODO check exist in array
         if (
             $action->id != "listReport"

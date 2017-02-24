@@ -10,7 +10,6 @@ class AddPostAction extends CAction
 {
     public function run()
     {
-        Yii::log('AddPostAction');
         header('Content-type: application/json');
         if (empty($_POST)) {
             $_POST = json_decode(file_get_contents('php://input'), true);

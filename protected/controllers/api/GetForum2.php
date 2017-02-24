@@ -4,7 +4,6 @@ class GetForum2 extends CAction
 {
     public function run()
     {
-        Yii::log('GetForum2');
         header('Content-type: application/json');
         $forumid = isset($_GET['forumid']) ? $_GET['forumid'] : null;
         if ($forumid == null) {
