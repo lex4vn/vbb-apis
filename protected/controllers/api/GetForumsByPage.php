@@ -3,7 +3,9 @@
 
 class GetForumsByPage extends CAction
 {
-    public function run(){
+    public function run()
+    {
+        Yii::log('GetForumsByPage');
         header('Content-type: application/json');
         $forumid = isset($_GET['forumid']) ? $_GET['forumid'] : null;
         if ($forumid == null) {
@@ -16,11 +18,11 @@ class GetForumsByPage extends CAction
         }
         $params = $_GET;
         $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
-        if($sessionhash){
+        if ($sessionhash) {
             $apiConfig = unserialize(base64_decode($sessionhash));
             $api = new Api($apiConfig, new GuzzleProvider(API_URL));
 
-            $response = $api->callRequest('forumdisplay', ['forumid' => $forumid, 'api_v'=> '1', 'pagenumber' => $pageNumber ], ConnectorInterface::METHOD_GET);
+            $response = $api->callRequest('forumdisplay', ['forumid' => $forumid, 'api_v' => '1', 'pagenumber' => $pageNumber], ConnectorInterface::METHOD_GET);
             //Thanh cong
             if (isset($response['response'])) {
                 $items = array();
@@ -108,7 +110,7 @@ class GetForumsByPage extends CAction
                         'threadtitle' => $threadbits->thread->threadtitle,
                         'postuserid' => $threadbits->thread->postuserid,
                         'postusername' => $threadbits->thread->postusername,
-                        'post_url' => API_URL.'showthread.php?t='.$threadbits->thread->threadid,
+                        'post_url' => API_URL . 'showthread.php?t=' . $threadbits->thread->threadid,
                         'preview' => $content,
                         'price' => $price,
                         'phone' => $phone,
@@ -129,7 +131,7 @@ class GetForumsByPage extends CAction
                 echo json_encode(array('code' => 1, 'message' => 'Forum error'));
                 return;
             }
-        }else{
+        } else {
             // Sessionhash is empty
             echo json_encode(array('code' => 10, 'message' => 'User logged out'));
             return;

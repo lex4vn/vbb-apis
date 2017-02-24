@@ -10,6 +10,7 @@ class AddPostAction extends CAction
 {
     public function run()
     {
+        Yii::log('AddPostAction');
         header('Content-type: application/json');
         if (empty($_POST)) {
             $_POST = json_decode(file_get_contents('php://input'), true);
@@ -71,30 +72,29 @@ class AddPostAction extends CAction
             $post->status = $status;
             $post->create_date = date('Y-m-d H:i:s');
             $post->modify_date = date('Y-m-d H:i:s');
-            if($post->status == 2){
+            if ($post->status == 2) {
                 $thumb = '';
                 if (isset($params['images'])) {
-                    foreach ($params['images'] as $index=>$item) {
-                        if($index == 0){
-                            $thumb = IMAGES_PATH.$item;
+                    foreach ($params['images'] as $index => $item) {
+                        if ($index == 0) {
+                            $thumb = IMAGES_PATH . $item;
                         }
                         $postImage = new PostImages();
-                        $postImage->base_url = IMAGES_PATH.$item;
+                        $postImage->base_url = IMAGES_PATH . $item;
                         $postImage->post_id = $post->id;
                     }
                 }
-                $post->thumb =$thumb;
+                $post->thumb = $thumb;
 
-                if(empty($thumb)){
+                if (empty($thumb)) {
                     echo json_encode(array('code' => 1, 'message' => 'Bạn cần thêm ít nhất 1 tấm ảnh!'));
                     return;
                 }
             }
-            if (!$post->save()){
-                echo json_encode(array('code' => 1, 'message' =>'Đã có lỗi khi đăng bài'));
+            if (!$post->save()) {
+                echo json_encode(array('code' => 1, 'message' => 'Đã có lỗi khi đăng bài'));
                 return;
             }
-
 
 
             echo json_encode(array('code' => 0, 'message' => 'Post successfull.'));
@@ -107,21 +107,22 @@ class AddPostAction extends CAction
         }
     }
 
-    private function send_notification($sessionhash, $msg) {
+    private function send_notification($sessionhash, $msg)
+    {
         $apiConfig = unserialize(base64_decode($sessionhash));
         $api = new Api($apiConfig, new GuzzleProvider(API_URL));
         $response = $api->callRequest('profile_buddylist', [
             'api_v' => '1'
         ], ConnectorInterface::METHOD_POST);
-        if(isset($response['response'])){
+        if (isset($response['response'])) {
             $tokens = array();
-            foreach ($response['response']->HTML->buddylist as $buddy){
+            foreach ($response['response']->HTML->buddylist as $buddy) {
                 $user = $buddy->user;
 
                 $userid = $user->userid;
 
-                $user = User::model()->findByAttributes(array('userid'=>$userid));
-                if(isset($user) && isset($user->device_token)) {
+                $user = User::model()->findByAttributes(array('userid' => $userid));
+                if (isset($user) && isset($user->device_token)) {
                     $tokens[] = $user->device_token;
                 }
 
