@@ -31,6 +31,8 @@ class ListPostAction extends CAction
             $arr_option['criteria'] = $criteria;
 
             //$posts = new CActiveDataProvider('Post', $arr_option);
+            //TODO
+            //$count =
             $posts = Yii::app()->db->createCommand()
                 ->select('*')
                 ->from('post t')
@@ -64,7 +66,7 @@ class ListPostAction extends CAction
             }
             echo json_encode(array('code' => 0,
                 'message' => 'get list forum success',
-                'totalpages' => count($posts),
+                'totalpages' => 1,
                 'listThread' => $items
             ));
             return;
