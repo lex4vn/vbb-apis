@@ -21,14 +21,14 @@ class ListPostAction extends CAction
 
             $type = $forumid == 69 ? 1 : 2;
 
-            $criteria = new CDbCriteria;
-            $criteria->addCondition("type = ".$type);
-            //$criteria->order = 'modify_date DESC';
+//            $criteria = new CDbCriteria;
+//            $criteria->addCondition("type = ".$type);
+//            //$criteria->order = 'modify_date DESC';
             $offset = ($page - 1) * $limit;
-            $criteria->limit = $limit;
-            $criteria->offset = $offset;
+//            $criteria->limit = $limit;
+//            $criteria->offset = $offset;
 
-            $arr_option['criteria'] = $criteria;
+//            $arr_option['criteria'] = $criteria;
 
             //$posts = new CActiveDataProvider('Post', $arr_option);
             //TODO
