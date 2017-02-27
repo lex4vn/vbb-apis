@@ -13,9 +13,11 @@ class ListPostAction extends CAction
             return;
         }
 
-        $page = isset($params['pageNumber']) ? $params['pageNumber'] : 1;
+        $page = isset($params['pageNumber']) ? $params['pageNumber'] : 0;
         $limit = isset($params['page_size']) ? $params['page_size'] : 20;
-
+        if($page == 0){
+            $page = 1;
+        }
         $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
         if ($sessionhash) {
 
