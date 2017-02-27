@@ -22,7 +22,7 @@ class SearchPostAction extends CAction
                 $criteria->compare('message', $q, true, 'OR');
                 $criteria->compare('content', $q, true, 'OR');
             }
-            $results = $dataProvider=new CActiveDataProvider("post", array('criteria'=>$criteria));
+            $results = Post::model()->findAll($criteria);
             foreach ($results as $result) {
                 $item = array(
                     'threadid' => $result->id,
