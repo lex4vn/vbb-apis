@@ -6,14 +6,14 @@ class ListPostAction extends CAction
     {
         header('Content-type: application/json');
         $params = $_GET;
-
+        Yii:log($_GET);
         $forumid = isset($params['forumid']) ? $params['forumid'] : null;
         if ($forumid == null) {
             echo json_encode(array('code' => 5, 'message' => 'Missing params forumid'));
             return;
         }
 
-        $page = isset($params['pageNumber']) ? $params['pageNumber'] : 0;
+        $page = isset($params['pageNumber']) ? $params['pageNumber'] : 1;
         $limit = isset($params['page_size']) ? $params['page_size'] : 20;
         if($page == 0){
             $page = 1;
