@@ -81,6 +81,7 @@ class AddPostAction extends CAction
                         $postImage = new PostImages();
                         $postImage->base_url = IMAGES_PATH . $item;
                         $postImage->post_id = $post->id;
+                        $postImage->save();
                     }
                 }
                 $post->thumb = $thumb;
