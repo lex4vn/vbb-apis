@@ -56,7 +56,7 @@ class AddPostAction extends CAction
         $phone = isset($params['phone']) ? $params['phone'] : 'Không có';
         $location = isset($params['location']) ? $params['location'] : 'vui lòng liên hệ';
         $formality = isset($params['formality']) ? $params['formality'] : '0';
-        $status = isset($params['status']) ? $params['status'] : '1';
+        $status = isset($params['status']) ? $params['status'] : '0';
         $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
         if ($sessionhash) {
 
@@ -68,10 +68,10 @@ class AddPostAction extends CAction
             $post->phone = $phone;
             $post->location = $location;
             $post->formality = $formality;
-            $post->status = $status;
+            $post->status = $status == 'Mới'? 0: 1;
             $post->create_date = date('Y-m-d H:i:s');
             $post->modify_date = date('Y-m-d H:i:s');
-            if ($post->status == 2) {
+            if ($post->type == 2) {
                 $thumb = '';
                 if (isset($params['images'])) {
                     foreach ($params['images'] as $index => $item) {
@@ -91,6 +91,7 @@ class AddPostAction extends CAction
                     return;
                 }
             }
+
             if (!$post->save()) {
                 echo json_encode(array('code' => 1, 'message' => 'Đã có lỗi khi đăng bài'));
                 return;
