@@ -51,7 +51,7 @@ class ImageAction extends CAction{
             //close file stream
             fclose($path);
 
-            $post_image = new Images();
+            $post_image = new PostImages();
             $post_image->type = 1;
             $post_image->status = 1;
             //$post_image->width = $item['width'];

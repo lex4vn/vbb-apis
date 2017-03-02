@@ -30,6 +30,12 @@ class PostAction extends CAction
             }
 
             $images = array();
+            $queryImages = "select * from post_images where post_id = $threadId";
+            $commandImages = $connection->createCommand($queryImages);
+            $resultImages = $commandImages->queryAll();
+            foreach($resultImages as $image){
+                $images[] = IMAGES_PATH . $image['base_url'];
+            }
 
             $comments = array();
             // Commments
@@ -65,7 +71,7 @@ class PostAction extends CAction
                 'userid' => $post['postuserid'],
                 'avatarurl' =>  $avatarurl,
                 'onlinestatus' => '',
-                'usertitle' =>$post['postusername'],
+                'usertitle' =>$user_title,
                 'postid' => $post['id'],
                 'post_url' => IMAGES_PATH. $post['thumb'],
                 'postdate' => $post['create_date'],
@@ -91,7 +97,7 @@ class PostAction extends CAction
             ));
             return;
         } else {
-            echo json_encode(array('code' => 2, 'message' => 'User logged out'));
+            echo json_encode(array('code' => 101, 'message' => 'User logged out'));
             return;
         }
     }
