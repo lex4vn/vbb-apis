@@ -72,7 +72,7 @@ class ListProfileBuddyAction extends CAction
         }
         else {
             // Sessionhash is empty
-            echo json_encode(array('code' => 10, 'message' => 'User logged out', 'abc' =>$sessionhash));
+            echo json_encode(array('code' => 101, 'message' => 'User logged out', 'abc' =>$sessionhash));
             return;
         }
     }

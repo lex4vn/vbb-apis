@@ -6,7 +6,6 @@ class ListPostAction extends CAction
     {
         header('Content-type: application/json');
         $params = $_GET;
-        Yii:log($_GET);
         $forumid = isset($params['forumid']) ? $params['forumid'] : null;
         if ($forumid == null) {
             echo json_encode(array('code' => 5, 'message' => 'Missing params forumid'));
@@ -35,6 +34,7 @@ class ListPostAction extends CAction
             //$posts = new CActiveDataProvider('Post', $arr_option);
             //TODO
             //$count =
+            //Yii::log($limit.':'.$offset)
             $posts = Yii::app()->db->createCommand()
                 ->select('*')
                 ->from('post t')
@@ -75,7 +75,7 @@ class ListPostAction extends CAction
 
         } else {
             // Sessionhash is empty
-            echo json_encode(array('code' => 10, 'message' => 'User logged out'));
+            echo json_encode(array('code' => 101, 'message' => 'User logged out'));
             return;
         }
     }

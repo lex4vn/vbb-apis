@@ -83,7 +83,7 @@ class AdvancedSearchPostAction extends CAction
 
         } else {
             // Sessionhash is empty
-            echo json_encode(array('code' => 10, 'message' => 'User logged out'));
+            echo json_encode(array('code' => 101, 'message' => 'User logged out'));
             return;
         }
 
