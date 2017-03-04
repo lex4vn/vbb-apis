@@ -33,11 +33,17 @@ class AddCommentAction extends CAction
         $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
 
         if ($sessionhash) {
-
+            $user = User::model()->findByPk(Yii::app()->session['user_id']);
+            $avatarurl = '';
+            if($user != null){
+                $avatarurl = $user->avatar;
+            }
             $comment = new Comment();
-            $comment->user_id = 1;
+            $comment->user_id = Yii::app()->session['user_id'];
             $comment->post_id = $params['postid'];
             $comment->content = $params['message'];
+            $comment->username = Yii::app()->session['username'];
+            $comment->avatar = $avatarurl;
             $comment->create_date = date('Y-m-d H:i:s');
             $comment->modify_date = date('Y-m-d H:i:s');
             if($comment->save()){

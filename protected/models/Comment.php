@@ -6,6 +6,8 @@
  * The followings are the available columns in table 'comment':
  * @property integer $id
  * @property integer $user_id
+ * @property string $username
+ * @property string $avatar
  * @property integer $post_id
  * @property string $content
  * @property string $create_date
@@ -32,12 +34,14 @@ class Comment extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('user_id, post_id, content', 'required'),
+			array('user_id, username, avatar, post_id, content', 'required'),
 			array('user_id, post_id, count_like, count_reply, status', 'numerical', 'integerOnly'=>true),
+			array('username', 'length', 'max'=>50),
+			array('avatar', 'length', 'max'=>200),
 			array('create_date, modify_date', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, user_id, post_id, content, create_date, modify_date, count_like, count_reply, status', 'safe', 'on'=>'search'),
+			array('id, user_id, username, avatar, post_id, content, create_date, modify_date, count_like, count_reply, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,6 +64,8 @@ class Comment extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'user_id' => 'User',
+			'username' => 'Username',
+			'avatar' => 'Avatar',
 			'post_id' => 'Post',
 			'content' => 'Content',
 			'create_date' => 'Create Date',
@@ -90,6 +96,8 @@ class Comment extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('user_id',$this->user_id);
+		$criteria->compare('username',$this->username,true);
+		$criteria->compare('avatar',$this->avatar,true);
 		$criteria->compare('post_id',$this->post_id);
 		$criteria->compare('content',$this->content,true);
 		$criteria->compare('create_date',$this->create_date,true);
