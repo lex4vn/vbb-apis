@@ -79,7 +79,7 @@ class LoginAction extends CAction
                         'userid' =>  $response['session']->userid,
                         'username' =>  $response['response']->errormessage[1],
                     ));
-
+                    $username = $response['response']->errormessage[1];
                     $user_id = $response['session']->userid;
                     $response = $api->callRequest('member', [
                         'u'=> $user_id,
@@ -96,10 +96,6 @@ class LoginAction extends CAction
                                     $phonenumber = $field->profilefield->value;
                                 }
                             }
-                        }
-                        $username = '';
-                        if(isset($response['response']->errormessage[1])) {
-                            $username = $response['response']->errormessage[1];
                         }
 
                         $usertitle = '';
