@@ -7,6 +7,7 @@ class PostAction extends CAction
         header('Content-type: application/json');
         $params = $_GET;
         $threadId = isset($params['threadId']) ? $params['threadId'] : null;
+
         $page = isset($params['pagenumber']) ? $params['pagenumber'] : 1;
 
         if ($threadId == null) {
@@ -73,7 +74,7 @@ class PostAction extends CAction
                 'onlinestatus' => '',
                 'usertitle' =>$user_title,
                 'postid' => $post['id'],
-                'post_url' => IMAGES_PATH. $post['thumb'],
+                'post_url' => $post['thumb'],
                 'postdate' => $post['create_date'],
                 'title' => $post['subject'],
                 'bike' => $post['bike'],
@@ -83,7 +84,7 @@ class PostAction extends CAction
                 'formality' => $post['formality'],
                 'status' =>  $post['status'],
                 'images' => $images,
-                'message' =>  $post['content'],
+                'message' =>  $post['message'],
                 'ismypost' => isset($post['userid'])? $post['userid'] == Yii::app()->session['user_id']: false,
                 'totalposts' =>  $post['formality'],
                 'pagenumber' =>  $post['formality'],

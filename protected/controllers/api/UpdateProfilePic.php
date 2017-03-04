@@ -18,16 +18,23 @@ class UpdateProfilePic extends CAction{
             return;
         }
         $data = $params['image'];
+        Yii::log('avatar_link'.$params['avatarurl']);
+        Yii::log('image'.$data);
         $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
          if ($sessionhash) {
             $apiConfig = unserialize(base64_decode($sessionhash));
             $api = new Api($apiConfig, new GuzzleProvider(API_URL));
-            $response = $api->callRequest('profile_updateprofilepic', 
+            $response = $api->callRequest('profile_updateprofilepic',
                 ['deleteprofilepic' => true, 'avatarurl' => $params['avatarurl'], 'upload' => $data,'api_v' => '1'], ConnectorInterface::METHOD_POST);
             if(isset($response['response'])){
                  $responsemessage = $response['response'] -> errormessage[0];
                 if(strcasecmp ($responsemessage, "redirect_updatethanks") == 0){
                     echo json_encode(array('code' => 0, 'message' => 'Profile picture update successfully'));
+                    $user = User::model()->findByPk(Yii::app()->session['user_id']);
+                    if($user != null){
+                        $user->avatar = $params['avatarurl'];
+                        $user->save();
+                    }
                 } else {
                     echo json_encode(array('code' => 1, 'message' => $responsemessage));
                 }

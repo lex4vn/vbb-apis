@@ -76,9 +76,8 @@ class AddPostAction extends CAction
             $post->modify_date = date('Y-m-d H:i:s');
             $post->thumb = 'noimage.png';
             $post->type = $type;
-//            if (isset($params['images'])) {
-//                $post->type = 2;
-//            }
+            $post->postuserid = Yii::app()->session['user_id'];
+            $post->postusername = Yii::app()->session['username'];
             $post->save();
 
             Yii::log($post->type);
