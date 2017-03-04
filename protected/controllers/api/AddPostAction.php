@@ -52,6 +52,7 @@ class AddPostAction extends CAction
         }
 
         $bike = isset($params['bike']) ? $params['bike'] : 'Chưa chọn';
+        $type = isset($params['type']) ? $params['type'] : 1;
         $price = isset($params['price']) ? $params['price'] : 0;
         $phone = isset($params['phone']) ? $params['phone'] : 'Không có';
         $location = isset($params['location']) ? $params['location'] : 'vui lòng liên hệ';
@@ -74,6 +75,7 @@ class AddPostAction extends CAction
             $post->create_date = date('Y-m-d H:i:s');
             $post->modify_date = date('Y-m-d H:i:s');
             $post->thumb = 'noimage.png';
+            $post->type = $type;
 //            if (isset($params['images'])) {
 //                $post->type = 2;
 //            }
