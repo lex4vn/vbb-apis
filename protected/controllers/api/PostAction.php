@@ -40,7 +40,7 @@ class PostAction extends CAction
 
             $comments = array();
             // Commments
-            $queryComment = "select *, username,avatar from comment left join api_user on api_user.userid = comment.user_id  where post_id = $threadId";
+            $queryComment = "select *, comment.username,comment.avatar from comment left join api_user on api_user.userid = comment.user_id  where post_id = $threadId";
             $commandComment = $connection->createCommand($queryComment);
             $resultComment = $commandComment->queryAll();
             foreach($resultComment as $comment){
@@ -71,7 +71,7 @@ class PostAction extends CAction
                 'username' => $post['postusername'],
                 'userid' => $post['postuserid'],
                 'avatarurl' =>  $avatarurl,
-                'onlinestatus' => '',
+                'onlinestatus' => 'online',
                 'usertitle' =>$user_title,
                 'postid' => $post['id'],
                 'post_url' => $post['thumb'],
