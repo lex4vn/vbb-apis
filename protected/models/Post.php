@@ -147,4 +147,34 @@ class Post extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	public function getPosts($postuserid = 0,$limit = 8, $offset = 0, $type = 0, $status = 1)
+	{
+		$sql = 't.status=' . $status;
+		if($type > 0){
+			$sql .= ' and t.type =' . $type;
+		}
+		if($postuserid > 0){
+			$sql .= ' and t.postuserid =' . $postuserid;
+		}
+
+		$total = Yii::app()->db->createCommand()
+			->select('*')
+			->from('post t')
+			->where($sql)
+			->queryAll();
+
+		$result = Yii::app()->db->createCommand()
+			->select('t.id, t.content, t.message, t.subject, t.thumb,t.price, t.phone, t.bike, t.formality, t.postusername, t.price, t.postuserid, t.location, t.create_date, t.modify_date, t.status, t.type, t.count_like, t.count_comment')
+			->from('post t')
+			->where($sql)
+			->order('t.modify_date desc')
+			->limit($limit)
+			->offset($offset)
+			->queryAll();
+		return array(
+			'data' => $result,
+			'total'=>count($total)
+		);
+	}
 }
