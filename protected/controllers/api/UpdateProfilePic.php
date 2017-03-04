@@ -19,7 +19,7 @@ class UpdateProfilePic extends CAction{
         }
         $data = $params['image'];
         Yii::log('avatar_link'.$params['avatarurl']);
-        Yii::log('image'.$data);
+        //Yii::log('image'.$data);
         $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
          if ($sessionhash) {
             $apiConfig = unserialize(base64_decode($sessionhash));

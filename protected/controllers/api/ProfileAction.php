@@ -38,8 +38,8 @@ class ProfileAction extends CAction
 				$avatarurl = '';
 				if($user != null){
 					$avatarurl = $user->avatar;
-
 				}
+				Yii::log('::::IMAGE AVATAR:::'.$avatarurl);
 				$profile = array(
 					'username' => $response['response']->prepared->username,
 					'fullname' => $fullname,
