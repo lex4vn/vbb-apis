@@ -35,13 +35,17 @@ class ProfileAction extends CAction
 				}
 
 				$user = User::model()->findByPk(Yii::app()->session['user_id']);
+				$username = '';
 				$avatarurl = '';
 				if($user != null){
 					$avatarurl = $user->avatar;
+					$username = $user->username;
 				}
 				Yii::log('::::IMAGE AVATAR:::'.$avatarurl);
+
+				$posts = Post::model()->findByAttributes(array('postuserid'=>Yii::app()->session['user_id']));
 				$profile = array(
-					'username' => $response['response']->prepared->username,
+					'username' => empty($username)? $response['response']->prepared->username : $username,
 					'fullname' => $fullname,
 					'phonenumber' => $phonenumber,
 					'birthday' => date('d/m/Y',strtotime($response['response']->prepared->birthday)),
@@ -51,7 +55,7 @@ class ProfileAction extends CAction
 					'usertitle' => $response['response']->prepared->usertitle,
 					'onlinestatus' => $response['response']->prepared->onlinestatus->onlinestatus == 1 ? "online" : "offline",
 					'joindate' => date('d/m/Y',strtotime($response['response']->prepared->joindate)),
-					'posts' => $response['response']->prepared->posts,
+					'posts' => $posts,//$response['response']->prepared->posts,
 					'avatarurl' => $avatarurl? $avatarurl : str_replace("amp;","",API_URL.$response['response']->prepared->avatarurl)
 					);
 				echo json_encode($profile);
