@@ -30,13 +30,14 @@ class UpdateProfilePic extends CAction{
                  $responsemessage = $response['response'] -> errormessage[0];
                 if(strcasecmp ($responsemessage, "redirect_updatethanks") == 0){
                     echo json_encode(array('code' => 0, 'message' => 'Profile picture update successfully'));
-                    $user = User::model()->findByPk(Yii::app()->session['user_id']);
-                    if($user != null){
-                        $user->avatar = $params['avatarurl'];
-                        $user->save();
-                    }
                 } else {
                     echo json_encode(array('code' => 1, 'message' => $responsemessage));
+                }
+                $user = User::model()->findByPk(Yii::app()->session['user_id']);
+                if($user != null){
+                    $user->avatar = $params['avatarurl'];
+                    $user->save();
+                    Yii::log('::::UPDATE AVATAR:::'.$user->avatar);
                 }
             }else{
                 echo json_encode(array('code' => 2, 'message' => 'Forum error'));
