@@ -34,7 +34,12 @@ class ProfileAction extends CAction
 					}
 				}
 
+				$user = User::model()->findByPk(Yii::app()->session['user_id']);
+				$avatarurl = '';
+				if($user != null){
+					$avatarurl = $user->avatar;
 
+				}
 				$profile = array(
 					'username' => $response['response']->prepared->username,
 					'fullname' => $fullname,
@@ -47,7 +52,7 @@ class ProfileAction extends CAction
 					'onlinestatus' => $response['response']->prepared->onlinestatus->onlinestatus == 1 ? "online" : "offline",
 					'joindate' => date('d/m/Y',strtotime($response['response']->prepared->joindate)),
 					'posts' => $response['response']->prepared->posts,
-					'avatarurl' =>str_replace("amp;","",API_URL.$response['response']->prepared->avatarurl)
+					'avatarurl' => $avatarurl? $avatarurl : str_replace("amp;","",API_URL.$response['response']->prepared->avatarurl)
 					);
 				echo json_encode($profile);
 
