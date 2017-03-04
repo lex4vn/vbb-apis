@@ -37,6 +37,7 @@ class UpdateProfilePic extends CAction{
                 if($user != null){
                     $user->avatar = $params['avatarurl'];
                     $user->save();
+                    Yii::log('::::UP AVATAR:::'.$params['avatarurl']);
                     Yii::log('::::UPDATE AVATAR:::'.$user->avatar);
                 }
             }else{
