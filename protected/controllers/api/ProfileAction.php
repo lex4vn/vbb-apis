@@ -19,6 +19,7 @@ class ProfileAction extends CAction
                 'api_v' => '1'
             ], ConnectorInterface::METHOD_POST);
             // TODO
+			//var_dump($response['response']);die;
             if(isset($response['response'])){
 				$fields = $response['response']->blocks->aboutme->block_data->fields->category->fields;
 				$phonenumber = '';
@@ -35,6 +36,7 @@ class ProfileAction extends CAction
 				}
 
 				$user = User::model()->findByPk(Yii::app()->session['user_id']);
+				//var_dump($user);die;
 				$username = '';
 				$avatarurl = '';
 				if($user != null){
@@ -56,7 +58,7 @@ class ProfileAction extends CAction
 					'onlinestatus' => $response['response']->prepared->onlinestatus->onlinestatus == 1 ? "online" : "offline",
 					'joindate' => date('d/m/Y',strtotime($response['response']->prepared->joindate)),
 					'posts' => count($posts),//$response['response']->prepared->posts,
-					'avatarurl' => $avatarurl? $avatarurl : str_replace("amp;","",API_URL.$response['response']->prepared->avatarurl)
+					'avatarurl' => empty($avatarurl)? str_replace("amp;","",API_URL.$response['response']->prepared->avatarurl):$avatarurl
 					);
 				echo json_encode($profile);
 
