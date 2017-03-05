@@ -119,7 +119,7 @@ class LoginAction extends CAction
                         }else{
                             $user->phonenumber =  $phonenumber;
                             $user->usertitle = $usertitle;
-                            $user->avatar = $avatar;
+                            //$user->avatar = $avatar;
                             $user->status = $status;
                         }
                         $user->save();
