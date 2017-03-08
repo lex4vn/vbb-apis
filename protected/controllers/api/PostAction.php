@@ -47,7 +47,7 @@ class PostAction extends CAction
             foreach($resultComment as $comment){
                 $comments[] = array(
                     'username' => $comment['username'],
-                    'userid' => $comment['userid'],
+                    'userid' => $comment['user_id'],
                     'avatarurl' =>  $comment['avatar'],
                     'onlinestatus' => 1,
                     'usertitle' => $comment['username'],
