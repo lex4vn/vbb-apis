@@ -88,7 +88,7 @@ $t = time();
                         'sliderBase'=>'/images/',
                         'imagesPath'=>'/upload/',
                         'images'=>$images_name,
-                        'urls'=>array(IPSERVER.$post["thumb"],'02.jpg','03.jpg','04.jpg'),
+                        'urls'=>array($post["thumb"],'02.jpg','03.jpg','04.jpg'),
                         'alts'=>array('First description','Second description','Third description','Four description'),
                         'defaultUrl'=>Yii::app()->request->hostInfo
                     )

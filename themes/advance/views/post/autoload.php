@@ -30,7 +30,7 @@ for ($i = 0; $i < count($post); $i++){
              <div class="col-md-4 col-xs-4 avata">
                 <a class="ava" href="<?php echo Yii::app()->baseUrl.'/post/view/'.$post[$i]['id'] ?>">
                 <img
-                src="<?php echo IPSERVER.$post[$i]['thumb'] ?>"
+                src="<?php echo $post[$i]['thumb'] ?>"
                 title="<?php echo $post[$i]['subject']?>"
                 alt="<?php echo $post[$i]['subject'] ?>" />
                 </a>

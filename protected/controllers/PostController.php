@@ -398,7 +398,7 @@ where cm.post_id=$post_id and cm.status = 1 order by cm.id desc";
         $connection = Yii::app()->db;
         $command = $connection->createCommand($query);
         $comments = $command->queryAll();
-        var_dump($comments);die();
+        //var_dump($comments);die();
         $url = Yii::app()->theme->baseUrl;
         $html = '';
         $html .= '<ul>';
@@ -409,13 +409,13 @@ where cm.post_id=$post_id and cm.status = 1 order by cm.id desc";
             } else {
                 $time = $CUtils->formatTime($comment['create_date']);
             }
-            if ($comment['avatar'] == '') {
+            if ($comment['avatar'] == '' || $comment['avatar'] == 'noavatar.png') {
                 $avata = Yii::app()->theme->baseUrl . '/FileManager/avata.png';
             } else {
                 if ($comment['password'] == 'faccebook' || $comment['password'] == 'Google') {
                     $avata = $comment['avatar'];
                 } else {
-                    $avata = IPSERVER . $comment['avatar'];
+                    $avata = $comment['avatar'];
                 }
             }
             $html .= '<li>';
@@ -588,7 +588,7 @@ where cm.post_id=$post_id and cm.status = 1 order by cm.id desc";
                 if ($Subcriber['password'] == 'faccebook' || $Subcriber['password'] == 'Google') {
                     $url_avatar = $Subcriber['url_avatar'];
                 } else {
-                    $url_avatar = IPSERVER . $Subcriber['url_avatar'];
+                    $url_avatar = $Subcriber['url_avatar'];
                 }
 //                $url_avatar = IPSERVER . $Subcriber['url_avatar'];
             } else {
@@ -645,7 +645,7 @@ where cm.post_id=$post_id and cm.status = 1 order by cm.id desc";
 
     public function actionList()
     {
-        $this->titlePage = 'Danh sách câu hỏi  | PKL';
+        $this->titlePage = 'Danh sách  | PKL';
         $title = isset($_GET['title']) ? $_GET['title'] : '';
         $page = isset($_GET['page']) ? $_GET['page'] : 1;
         $page_size = 10;
