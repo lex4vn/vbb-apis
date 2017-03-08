@@ -34,7 +34,7 @@ class AddCommentAction extends CAction
 
         if ($sessionhash) {
             $user = User::model()->findByPk(Yii::app()->session['user_id']);
-            $avatarurl = '';
+            $avatarurl = 'noavatar.png';
             if($user != null){
                 $avatarurl = $user->avatar;
             }
