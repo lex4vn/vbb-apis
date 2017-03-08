@@ -57,7 +57,7 @@ class AddCommentAction extends CAction
                 }
 
             }
-            Yii::log($comment->getErrors());
+            Yii::log(json_encode((array)$comment));
             echo json_encode(array('code' => 5, 'message' => 'Comment failed'));
             return;
         } else {

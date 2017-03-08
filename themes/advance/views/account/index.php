@@ -40,11 +40,7 @@
         <div class="sign-main">
             <div class="sign-form">
                 <div class="sign-logo">
-                    <a href="<?php echo Yii::app()->baseUrl .'/account/registerWeb'?>" style="font-family: font-dep"><img src="<?php echo Yii::app()->theme->baseUrl ?>/img/logo2.png" /></a>
-                </div>
-
-                <div class="sign-logo">
-                    <a href="<?php echo $this->createUrl("/");?>"><img src="<?php echo Yii::app()->theme->baseUrl ?>/img/logo1.png" /></a>
+                    <a href="http://pkl.vn/forum/" style="font-family: font-dep"><img src="<?php echo Yii::app()->theme->baseUrl ?>/img/logo-login.png" /></a>
                 </div>
 
                 <div class="sign-input">
@@ -59,9 +55,9 @@
                         <button type="submit" class="btn btn-default sign-submit" name="submit">Đăng nhập</button>
                     </form>
                     <div class="sign-more">
-                        <a href="#" style="font-family: font-dep1">Bạn chưa có tài khoản?</a><br/>
+                        <p style="font-family: font-dep1">Bạn chưa có tài khoản?</p>
                         <!--<a href="#"style="font-family: font-dep"  data-toggle="modal" data-target="#myModal">Đăng ký</a><br/>-->
-                        <a href=""style="font-family: font-dep">Đăng ký</a><br/>
+                        <a href="http://pkl.vn/forum/register.php"style="font-family: font-dep">Đăng ký</a><br/>
 
                     </div>
                 </div>
