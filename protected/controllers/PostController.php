@@ -84,15 +84,15 @@ class PostController extends Controller
                         $extention = $array_name[count($array_name) - 1];
                         $new_name = date('YmdHis') . '-' . rand() . '.' . $extention;
 
-                        if (!file_exists(IMAGES_PATH)) {
-                            mkdir(IMAGES_PATH, 0777, true);
+                        if (!file_exists(IMAGES_SOURCE)) {
+                            mkdir(IMAGES_SOURCE, 0777, true);
                         }
-                        Yii::log('forder upload : ' . IMAGES_PATH, 'error');
-                        move_uploaded_file($files['tmp_name'][$i], IMAGES_PATH . '/' . $new_name);
+                        Yii::log('forder upload : ' . IMAGES_SOURCE, 'error');
+                        move_uploaded_file($files['tmp_name'][$i], IMAGES_SOURCE . '/' . $new_name);
 
                         // Check to make sure the move result is true before continuing
-                        $target_file = IMAGES_PATH . '/' . $new_name;
-                        $resized_file = IMAGES_PATH . '/' . $new_name;
+                        $target_file = IMAGES_SOURCE . '/' . $new_name;
+                        $resized_file = IMAGES_SOURCE . '/' . $new_name;
                         $wmax = 1024;
                         $hmax = 720;
                         $this->ak_img_resize($target_file, $resized_file, $wmax, $hmax, $files['type'][$i]);
@@ -116,7 +116,7 @@ class PostController extends Controller
                             echo $status;
                             die;
                         }
-                        $size = getimagesize(IMAGES_PATH . '/' . $new_name);
+                        $size = getimagesize(IMAGES_SOURCE . '/' . $new_name);
                         $postImage->width = $size[0];
                         $postImage->height = $size[1];
                         $postImage->save();
@@ -184,10 +184,10 @@ class PostController extends Controller
             if ($user['password'] == 'faccebook' || $user['password'] == 'Google') {
                 $url_avatar = $user['url_avatar'];
             } else {
-                $url_avatar = IPSERVER . $user['url_avatar'];
+                $url_avatar = $user['url_avatar'];
             }
         } else {
-            $url_avatar = '';
+            $url_avatar = 'http://pkl.vn/vbb-apis/themes/advance/FileManager/avata.png';
         }
 //        $post['subscriber_name'] = $user['lastname'] . ' ' . $user['firstname'];
 //        $post['sub_id'] = $user['id'];

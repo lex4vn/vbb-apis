@@ -202,15 +202,12 @@
             processData:false,
             success: function(data){
                 hideLoad();
-                if(data == 1){
-                    alert('Bạn không đủ tiền, vui lòng nạp thêm tiền để đăng câu hỏi.'); 
-                    window.location.replace("<?php echo Yii::app()->homeurl . 'account/useCard'?>");return false;
-                }else if(data == 2){
-                   alert('Ảnh upload câu hỏi của bạn bị lỗi, Bạn vui lòng upload lại ảnh.'); 
-                    window.location.replace("<?php echo Yii::app()->homeurl . 'question/upload'?>");return false;
+                if(data == 2){
+                   alert('Ảnh upload của bạn bị lỗi, Bạn vui lòng upload lại ảnh.');
+                    window.location.replace("<?php echo Yii::app()->homeurl . 'post/upload'?>");return false;
                 }else if(data == 3){
                    alert('Ảnh upload của bạn không được quá 2M.'); 
-                    window.location.replace("<?php echo Yii::app()->homeurl . 'question/upload'?>");return false;
+                    window.location.replace("<?php echo Yii::app()->homeurl . 'post/upload'?>");return false;
                 }else{
                     window.location.replace("<?php echo Yii::app()->homeurl?>");
                 }
@@ -218,19 +215,7 @@
             error: function(){}
         });
     }));
-    $('#class1').change(function(){
-        var class_id = $('#class1').val();
-        $.ajax({
-            type: "POST",
-            url: "<?php echo Yii::app()->request->baseUrl . '/question/loadSubject'?>",
-            data: {'class_id':class_id},
-            dataType:'html',
-            success: function(html){
-//                $('#subject').remove();
-                $('#subject').html(html);
-            }
-        });
-    });
+
     function showLoad(){
         $('.loadgif').show();
     }
