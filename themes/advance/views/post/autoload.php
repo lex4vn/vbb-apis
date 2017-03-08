@@ -12,7 +12,7 @@ for ($i = 0; $i < count($post); $i++){
              <div class="col-md-4 col-xs-4 avata">
                 <a class="ava" href="<?php echo Yii::app()->baseUrl.'/post/view/'.$post[$i]['id'] ?>">
 
-                    <?php if($tab_item == 1){ ?>
+                    <?php if($tab_item == 2){ ?>
                 <img
                 src="<?php echo $post[$i]['thumb'] ?>"
                 title="<?php echo $post[$i]['subject']?>"
@@ -34,7 +34,7 @@ for ($i = 0; $i < count($post); $i++){
                      <h2 style="word-wrap:break-word;"><?php echo $post[$i]['subject'] ?></h2>
                  </div>
 
-                 <?php if($tab_item == 1){ ?>
+                 <?php if($tab_item == 2){ ?>
                  <div class="article-price">
                     <div class="price">
                         <?php echo number_format($post[$i]['price'],0,'.',',') ?>

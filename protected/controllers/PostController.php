@@ -16,25 +16,28 @@ class PostController extends Controller
     public function actionLoadItem()
     {
         $uid = 1;//$_POST['uid'];
-        $type = $_POST['tab_item'] == 2 ? 1:2;
+        $type = $_POST['tab_item'] == 2 ? 2:1;
         $page = $_POST['page'];
         $page_size = $_POST['page_size'];
         $offset = $page_size * $page;
 
         $status = 1;
 
-        if ($type == 1) {
+        if ($type == 2) {
             unset(Yii::app()->session['tab_item']);
             Yii::app()->session['tab_item'] = 2;
-        } else {
+        } else if($type == 1) {
             unset(Yii::app()->session['tab_item']);
             Yii::app()->session['tab_item'] = 3;
+        }else{
+            unset(Yii::app()->session['tab_item']);
+            Yii::app()->session['tab_item'] = 4;
         }
         unset(Yii::app()->session['page']);
         Yii::app()->session['page'] = $page;
 
         $html = '';
-        if($type == 1){
+        if($type == 2){
             $query = "select * from post where type = $type order by modify_date desc limit $offset, $page_size";
         }else{
             $query = "select p.id,p.subject,p.message,p.postusername,p.create_date,p.status,a.expiry_date,avatar from post p
