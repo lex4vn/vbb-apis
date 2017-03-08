@@ -1,27 +1,9 @@
 <?php
-
 for ($i = 0; $i < count($post); $i++){
-
     $CUtils = new CUtils();
-    $time = $CUtils->formatTime($post[$i]['modify_date']);
+    $time = $CUtils->formatTime($tab_item == 1?$post[$i]['modify_date']:$post[$i]['create_date']);
     $post_id = $post[$i]['id'];
     $subject = $post[$i]['subject'];
-//    if($Subcriber['url_avatar'] != null){
-//        if($Subcriber['password'] == 'faccebook' || $Subcriber['password'] == 'Google'){
-//            $url_avatar = $Subcriber['url_avatar'];
-//        }else{
-//            $url_avatar = IPSERVER . $Subcriber['url_avatar'];
-//        }
-//    }else{
-//        $url_avatar = '';
-//    }
-  //  $post[$i]['url_avatar'] = $url_avatar;
-//    if($post[$i]['url_avatar'] == ''){
-//        $avata = Yii::app()->theme->baseUrl .'/FileManager/avata.png';
-//    }else{
-//        $avata = $post[$i]['url_avatar'];
-//    }
- //   var_dump($post[$i]);die;
 ?>
  <div class="web_body">
      <div class="listarticle">
@@ -29,10 +11,20 @@ for ($i = 0; $i < count($post); $i++){
 
              <div class="col-md-4 col-xs-4 avata">
                 <a class="ava" href="<?php echo Yii::app()->baseUrl.'/post/view/'.$post[$i]['id'] ?>">
+
+                    <?php if($tab_item == 1){ ?>
                 <img
                 src="<?php echo $post[$i]['thumb'] ?>"
                 title="<?php echo $post[$i]['subject']?>"
                 alt="<?php echo $post[$i]['subject'] ?>" />
+                    <?php }else{ ?>
+                        <img
+                            src="<?php echo $post[$i]['avatar'] ?>"
+                            title="<?php echo $post[$i]['subject']?>"
+                            alt="<?php echo $post[$i]['subject'] ?>" />
+                    <?php } ?>
+
+
                 </a>
              </div>
 
@@ -42,29 +34,46 @@ for ($i = 0; $i < count($post); $i++){
                      <h2 style="word-wrap:break-word;"><?php echo $post[$i]['subject'] ?></h2>
                  </div>
 
+                 <?php if($tab_item == 1){ ?>
                  <div class="article-price">
-                    <div class="col-md-6 col-xs-6">
-                        <p style="word-wrap:break-word;"><?php echo $post[$i]['price'] ?></p>
+                    <div class="price">
+                        <?php echo number_format($post[$i]['price'],0,'.',',') ?>
                      </div>
 
-                     <div class="col-md-6 col-xs-6">
-                         <p style="word-wrap:break-word;"><?php echo $post[$i]['formality'] ?></p>
+                     <div class="text-right">
+                         <?php echo $post[$i]['formality'] == 1? 'Cũ': 'Mới' ?>
                      </div>
                  </div>
 
-                 <div class="article-price">
-                     <p style="word-wrap:break-word;"><?php echo $post[$i]['location'] ?></p>
+                 <div class="article-location">
+                         <span class="glyphicon glyphicon-map-marker"></span>
+                         <?php echo $post[$i]['location'] ?>
                  </div>
 
-                 <div class="article-price">
-                     <div class="col-md-6 col-xs-6">
-                         <p style="word-wrap:break-word;"><?php echo $post[$i]['postusername'] ?></p>
+                 <div class="article-user">
+                     <div class="username">
+                         <?php echo $post[$i]['postusername'] ?>
                      </div>
 
-                     <div class="col-md-6 col-xs-6">
-                         <p style="word-wrap:break-word;"><?php echo $post[$i]['status'] == 0? 'Chưa bán': 'Đã bán' ?></p>
+                     <div class="text-right">
+                         <?php echo $post[$i]['status'] == 1? 'Chưa bán': 'Đã bán' ?>
                      </div>
                  </div>
+
+                 <?php }else{ ?>
+                     <div class="article-user">
+                         <div class="username">
+                             <?php echo $post[$i]['postusername'] ?>
+                         </div>
+
+                         <div class="text-right">
+                             <?php echo $post[$i]['status'] == 1? 'Online': 'Offline' ?>
+                         </div>
+                     </div>
+                     <div class="article-location">
+                         <?php echo $post[$i]['create_date'] ?>
+                     </div>
+                 <?php } ?>
 
              </div>
 

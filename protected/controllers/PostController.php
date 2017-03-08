@@ -10,6 +10,66 @@ class PostController extends Controller
 //        }
         $this->render('post/index', array());
     }
+    //**
+    //  Load more in page index
+    //**//
+    public function actionLoadItem()
+    {
+        $uid = 1;//$_POST['uid'];
+        $type = $_POST['tab_item'] == 2 ? 1:2;
+        $page = $_POST['page'];
+        $page_size = $_POST['page_size'];
+        $offset = $page_size * $page;
+
+        $status = 1;
+
+        if ($type == 1) {
+            unset(Yii::app()->session['tab_item']);
+            Yii::app()->session['tab_item'] = 2;
+        } else {
+            unset(Yii::app()->session['tab_item']);
+            Yii::app()->session['tab_item'] = 3;
+        }
+        unset(Yii::app()->session['page']);
+        Yii::app()->session['page'] = $page;
+
+        $html = '';
+        if($type == 1){
+            $query = "select * from post where type = $type order by modify_date desc limit $offset, $page_size";
+        }else{
+            $query = "select p.id,p.subject,p.message,p.postusername,p.create_date,p.status,a.expiry_date,avatar from post p
+left join authtoken a on a.user_id = p.postuserid
+left join api_user on api_user.userid = p.postuserid
+where p.type = $type order by p.create_date desc limit $offset, $page_size";
+        }
+        $connection = Yii::app()->db;
+        $command = $connection->createCommand($query);
+        $post = $command->queryAll();
+
+        if (count($post) == 0) {
+            $html .= '<div class="web_body">';
+            $html .= '<div class="listarticle">';
+            $html .= '<div class="row ">';
+            $html .= '<div class="col-md-12"><div class="row">';
+            $html .= '<div class="col-md-6 col-xs-6 avata">';
+            $html .= 'Không có kết quả';
+            $html .= '</div>';
+            $html .= '</div></div>';
+            $html .= '</div>';
+            $html .= '</div>';
+            $html .= '</div>';
+            echo $html;
+            die;
+        }
+
+        $this->renderPartial('post/autoload', array(
+            'post' => $post,
+            'user_id' => $uid,
+            'tab_item' => $type,
+        ));
+    }
+
+
 
 
     public function actionNotifyPost()
@@ -432,85 +492,7 @@ where cm.post_id=$post_id and cm.status = 1 order by cm.id desc";
         echo $html;
     }
 
-    public function actionLoadItem()
-    {
 
-        $uid = 1;//$_POST['uid'];
-        $tab_item = $_POST['tab_item'];
-        $page = $_POST['page'];
-        $page_size = $_POST['page_size'];
-        $offset = $page_size * $page;
-        switch ($tab_item) {
-            case 1:
-                $status = 3;
-                break;
-            case 2:
-                $status = 2;
-                break;
-            case 3:
-                $status = 1;
-                break;
-            case 4:
-                $status = 5;
-                break;
-            case 5:
-                $status = 6;
-                break;
-            default:
-                $status = 2;
-                break;
-        }
-        $status = 1;
-       // var_dump($status);die;
-        if ($tab_item == 1) {
-            unset(Yii::app()->session['tab_item']);
-            Yii::app()->session['tab_item'] = 1;
-        } else if ($tab_item == 2) {
-            unset(Yii::app()->session['tab_item']);
-            Yii::app()->session['tab_item'] = 2;
-        } else if ($tab_item == 3) {
-            unset(Yii::app()->session['tab_item']);
-            Yii::app()->session['tab_item'] = 3;
-        } else if ($tab_item == 4) {
-            unset(Yii::app()->session['tab_item']);
-            Yii::app()->session['tab_item'] = 4;
-        } else if ($tab_item == 5) {
-            unset(Yii::app()->session['tab_item']);
-            Yii::app()->session['tab_item'] = 5;
-        }
-        unset(Yii::app()->session['page']);
-        Yii::app()->session['page'] = $page;
-
-        $html = '';
-        $query = "select * from post where status = $status order by modify_date desc limit $offset, $page_size";
-        //var_dump($query);die;
-        $connection = Yii::app()->db;
-        $command = $connection->createCommand($query);
-        $post = $command->queryAll();
-
-        if (count($post) == 0) {
-            $html .= '<div class="web_body">';
-            $html .= '<div class="listarticle">';
-            $html .= '<div class="row ">';
-            $html .= '<div class="col-md-12"><div class="row">';
-            $html .= '<div class="col-md-6 col-xs-6 avata">';
-            $html .= 'Không có kết quả';
-            $html .= '</div>';
-            $html .= '</div></div>';
-            $html .= '</div>';
-            $html .= '</div>';
-            $html .= '</div>';
-            echo $html;
-            die;
-        }
-
-        $this->renderPartial('post/autoload', array(
-            'post' => $post,
-            'user_id' => $uid,
-            'tab_item' => $tab_item,
-            'status' => $status
-        ));
-    }
 
     public function actionCheckSocket()
     {

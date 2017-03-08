@@ -180,6 +180,7 @@ input[type='file'] {
   width: 70%;
 }
 .avata img {
+    border-radius: 50%;
   float: left;
   margin-right: 4px;
 }
@@ -301,6 +302,34 @@ input[type='file'] {
    font-size: 13px
 }
 /*~~~~~~~~~~~~~~~~~~~question~~~~~~~~~~~~~~~~~~~~~~~*/
+.article-title h2{
+    color:#222;font-weight: bold;
+}
+.article-price,.article-user{
+    margin: 5px 0;
+}
+.article-price .price{
+    color: red;
+    font-size: larger;
+    padding-left: 0;
+    width: 50%;
+    float:left;
+}
+.article-user .username{
+    color: #42a1b3;
+    padding-left: 0;
+    width: 50%;
+    float:left;
+}
+
+.article-location .glyphicon{
+    color: #f3a610;
+}
+.article-location{
+    margin: 8px 0;
+}
+
+
 .question{margin-top: 10px;}
 .question-title {
     background-color: #fff;
@@ -343,7 +372,12 @@ input[type='file'] {
   border: none !important;
 }
 .question-submit{width: 100%; margin-top: 15px; text-align: center;margin-bottom: 40px;}
-.question-submit button{padding: 5px 20px;}
+.btn-primary{
+    padding: 8px 25px !important;
+    color: #644c1b !important;
+    background-color: #f3a610 !important;
+    border-color: #765008 !important;
+}
 .answer{
     border-top: 1px solid #ccc;
   padding-top: 10px;
@@ -728,10 +762,9 @@ a.item-user:hover{
 @media (max-width: 480px) {
         .profile-name{float: left;width: 70%;}
         .avata img{
-            width: 35px;
             float: left;
             margin-right: 4px;
-            height: 35px !important;
+            border-radius: 50%;
         }
         .name-title{
             float: left;

@@ -45,11 +45,7 @@
         var uid = '<?php echo $user_id ?>';
         var page = page;
         var page_size = page_size;  
-        <?php if(!$user_id){?>
-            var tab_item = 1;
-        <?php }else{?>
-            var tab_item = 2;
-        <?php } ?>
+
         showLoadItem();
 
         $.ajax({
