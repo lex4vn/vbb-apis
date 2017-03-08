@@ -18,7 +18,11 @@
 }
 body { background:#eee;}
 label{display:block;}
-#content input, #content textarea{width: 100%;}
+#content input, #content textarea{width: 100%;padding: 8px;}
+.left-col{
+    width: 50%;
+    float: left;
+}
 #tpl-contaiter { max-width:100%; margin:auto;}
 #tpl-contaiter img { max-width:100%; height:auto;}
 /*~~~~~~~~~~~~~~~~~ HEADER ~~~~~~~~~~~~~~~~*/
@@ -688,7 +692,9 @@ a.item-user:hover{
     background-color: #f8f8f8;
 }
 
-
+#formUpload{
+    padding: 10px;
+}
 @media (max-width: 1169px) {
 
 }

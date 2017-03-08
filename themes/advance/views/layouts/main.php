@@ -149,7 +149,7 @@
         } else {
             $uid = -1;
         }
-        $this->widget("application.widgets.SearchBox", array());
+
         $this->widget("application.widgets.NavMenu", array('userName' => $this->userName));
     ?>
 </div>

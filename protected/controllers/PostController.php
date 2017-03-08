@@ -703,6 +703,23 @@ where cm.post_id=$post_id and cm.status = 1 order by cm.id desc";
         ));
     }
 
+    public function actionBuy()
+    {
+        $this->titlePage = 'Đăng tin mua xe | PKL';
+        /*if (!Yii::app()->session['user_id']) {
+            $this->redirect(Yii::app()->homeurl);
+        }*/
+
+        $biketypes = Biketype::model()->findAll();
+        //$subject = SubjectCategory::model()->findAllByAttributes(array('status' => 1, 'type' => 1));
+        $time = date('Y-m-d H:i:s');
+        $criteria = new CDbCriteria;
+        $criteria->condition = "is_active = 1 and expiry_date > '$time'";
+        $criteria->compare('subscriber_id', Yii::app()->session['user_id']);
+        //$usingService = ServiceSubscriberMapping::model()->findAll($criteria);
+        // $level = Level::model()->findAll();
+        $this->render('post/buy');
+    }
     /**
      * This is the action to handle external exceptions.
      */

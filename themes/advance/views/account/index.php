@@ -40,23 +40,13 @@
         <div class="sign-main">
             <div class="sign-form">
                 <div class="sign-logo">
-                    <!--<a href="#" style="font-family: font-dep"  data-toggle="modal" data-target="#myModal5" ><img src="<?php echo Yii::app()->theme->baseUrl ?>/img/logo2.png" /></a>-->
                     <a href="<?php echo Yii::app()->baseUrl .'/account/registerWeb'?>" style="font-family: font-dep"><img src="<?php echo Yii::app()->theme->baseUrl ?>/img/logo2.png" /></a>
                 </div>
+
                 <div class="sign-logo">
                     <a href="<?php echo $this->createUrl("/");?>"><img src="<?php echo Yii::app()->theme->baseUrl ?>/img/logo1.png" /></a>
                 </div>
-<!--                <div class="row icon-reg">
-                    <div class="col-lg-4 col-xs-4 col-md-4">
-                        <a href="#"><img src="<?php // echo Yii::app()->theme->baseUrl .'/img/dangnhap2.png'?>" /></a>
-                    </div>
-                    <div class="col-lg-4 col-xs-4 col-md-4">
-                        <a href="https://facebook.com/dialog/oauth?client_id=1054223384618565&redirect_uri=http://hocde.onedu.vn/account/loginface"> <img src="<?php echo Yii::app()->theme->baseUrl .'/img/fb2.png'?>" /></a>
-                    </div>
-                    <div class="col-lg-4 col-xs-4 col-md-4">
-                        <a href="https://accounts.google.com/o/oauth2/auth?response_type=code&redirect_uri=http%3A%2F%2Fhocde.onedu.vn%2Faccount%2FloginGoogle&client_id=416965466359-5ic1landcm6r2tonkchmnrkiu0ukfqlh.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.login+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.me&access_type=offline&approval_prompt=auto"> <img src="<?php echo Yii::app()->theme->baseUrl .'/img/gg2.png'?>" /></a>
-                    </div>
-                </div>-->
+
                 <div class="sign-input">
                     <form action="<?php echo $this->createUrl("/account/login"); ?>" method="post">
                         <div class="form-group">
@@ -67,141 +57,18 @@
                         </div>
                         <?php echo Yii::app()->user->getFlash('responseToUser'); ?><br/>
                         <button type="submit" class="btn btn-default sign-submit" name="submit">Đăng nhập</button>
-                        <div class="row" style="margin-top: 10px">
-                            <a type="submit" href="https://facebook.com/dialog/oauth?client_id=1054223384618565&redirect_uri=https://www.hocde.vn/account/loginface" class="sign-submit"><img width="60%" src="<?php echo Yii::app()->theme->baseUrl ?>/img/dangnhapfb.png" /> </a>
-                        </div>
-                       <!--<a href="https://accounts.google.com/o/oauth2/auth?response_type=code&redirect_uri=http%3A%2F%2Fhocde.onedu.vn%2Faccount%2FloginGoogle&client_id=416965466359-5ic1landcm6r2tonkchmnrkiu0ukfqlh.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.login+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.me&access_type=offline&approval_prompt=auto" class="btn btn-default sign-submit">Google Plus</a>-->
                     </form>
                     <div class="sign-more">
                         <a href="#" style="font-family: font-dep1">Bạn chưa có tài khoản?</a><br/>
                         <!--<a href="#"style="font-family: font-dep"  data-toggle="modal" data-target="#myModal">Đăng ký</a><br/>-->
-                        <a href="<?php echo Yii::app()->baseUrl .'/account/registerWeb'?>"style="font-family: font-dep">Đăng ký</a><br/>
-                        <a href="sms:8200?body=qmk hocde">Quên mật khẩu</a> 
+                        <a href=""style="font-family: font-dep">Đăng ký</a><br/>
+
                     </div>
-                    <?php // echo Yii::app()->session['user_id']; ?>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="icon-mk" style="text-align: center; margin-top: 7px;">
-                    <a href="#"><img src="<?php echo Yii::app()->theme->baseUrl .'/img/icon.png'?>" width="35%"/></a>
-                </div>
-                <div class="modal-body">
-                    <form action="#" method="post">
-                        <div class="form-group">
-                            <label>Nhập tên tài khoản</label>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="username1" id="username1" placeholder="Tên đăng nhập">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary reset_pass">Đồng ý</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-body">
-              <!--<form action="<?php // echo $this->createUrl("/account/register"); ?>" method="post">-->
-              <form action="#" method="post">
-                 <div class="row">
-                      <div class="form-group col-xs-6">
-                        <input type="text" class="form-control" name="lastname" id="lastname" placeholder="Họ">
-                      </div>
-                      <div class="form-group col-xs-6">
-                        <input type="text" class="form-control" name="firtname" id="firtname" placeholder="Tên">
-                        <label class="noti-name" style="display: none; color: #f00; margin-top: -10px; ">Chưa nhập tên</label>
-                      </div>
-                 </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" name="username" id="username" placeholder="Tên đăng nhập">
-                  <label class="noti-uername" style="display: none; color: #f00; margin-top: -10px; ">Chưa nhập tên đăng nhập</label>
-                </div>
-                <div class="form-group">
-                  <input type="password" class="form-control" name="password" id="password" placeholder="Mật khẩu">
-                  <label class="noti-password" style="display: none; color: #f00; margin-top: -10px; ">Chưa nhập mật khẩu</label>
-                </div>
-                <div class="form-group">
-                  <input type="password" class="form-control" name="password_confirm" id="password_confirm" placeholder="Nhập lại mật khẩu">
-                  <label class="noti-password-cf" style="display: none; color: #f00; margin-top: -10px; ">Chưa nhập mật khẩu</label>
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" name="mobile" id="mobile" placeholder="Số điện thoại">
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" name="email" id="email" placeholder="Email">
-                  <label class="noti-email" style="display: none; color: #f00; margin-top: -10px; ">Chưa nhập email</label>
-                </div>
-                <div class="form-group">
-                  <select class="form-control" name="type_account" id="type_account">
-                      <option value="1">Học sinh</option>
-                      <option value="2">Giáo viên</option>
-                  </select>
-                </div>
-                 <div class="modal-footer">
-                     <a class="loadgif" style="display: none"><img width="60px" src="<?php echo Yii::app()->theme->baseUrl .'/img/load.gif'?>" /></a>
-                    <button type="button" class="btn btn-primary register_sub">Đăng ký</button>
-                </div>
-              </form>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="modal fade" id="myModal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-body">
-              <!--<form action="<?php // echo $this->createUrl("/account/register"); ?>" method="post">-->
-              <form action="#" method="post">
-                 <div class="row">
-                      <div class="form-group col-xs-6">
-                        <input type="text" class="form-control" name="firtname1" id="firtname1" placeholder="Họ">
-                      </div>
-                      <div class="form-group col-xs-6">
-                        <input type="text" class="form-control" name="lastname1" id="lastname1" placeholder="Tên">
-                      </div>
-                 </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" name="username2" id="username2" placeholder="Tên đăng nhập">
-                </div>
-                <div class="form-group">
-                  <input type="password" class="form-control" name="password1" id="password1" placeholder="Mật khẩu">
-                </div>
-                <div class="form-group">
-                  <input type="password" class="form-control" name="password_confirm1" id="password_confirm1" placeholder="Nhập lại mật khẩu">
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" name="mobile1" id="mobile1" placeholder="Số điện thoại">
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" name="email1" id="email1" placeholder="Email">
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" name="partnerids1" id="partnerids1" placeholder="PartnerID">
-                </div>
-                <div class="form-group">
-                  <select class="form-control" name="type_account1" id="type_account1">
-                      <option value="1">Học sinh</option>
-                      <option value="2">Giáo viên</option>
-                  </select>
-                </div>
-                 <div class="modal-footer">
-                     <a class="loadgif" style="display: none"><img width="60px" src="<?php echo Yii::app()->theme->baseUrl .'/img/load.gif'?>" /></a>
-                    <button type="button" class="btn btn-primary register_sub_net2e">Đăng ký</button>
-                </div>
-              </form>
-          </div>
-        </div>
-      </div>
-    </div>
+
 </body>
 <script>
 //    $('.submit-face').click(function(){
