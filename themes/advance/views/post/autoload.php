@@ -1,7 +1,7 @@
 <?php
 for ($i = 0; $i < count($post); $i++){
     $CUtils = new CUtils();
-    $time = $CUtils->formatTime($tab_item == 1?$post[$i]['modify_date']:$post[$i]['create_date']);
+    $time = $CUtils->formatTime($tab_item == 2?$post[$i]['modify_date']:$post[$i]['create_date']);
     $post_id = $post[$i]['id'];
     $subject = $post[$i]['subject'];
 ?>
@@ -9,7 +9,7 @@ for ($i = 0; $i < count($post); $i++){
      <div class="listarticle">
          <div class="row ">
 
-             <div class="col-md-4 col-xs-4 avata">
+             <div class="col-md-4 col-xs-4">
                 <a class="ava" href="<?php echo Yii::app()->baseUrl.'/post/view/'.$post[$i]['id'] ?>">
 
                     <?php if($tab_item == 2){ ?>
@@ -18,7 +18,7 @@ for ($i = 0; $i < count($post); $i++){
                 title="<?php echo $post[$i]['subject']?>"
                 alt="<?php echo $post[$i]['subject'] ?>" />
                     <?php }else{ ?>
-                        <img
+                        <img class="avata"
                             src="<?php echo $post[$i]['avatar'] ?>"
                             title="<?php echo $post[$i]['subject']?>"
                             alt="<?php echo $post[$i]['subject'] ?>" />

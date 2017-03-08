@@ -179,7 +179,7 @@ input[type='file'] {
   float: left;
   width: 70%;
 }
-.avata img {
+.avata{
     border-radius: 50%;
   float: left;
   margin-right: 4px;
@@ -761,7 +761,7 @@ a.item-user:hover{
 }
 @media (max-width: 480px) {
         .profile-name{float: left;width: 70%;}
-        .avata img{
+        .avata{
             float: left;
             margin-right: 4px;
             border-radius: 50%;
