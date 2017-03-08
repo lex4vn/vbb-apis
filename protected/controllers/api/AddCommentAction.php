@@ -46,6 +46,7 @@ class AddCommentAction extends CAction
             $comment->avatar = $avatarurl;
             $comment->create_date = date('Y-m-d H:i:s');
             $comment->modify_date = date('Y-m-d H:i:s');
+
             if($comment->save()){
                 $post = Post::model()->findByPk($comment->post_id);
                 $post->count_comment += 1;
@@ -56,6 +57,7 @@ class AddCommentAction extends CAction
                 }
 
             }
+            Yii::log($comment->getErrors());
             echo json_encode(array('code' => 5, 'message' => 'Comment failed'));
             return;
         } else {
