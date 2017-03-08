@@ -40,6 +40,7 @@ class SearchUserAction extends CAction
             ]);
 
             if (count($response) >= 3) {
+                Yii::log('Email ID:'.$response[0]);
                 echo json_encode(array('code' => 0,
                     'message' => 'Successful',
                     'userid' => $response[0],
@@ -57,6 +58,7 @@ class SearchUserAction extends CAction
 		]);
 
 		if (count($response) >= 3) {
+            Yii::log('Username:'.$response[0]);
 			echo json_encode(array('code' => 0,
 				'message' => 'Successful',
 				'userid' => $response[0],
