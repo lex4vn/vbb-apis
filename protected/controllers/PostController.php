@@ -73,6 +73,53 @@ where p.type = $type order by p.create_date desc limit $offset, $page_size";
     }
 
 
+    public function actionView($id)
+    {
+
+        if (!isset($id)) {
+            $this->redirect(Yii::app()->homeurl);
+        }
+        $postCheck = Post::model()->findByPk($id);
+        if ($postCheck == null) {
+            $this->redirect(Yii::app()->homeurl);
+        }
+
+        $query = "select *, images.post_id, p.id, p.status as status_p from post p join images on images.post_id = p.id where p.id = $id";
+        $connection = Yii::app()->db;
+        $command = $connection->createCommand($query);
+        $post = $command->queryRow();
+
+        $user = User::model()->findByPk($postCheck['postuserid']);
+        if ($user['avatar'] != null) {
+
+            if ($user['password'] == 'faccebook' || $user['password'] == 'Google') {
+                $url_avatar = $user['avatar'];
+            } else {
+                $url_avatar = $user['avatar'];
+            }
+        } else {
+            $url_avatar = 'http://pkl.vn/vbb-apis/themes/advance/FileManager/avata.png';
+        }
+
+        $post['url_avatar'] = $url_avatar;
+        $post['check_like'] = true;
+        $post['count_like'] = true;
+        $this->titlePage = $post['subject'];
+
+        $images = Images::model()->findAllByAttributes(array('post_id' => $post['id']));
+
+        $this->render('post/detail', array
+            (
+                'post' => $post,
+                'images' => $images,
+                'checkLike' => 10,
+                'success' => 1,
+                'subUser' => 1,
+                'id' => $id,
+                'reply' => 6
+            )
+        );
+    }
 
 
     public function actionNotifyPost()
@@ -195,151 +242,6 @@ where p.type = $type order by p.create_date desc limit $offset, $page_size";
         }
     }
 
-    public function actionView($id)
-    {
-
-        if (!isset($id)) {
-            $this->redirect(Yii::app()->homeurl);
-        }
-        $postCheck = Post::model()->findByPk($id);
-        if ($postCheck == null) {
-            $this->redirect(Yii::app()->homeurl);
-        }
-
-        Yii::app()->session['user_id'] = 1;
-//        if (!Yii::app()->session['user_id']) {
-//            $this->redirect(Yii::app()->homeurl . 'account');
-//        }
-
-        $query = "select *, images.post_id, p.id, p.status as status_p from post p join images on images.post_id = p.id where p.id = $id";
-        $connection = Yii::app()->db;
-        $command = $connection->createCommand($query);
-        $post = $command->queryRow();
-
-//        if (!Yii::app()->session['user_id']) {
-//            $checkLike = 0;
-//            $user_id = null;
-//            $post['check_like'] = 0;
-//        } else {
-//            $user_id = Yii::app()->session['user_id'];
-//            $checkLike = Like::model()->findByAttributes(
-//                array(
-//                    'post_id' => $id,
-//                    'subscriber_id' => Yii::app()->session['user_id']
-//                )
-//            );
-//            if (count($checkLike) > 0) {
-//                $post['check_like'] = 1;
-//            } else {
-//                $post['check_like'] = 0;
-//            }
-//        }
-
-//        $class_name = Class1::model()->findByAttributes(array('id' => $class_id, 'status' => 1));
-//        $level = Level::model()->findByPk($post['level_id']);
-//        $subjectCategory = SubjectCategory::model()->findByAttributes(array('id' => $category_id, 'status' => 1));
-//        $post['class_name'] = $class_name['class_name'];
-//        $post['subject_name'] = $subjectCategory['subject_name'];
-
-        $user = User::model()->findByPk(Yii::app()->session['user_id']);
-        if ($user['url_avatar'] != null) {
-//            $url_avatar = IPSERVER.$Subcriber['url_avatar'];
-            if ($user['password'] == 'faccebook' || $user['password'] == 'Google') {
-                $url_avatar = $user['url_avatar'];
-            } else {
-                $url_avatar = $user['url_avatar'];
-            }
-        } else {
-            $url_avatar = 'http://pkl.vn/vbb-apis/themes/advance/FileManager/avata.png';
-        }
-//        $post['subscriber_name'] = $user['lastname'] . ' ' . $user['firstname'];
-//        $post['sub_id'] = $user['id'];
-        $post['url_avatar'] = $url_avatar;
-        $post['check_like'] = true;
-        $post['count_like'] = true;
-        $this->titlePage = $post['subject'];
-
-        $images = Images::model()->findAllByAttributes(array('post_id' => $post['id']));
-
-        //answer
-//        $query = "select *, ai.answer_id, a.id, a.post_id, ai.status, ai.title from answer a join answer_image ai on ai.answer_id = a.id where a.post_id = $id and ai.status <> 4 order by a.id desc";
-//        $query = "select * from answer where post_id = $id and status <> 15 and status <> 4 order by id desc";
-//        $connection = Yii::app()->db;
-//        $command = $connection->createCommand($query);
-//        $answer = $command->queryRow();
-//        echo '<pre>';print_r($answer);die;
-//        $success = '';
-//        $checkLike = '';
-//        $subUser = '';
-//        $reply = '';
-//        $arrHoldPost = '';
-//        $url_images = array();
-//        $subUser = Subscriber::model()->findByPk($answer['subscriber_id']);
-//        $answer_id = $answer['id'];
-//        if ($user_id != null) {
-//            if ($answer != '') {
-//                $query = "select * from answer_image where answer_id = $answer_id order by id asc";
-//                $image = AnswerImage::model()->findAllBySql($query);
-//                //
-//                for ($j = 0; $j < count($image); $j++) {
-//                    $url_images[$j]['images'] = IPSERVER . $image[$j]['base_url'];
-//                    if ($image[$j]['width'] != null) {
-//                        $url_images[$j]['width'] = $image[$j]['width'];
-//                    } else {
-//                        $url_images[$j]['width'] = 0;
-//                    }
-//                    if ($image[$j]['height'] != null) {
-//                        $url_images[$j]['height'] = $image[$j]['height'];
-//                    } else {
-//                        $url_images[$j]['height'] = 0;
-//                    }
-//                }
-//                $answer['url_images'] = $url_images;
-//                if ($post['status_q'] != 3 && $post['status_q'] != 4 && $post['status_q'] != 6) {
-//                    if ($answer['subscriber_id'] != $this->userName->id) {
-//                        $checkLikeAll = AnswerCheck::model()->findByAttributes(array('answer_id' => $answer['id'], 'subscriber_id' => $user_id));
-//                        if ($user_id == $post['subscriber_id'] && $this->userName->type == 1) {
-//                            if ($checkLikeAll != null) {
-//                                $checkLike = 1;
-//                                if ($checkLikeAll[0]['status'] == 1) {
-//                                    $success = 1;
-//                                }
-//                            } else {
-//                                $checkLike = 0;
-//                            }
-//                        } else {
-//                            $checkLike = 0;
-//                        }
-//                    } else {
-//                        $reply = 1;
-//                    }
-//                } else if ($post['status_q'] == 3 || $post['status_q'] == 6) {
-//                    $success = 1;
-//                } else if ($post['status_q'] == 4) {
-//                    $success = 5;
-//                }
-//            }
-//            $time = time();
-//            $criteria = new CDbCriteria;
-//            $criteria->condition = "end_time > $time";
-//            $criteria->compare('post_id', $id);
-//            $arrHoldPost = HoldPost::model()->findAll($criteria);
-//        } else {
-//            $answer['url_images'] = $url_images;
-//        }
-
-        $this->render('post/detail', array
-            (
-            'post' => $post,
-            'images' => $images,
-            'checkLike' => 10,
-            'success' => 1,
-            'subUser' => 1,
-            'id' => $id,
-            'reply' => 6
-            )
-        );
-    }
 
     public function actionInsertComment()
     {
