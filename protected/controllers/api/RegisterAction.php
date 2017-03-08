@@ -108,6 +108,7 @@ class RegisterAction extends CAction
             return;
         }
 
+        Yii::log(json_encode((array)$response['response']));
         if (isset($response['response'])) {
             if (isset($response['response']->errormessage)) {
                 $result = $response['response']->errormessage[0];
