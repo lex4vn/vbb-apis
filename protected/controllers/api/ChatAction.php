@@ -112,8 +112,9 @@ class ChatAction extends CAction
             }else{
                 // Get message all message
                 $criteria = new CDbCriteria;
-                $criteria->condition = 'fromid = '.Yii::app()->session['user_id'];
-                $criteria->order = 'time';
+                $criteria->condition = 'to = '.Yii::app()->session['user_id'];
+                $criteria->group = 'fromid';
+                $criteria->order = 'time desc';
 
             }
             $messages = Chat::model()->findAll($criteria);
