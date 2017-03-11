@@ -55,7 +55,7 @@ class ProfileAction extends CAction
 					'displayemail' => $response['response']->prepared->displayemail,
 					'homepage' => $response['response']->prepared->homepage,
 					'usertitle' => $response['response']->prepared->usertitle,
-					'onlinestatus' => $response['response']->prepared->onlinestatus->onlinestatus == 1 ? "online" : "offline",
+					'onlinestatus' => "online",//$response['response']->prepared->onlinestatus->onlinestatus == 1 ? "online" : "offline",
 					'joindate' => date('d/m/Y',strtotime($response['response']->prepared->joindate)),
 					'posts' => count($posts),//$response['response']->prepared->posts,
 					'avatarurl' => $avatarurl
