@@ -15,59 +15,58 @@ class ProfileAction extends CAction
             $apiConfig = unserialize(base64_decode($sessionhash));
             $api = new Api($apiConfig, new GuzzleProvider(API_URL));
             $response = $api->callRequest('member', [
-                'u'=> Yii::app()->session['user_id'],
+                'u' => Yii::app()->session['user_id'],
                 'api_v' => '1'
             ], ConnectorInterface::METHOD_POST);
             // TODO
-			//var_dump($response['response']);die;
-            if(isset($response['response'])){
-				$fields = $response['response']->blocks->aboutme->block_data->fields->category->fields;
-				$phonenumber = '';
-				$fullname = '';
-				if(isset($fields)){
+            //var_dump($response['response']);die;
+            if (isset($response['response'])) {
+                $fields = $response['response']->blocks->aboutme->block_data->fields->category->fields;
+                $phonenumber = '';
+                $fullname = '';
+                if (isset($fields)) {
 
-					foreach($fields as $field) {
-						if ($field->profilefield->title == "Họ và Tên") {
-							$fullname = $field->profilefield->value;
-						} else if ($field->profilefield->title == "Phone Number"){
-							$phonenumber = $field->profilefield->value;
-						}
-					}
-				}
+                    foreach ($fields as $field) {
+                        if ($field->profilefield->title == "Họ và Tên") {
+                            $fullname = $field->profilefield->value;
+                        } else if ($field->profilefield->title == "Phone Number") {
+                            $phonenumber = $field->profilefield->value;
+                        }
+                    }
+                }
 
-				$user = User::model()->findByPk(Yii::app()->session['user_id']);
-				//var_dump($user);die;
-				$username = '';
-				$avatarurl = '';
-				if($user != null){
-					$avatarurl = $user->avatar;
-					$username = $user->username;
-				}
-				Yii::log('::::IMAGE AVATAR:::'.$avatarurl);
+                $user = User::model()->findByPk(Yii::app()->session['user_id']);
+                //var_dump($user);die;
+                $username = '';
+                $avatarurl = '';
+                if ($user != null) {
+                    $avatarurl = $user->avatar;
+                    $username = $user->username;
+                }
+                Yii::log('::::IMAGE AVATAR:::' . $avatarurl);
 
-				$posts = Post::model()->findByAttributes(array('postuserid'=>Yii::app()->session['user_id']));
-				$profile = array(
-					'username' => empty($username)? $response['response']->prepared->username : $username,
-					'fullname' => empty($fullname)? $username:$fullname,
-					'phonenumber' => $phonenumber,
-					'birthday' => date('d/m/Y',strtotime($response['response']->prepared->birthday)),
-					'age' => $response['response']->prepared->age,
-					'displayemail' => $response['response']->prepared->displayemail,
-					'homepage' => $response['response']->prepared->homepage,
-					'usertitle' => $response['response']->prepared->usertitle,
-					'onlinestatus' => "online",//$response['response']->prepared->onlinestatus->onlinestatus == 1 ? "online" : "offline",
-					'joindate' => date('d/m/Y',strtotime($response['response']->prepared->joindate)),
-					'posts' => count($posts),//$response['response']->prepared->posts,
-					'avatarurl' => $avatarurl
-					);
-				echo json_encode($profile);
+                $posts = Post::model()->findByAttributes(array('postuserid' => Yii::app()->session['user_id']));
+                $profile = array(
+                    'username' => empty($username) ? $response['response']->prepared->username : $username,
+                    'fullname' => empty($fullname) || $fullname == null ? $username : $fullname,
+                    'phonenumber' => $phonenumber,
+                    'birthday' => date('d/m/Y', strtotime($response['response']->prepared->birthday)),
+                    'age' => $response['response']->prepared->age,
+                    'displayemail' => $response['response']->prepared->displayemail,
+                    'homepage' => $response['response']->prepared->homepage,
+                    'usertitle' => $response['response']->prepared->usertitle,
+                    'onlinestatus' => "online",//$response['response']->prepared->onlinestatus->onlinestatus == 1 ? "online" : "offline",
+                    'joindate' => date('d/m/Y', strtotime($response['response']->prepared->joindate)),
+                    'posts' => count($posts),//$response['response']->prepared->posts,
+                    'avatarurl' => $avatarurl
+                );
+                echo json_encode($profile);
 
-            }else{
+            } else {
                 echo json_encode(array('code' => 2, 'message' => 'Forum error'));
                 return;
             }
-        }
-        else {
+        } else {
             // Sessionhash is empty
             echo json_encode(array('code' => 101, 'message' => 'User logged out'));
             return;
