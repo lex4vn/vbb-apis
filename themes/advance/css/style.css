@@ -18,7 +18,10 @@
 }
 body { background:#eee;}
 label{display:block;}
-#content input, #content textarea{width: 100%;padding: 8px;}
+#content input, #content textarea{
+    width: 100%;
+    padding: 8px;
+}
 .left-col{
     width: 50%;
     float: left;
@@ -729,6 +732,9 @@ a.item-user:hover{
 
 #formUpload{
     padding: 10px;
+}
+.sign-input{
+    max-width: 200px
 }
 @media (max-width: 1169px) {
 

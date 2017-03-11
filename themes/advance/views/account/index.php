@@ -40,7 +40,8 @@
         <div class="sign-main">
             <div class="sign-form">
                 <div class="sign-logo">
-                    <a href="http://pkl.vn/forum/" style="font-family: font-dep"><img src="<?php echo Yii::app()->theme->baseUrl ?>/img/logo-login.png" /></a>
+                    <a href="http://pkl.vn/forum/" style="font-family: font-dep">
+                        <img src="<?php echo Yii::app()->theme->baseUrl ?>/img/login-logo.png" /></a>
                 </div>
 
                 <div class="sign-input">
@@ -51,7 +52,7 @@
                         <div class="form-group">
                           <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Mật khẩu">
                         </div>
-                        <?php echo Yii::app()->user->getFlash('responseToUser'); ?><br/>
+                        <p class="sign-submit" ><?php echo Yii::app()->user->getFlash('responseToUser'); ?></p><br/>
                         <button type="submit" class="btn btn-default sign-submit" name="submit">Đăng nhập</button>
                     </form>
                     <div class="sign-more">

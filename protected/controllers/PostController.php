@@ -75,7 +75,6 @@ where p.type = $type order by p.create_date desc limit $offset, $page_size";
 
     public function actionView($id)
     {
-
         if (!isset($id)) {
             $this->redirect(Yii::app()->homeurl);
         }
