@@ -48,7 +48,7 @@ class ProfileAction extends CAction
 				$posts = Post::model()->findByAttributes(array('postuserid'=>Yii::app()->session['user_id']));
 				$profile = array(
 					'username' => empty($username)? $response['response']->prepared->username : $username,
-					'fullname' => $fullname,
+					'fullname' => empty($fullname)? $username:$fullname,
 					'phonenumber' => $phonenumber,
 					'birthday' => date('d/m/Y',strtotime($response['response']->prepared->birthday)),
 					'age' => $response['response']->prepared->age,
