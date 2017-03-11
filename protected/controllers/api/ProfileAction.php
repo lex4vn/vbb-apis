@@ -36,7 +36,7 @@ class ProfileAction extends CAction
                 }
 
                 $user = User::model()->findByPk(Yii::app()->session['user_id']);
-                //var_dump($user);die;
+                Yii::log($user->username);
                 $username = '';
                 $avatarurl = '';
                 if ($user != null) {
