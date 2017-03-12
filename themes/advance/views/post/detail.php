@@ -80,7 +80,7 @@ if ($user['avatar'] == null) {
                         'infos' => false,
                         'constrainImage' => true,
                         'sliderBase' => '/images/',
-                        'imagesPath' => '/upload/',
+                        'imagesPath' => '/',
                         'images' => $images_name,
                         'urls' => array($post["thumb"], '02.jpg', '03.jpg', '04.jpg'),
                         'alts' => array('First description', 'Second description', 'Third description', 'Four description'),
