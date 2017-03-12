@@ -5,11 +5,9 @@ class PostController extends Controller
     public function actionIndex()
     {
         $this->titlePage = 'Chợ PKL';
-//        if (!Yii::app()->session['user_id']) {
-//            $this->redirect(Yii::app()->homeurl);
-//        }
         $this->render('post/index', array());
     }
+
     //**
     //  Load more in page index
     //**//
@@ -78,34 +76,17 @@ where p.type = $type order by p.create_date desc limit $offset, $page_size";
         if (!isset($id)) {
             $this->redirect(Yii::app()->homeurl);
         }
-        $postCheck = Post::model()->findByPk($id);
-        if ($postCheck == null) {
+        $post = Post::model()->findByPk($id);
+        if ($post == null) {
             $this->redirect(Yii::app()->homeurl);
         }
 
-        $query = "select *, images.post_id, p.id, p.status as status_p from post p join images on images.post_id = p.id where p.id = $id";
-        $connection = Yii::app()->db;
-        $command = $connection->createCommand($query);
-        $post = $command->queryRow();
+        $user = User::model()->findByPk($post['postuserid']);
+        $comment = Comment::model()->findByAttributes(array('post_id'=>$post['postuserid']));
 
-        $user = User::model()->findByPk($postCheck['postuserid']);
-        if ($user['avatar'] != null) {
-
-            if ($user['password'] == 'faccebook' || $user['password'] == 'Google') {
-                $url_avatar = $user['avatar'];
-            } else {
-                $url_avatar = $user['avatar'];
-            }
-        } else {
-            $url_avatar = 'http://pkl.vn/vbb-apis/themes/advance/FileManager/avata.png';
-        }
-
-        $post['url_avatar'] = $url_avatar;
-        $post['check_like'] = true;
-        $post['count_like'] = true;
         $this->titlePage = $post['subject'];
 
-        $images = Images::model()->findAllByAttributes(array('post_id' => $post['id']));
+        $images = PostImages::model()->findAllByAttributes(array('post_id' => $post['id']));
 
         $this->render('post/detail', array
             (
@@ -115,11 +96,27 @@ where p.type = $type order by p.create_date desc limit $offset, $page_size";
                 'success' => 1,
                 'subUser' => 1,
                 'id' => $id,
-                'reply' => 6
+                'reply' => 6,
+                'user' => $user,
+                'comment' => $comment
             )
         );
     }
 
+    public function actionComment()
+    {
+        $this->titlePage = 'Câu hỏi | PKL';
+        if (isset($_GET['classId'])) {
+            $class_id = $_GET['classId'];
+        } else {
+            echo 'Url không tồn tại!';
+            die;
+        }
+
+        $this->render('post/notifyPost', array(
+            'class_id' => $class_id,
+        ));
+    }
 
     public function actionNotifyPost()
     {

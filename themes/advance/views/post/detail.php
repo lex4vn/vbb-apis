@@ -1,35 +1,20 @@
-<?php // echo "<pre>"; print_r($post);die;?>
 <?php
 if (Yii::app()->session['user_id']) {
     $user_id = Yii::app()->session['user_id'];
-    //$subcriberPop = User::model()->findByPk($user_id);
 } else {
     $user_id = -1;
 }
-?>
-<?php
+
 $CUtils = new CUtils();
 $time = $CUtils->formatTime($post['modify_date']);
-if ($post['url_avatar'] == '') {
-    $avata = Yii::app()->theme->baseUrl . '/FileManager/avata.png';
-} else {
-    $avata = $post['url_avatar'];
-}
 $secs = '00';
 $t = time();
+if ($user['avatar'] == null) {
+    $avata = 'http://pkl.vn/vbb-apis/themes/advance/FileManager/avata.png';
+} else {
+    $avata = $user['avatar'];
+}
 ?>
-<style>
-    .changeLevel {
-        color: #343434 !important;
-        font-weight: 500;
-    }
-
-    .levelSuccess, .levelFail {
-        padding: 5px;
-        font-size: 12px;
-    }
-</style>
-
 <div class="web_body">
     <div class="listarticle">
         <div class="row">
@@ -42,27 +27,36 @@ $t = time();
                         </a>
                     </div>
 
-                    <div class="col-md-6 col-xs-6 post-detail">
-                        <div class="post-name">
-                            <a href="#"><?php echo $post['subject'] ?></a>
+                    <div class="col-md-6 col-xs-6">
+                        <div class="article-title">
+                            <a href="#"><?php echo $user['username'] ?></a>
                         </div>
                         <div class="user-status">
                             <span><?php echo 'Online'; ?></span>
-                            <p><?php echo $time ?></p>
+                            <span><?php echo $post['modify_date'] ?></span>
                         </div>
-                        <div class="post-price">
-                            <span><?php echo $post['price'] ?></span>
-                            <span><?php echo $post['formality'] ?></span>
+                        <div class="article-price">
+                            <span><?php echo number_format($post['price'],0,'.',',') ?></span>
+                            <span><?php echo $post['formality'],'%' ?></span>
                         </div>
+
+                        <div class="article-location">
+                            <span class="glyphicon glyphicon-map-marker"></span>
+                            <?php echo $post['location'] ?>
+                        </div>
+
                     </div>
 
-                    <div class="col-md-3 col-xs-3 post-share">
+                    <div class="col-md-3 col-xs-3">
                         <?php
                         if ($user_id != -1) {
                             ?>
                             <div class="subject-title">
                                 <a data-toggle="modal" data-target="#myModal3" href="#"><img
                                         src="<?php echo Yii::app()->theme->baseUrl . '/img/share.png' ?>"
+                                        style="width:30px !important"/></a>
+                                <a data-toggle="modal" data-target="#myModal4" href="#"><img
+                                        src="<?php echo Yii::app()->theme->baseUrl . '/img/add-friend.png' ?>"
                                         style="width:30px !important"/></a>
                             </div>
                             <?php
@@ -75,22 +69,22 @@ $t = time();
             <div class="col-md-12">
                 <?php
                 $images_name = array();
-                foreach($images as $image){
+                foreach ($images as $image) {
                     $images_name[] = $image['base_url'];
                 }
                 $this->widget('ext.slider.slider', array(
-                        'container'=>'slideshow',
-                        'width'=>960,
-                        'height'=>240,
-                        'timeout'=>6000,
-                        'infos'=>false,
-                        'constrainImage'=>true,
-                        'sliderBase'=>'/images/',
-                        'imagesPath'=>'/upload/',
-                        'images'=>$images_name,
-                        'urls'=>array($post["thumb"],'02.jpg','03.jpg','04.jpg'),
-                        'alts'=>array('First description','Second description','Third description','Four description'),
-                        'defaultUrl'=>Yii::app()->request->hostInfo
+                        'container' => 'slideshow',
+                        'width' => 960,
+                        'height' => 240,
+                        'timeout' => 6000,
+                        'infos' => false,
+                        'constrainImage' => true,
+                        'sliderBase' => '/images/',
+                        'imagesPath' => '/upload/',
+                        'images' => $images_name,
+                        'urls' => array($post["thumb"], '02.jpg', '03.jpg', '04.jpg'),
+                        'alts' => array('First description', 'Second description', 'Third description', 'Four description'),
+                        'defaultUrl' => Yii::app()->request->hostInfo
                     )
                 );
                 ?>
@@ -124,6 +118,10 @@ $t = time();
 </div>
 
 <script>
+    $(document).ready(function(){
+        loadComment();
+    });
+
     $(".checkLike_<?php echo $post['id'] ?>").click(function () {
         var $_this = $(this);
         var status = $_this.attr('status');

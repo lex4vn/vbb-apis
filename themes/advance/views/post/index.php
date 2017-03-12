@@ -9,7 +9,7 @@
                 <i class="fa icon icon-facebook"></i>
                     <span>Facebook</span>
                 </a></li>
-            <li class="tabs-item" tab_item="2"  style="width: 25%;">
+            <li class="tabs-item tab-sell" tab_item="2"  style="width: 25%;">
                 <a href="#">
                 <i class="fa icon icon-buy"></i>
                     <span>Cần bán</span>
@@ -30,6 +30,7 @@
 <!--<div class="loadItem" style=""><img src="<?php echo Yii::app()->theme->baseUrl .'/img/ajax-loader.gif'?>" /></div>-->
 <script>
     $(document).ready(function(){
+      $('.tab-sell').click();
       loadItem(1,10);
     });
 
