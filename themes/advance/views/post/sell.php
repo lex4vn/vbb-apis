@@ -1,14 +1,13 @@
 <?php
-//    print_r($this->userName->url_avatar);die;
-    if($this->userName == null || $this->userName == ''){
-        $avata = Yii::app()->theme->baseUrl .'/FileManager/avata.png';
+if($this->userName == null || $this->userName == ''){
+    $avata = Yii::app()->theme->baseUrl .'/FileManager/avata.png';
+}else{
+    if($this->userName->avatar != ''){
+        $avata = $this->userName->avatar;
     }else{
-        if($this->userName->url_avatar != ''){
-            $avata = $this->userName->url_avatar;
-        }else{
-            $avata = Yii::app()->theme->baseUrl .'/FileManager/avata.png';
-        }
+        $avata = Yii::app()->theme->baseUrl .'/FileManager/avata.png';
     }
+}
 ?>
 <form enctype="multipart/form-data" id="formUpload" action="" method="post" data-ajax="false">
     <div class="form-group">

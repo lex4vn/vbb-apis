@@ -4,7 +4,6 @@
 
 <div class="tabs">
     <ul>
-        <?php if(!$user_id) {?>
             <li class="tabs-item" tab_item="1" style="width: 25%;">
                 <a href="#">
                 <i class="fa icon icon-facebook"></i>
@@ -24,13 +23,6 @@
                 <a href="#">
                     <i class="fa icon icon-search"></i>
                     <span>Tìm kiếm</span></a></li>
-        <?php }else{?>
-            <li class="tabs-item" tab_item="5">
-                <a href="#">
-                    <i class="fa icon icon-account"></i>
-                    <span>My account</span>
-                </a></li>
-        <?php } ?>
     </ul>
 </div>
 <div class ="list-group-item-answer"></div>
@@ -38,7 +30,7 @@
 <!--<div class="loadItem" style=""><img src="<?php echo Yii::app()->theme->baseUrl .'/img/ajax-loader.gif'?>" /></div>-->
 <script>
     $(document).ready(function(){
-      loadItem(0,10);
+      loadItem(1,10);
     });
 
     function loadItem(page,page_size){

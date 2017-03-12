@@ -178,7 +178,7 @@ class AccountController extends Controller {
                             $user->save();
 
                             Yii::app()->session['user_id'] = $user->userid;
-                            $sessionKey = CUtils::generateSessionKey($user->userid);
+                            //$sessionKey = CUtils::generateSessionKey($user->userid,$user->username);
                             Yii::app()->session['session_key'] = $sessionKey;
                             Yii::app()->user->setState('userSessionTimeout', time() + self::sessionTimeoutSeconds);
                             if (!$this->detect->isMobile() && !$this->detect->isTablet()) {

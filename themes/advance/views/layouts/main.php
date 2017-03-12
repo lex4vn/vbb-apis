@@ -4,7 +4,6 @@
 <?php
     $requestUrl = Yii::app()->request->getUrl() . '/' . Yii::app()->controller->action->id;
     //$currentUrl = Yii::app()->request->getUrl();
-    $currentAction = '/hocde.vn/questionBank/index';
 ?>
 <!DOCTYPE HTML>
 <html class="ui-mobile">
@@ -35,70 +34,14 @@
         }
     </style>
     <![endif]-->
-    <?php if ($requestUrl != $currentAction) { ?>
-        <?php if ($requestUrl != '/questionBank/index') { ?>
-            <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl ?>/js/jquery.js"></script>
-            <?php
-        }
-    }
-    ?>
-    <?php if ($requestUrl == $currentAction) { ?>
-        <?php if ($requestUrl != '/hocde.vn/questionBank/index') { ?>
-            <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl ?>/js/jquery.js"></script>
-            <?php
-        }
-    }
-    ?>
+
+    <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl ?>/js/jquery.js"></script>
     <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl ?>/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl ?>/js/bootstrap-select.js"></script>
     <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl ?>/Plugin/Fancybox/fancybox.js"></script>
     <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl ?>/js/jquery.touchSwipe.min.js"></script>
     <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl ?>/js/site.js"></script>
     <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl ?>/js/jquery.validate.min.js"></script>
-
-    <!-- required libraries -->
-    <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl ?>/js/socket.io.js"></script>
-    <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl ?>/js/jsencrypt.js"></script>
-    <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl ?>/js/adapter-1.3.0.js"></script>
-    <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl ?>/js/vstack-sdk-1.5-build-20161118.js"></script>
-
-    <script>
-        window.fbAsyncInit = function () {
-            FB.init({
-                appId: '891467350909145',
-                xfbml: true,
-                version: 'v2.5'
-            });
-        };
-
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) {
-                return;
-            }
-            js = d.createElement(s);
-            js.id = id;
-            js.src = "//connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-    </script>
-    <script>
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
-            a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
-        ga('create', 'UA-79670755-3', 'auto');
-        ga('send', 'pageview');
-
-    </script>
 </head>
 <body>
 <div id="tpl-contaiter">
@@ -115,7 +58,7 @@
 
                 <?php
                 if ($this->userName != NULL) {
-                    $uid = $this->userName->id;
+                    $uid = $this->userName->userid;
                 } else {
                     $uid = -1;
                 }
@@ -125,7 +68,7 @@
                 <div class="finter">
                     <?php // if ($checkmenu == 'site' || $checkmenu =='') { ?>
                     <a href="javascript:;" data-toggle="modal" data-target="#myModal"><img
-                            src="<?php echo Yii::app()->theme->baseUrl ?>/img/finter.png" class="icon-search1"/>
+                            src="<?php echo Yii::app()->theme->baseUrl ?>/img/topnav-add.png" class="icon-search1"/>
                     </a>
                     <?php // } ?>
                 </div>
@@ -144,12 +87,6 @@
     <!--End Main-->
     <!-- End Footer-->
     <?php
-        if ($this->userName != NULL) {
-            $uid = $this->userName->id;
-        } else {
-            $uid = -1;
-        }
-
         $this->widget("application.widgets.NavMenu", array('userName' => $this->userName));
     ?>
 </div>

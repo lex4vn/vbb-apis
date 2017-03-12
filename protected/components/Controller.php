@@ -31,6 +31,13 @@ class Controller extends CController
 
     public function __construct($id, $module)
     {
+		if (Yii::app()->session['user_id']) {
+			$user_id        = Yii::app()->session['user_id'];
+			$this->userName = User::model()->findByPk($user_id);
+		} else {
+			$user_id        = NULL;
+			$this->userName = NULL;
+		}
 		$domain = $_SERVER['HTTP_HOST'];
 		$this->detect = Yii::app()->mobileDetect;
 		if ($this->detect->isTablet()) {
