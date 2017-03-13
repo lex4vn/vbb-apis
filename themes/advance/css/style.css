@@ -474,7 +474,10 @@ background-color: #02a7ba;
 
 /*~~~~~~~~~~~~~~~~~ END BANNER ~~~~~~~~~~~~~~~~*/
 /*~~~~~~~~~~~~~~~~~ MAIN ~~~~~~~~~~~~~~~~*/
-#tpl-main {}
+
+#tpl-main {
+
+}
 
 .web_body {
     margin-top: 10px;
@@ -737,12 +740,19 @@ a.item-user:hover{
     max-width: 200px
 }
 @media (max-width: 1169px) {
-
+    #tpl-main {
+        margin: 0 auto;
+        max-width: 960px;
+    }
 }
 @media (max-width: 991px) {
 	.articleitem_body .title a { font-size:16px; font-weight: bold;}
 	.articleitem_body .wrap-tool { font-size: 12px;}
 	#tpl-header { font-size:22px;}
+    #tpl-main {
+        margin: 0 auto;
+        max-width: 960px;
+    }
 }
 @media (max-width: 768px) {
 	.articleitem_body .wrap-tool .view { background-size: 18px; padding-left: 26px; }
