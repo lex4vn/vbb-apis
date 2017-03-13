@@ -156,6 +156,8 @@ if ($user['avatar'] == null) {
     });
     $(".submit-comment-text").click(function () {
         var comment_text = $('#comment-text').val();
+        <?php echo $user_id == null? 'alert("Vui lòng đăng nhập để nhận xét");':'' ?>
+
         var uid = <?php echo $user_id ?>;
         var post_id = <?php echo $post['id'] ?>;
         if (comment_text.length < 3 || comment_text.trim().length < 3) {

@@ -40,10 +40,13 @@ if ($userName == null || $userName == '') {
                 <img src="<?php echo Yii::app()->theme->baseUrl ?>/img/sell.png"/>
                 <a href="<?php echo Yii::app()->baseUrl . '/post/sell' ?>" class="ui-link">Đăng tin bán xe</a>
             </li>
+            <?php if (Yii::app()->session['user_id']) {
+            ?>
             <li>
                 <img src="<?php echo Yii::app()->theme->baseUrl ?>/img/logout.png"/>
                 <a href="<?php echo Yii::app()->baseUrl . '/account/logout' ?>" class="ui-link">Đăng xuất</a>
             </li>
+            <?php } ?>
             <li>
                 <?php
                 if (!Yii::app()->session['user_id']) {

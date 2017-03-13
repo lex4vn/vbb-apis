@@ -739,6 +739,12 @@ a.item-user:hover{
 .sign-input{
     max-width: 200px
 }
+@media (max-width: 2000px) {
+    #tpl-main {
+        margin: 0 auto;
+        max-width: 960px;
+    }
+}
 @media (max-width: 1169px) {
     #tpl-main {
         margin: 0 auto;
