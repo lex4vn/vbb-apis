@@ -41,7 +41,7 @@ class ProfilePostAction extends CAction
             }
             echo json_encode(array('code' => 0,
                 'message' => 'Get list post successful',
-                'totalpages' => $posts['total'],
+                'totalpages' => 1,
                 'posts' => $items
             ));
             return;
