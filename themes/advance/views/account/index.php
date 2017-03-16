@@ -47,7 +47,7 @@
                 <div class="sign-input">
                     <form action="<?php echo $this->createUrl("/account/login"); ?>" method="post">
                         <div class="form-group">
-                          <input type="text" class="form-control" name="username" id="exampleInputEmail1" placeholder="Tài khoản">
+                          <input type="text" class="form-control" name="username" id="exampleInputEmail1" placeholder="Email hoặc tên đăng nhập">
                         </div>
                         <div class="form-group">
                           <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Mật khẩu">
@@ -58,7 +58,7 @@
                     <div class="sign-more">
                         <p style="font-family: font-dep1">Bạn chưa có tài khoản?</p>
                         <!--<a href="#"style="font-family: font-dep"  data-toggle="modal" data-target="#myModal">Đăng ký</a><br/>-->
-                        <a href="http://pkl.vn/forum/register.php"style="font-family: font-dep">Đăng ký</a><br/>
+                        <a  class="btn btn-default sign-register" href="http://pkl.vn/forum/register.php">Đăng ký</a><br/>
 
                     </div>
                 </div>

@@ -2,19 +2,60 @@
 
 class PostController extends Controller
 {
+    public function beforeAction($action)
+    {
+        if (strcasecmp($action->id, 'index')) {
+            $sessionKey = isset(Yii::app()->session['session_key']) ? Yii::app()->session['session_key'] : null;
+            if ($sessionKey == null) {
+                $this->redirect(Yii::app()->homeurl . '/account/login');
+            }
+            $sessionKey = str_replace(' ', '+', $sessionKey);
+            Yii::log("\n SessionKey: " . $sessionKey);
+            if (!CUtils::checkAuthSessionKey($sessionKey)) {
+                Yii::app()->user->logout();
+                Yii::app()->session->clear();
+                Yii::app()->session->destroy();
+                Yii::app()->user->setFlash('responseToUser', 'Tài khoản Đã bị đăng nhập trên thiêt bị khác');
+                $this->redirect(Yii::app()->homeurl . '/account/login');
+                return false;
+            }
+        }
+        return parent::beforeAction($action);
+    }
+
     public function actionIndex()
     {
         $this->titlePage = 'Chợ PKL';
         $this->render('post/index', array());
     }
 
+    public function actionSaveBuy()
+    {
+        header("Content-Type: text/html;charset=utf-8");
+        if (isset($_POST)) {
+            $post = new Post();
+            $post->subject = isset($_POST['title']) ? strip_tags($_POST['title']) : null;
+            $post->message = isset($_POST['description']) ? $_POST['description'] : null;
+            $post->phone = isset($_POST['phone']) ? $_POST['phone'] : null;
+            $post->postuserid = Yii::app()->session['user_object']->userid;
+            $post->postusername = Yii::app()->session['user_object']->username;
+            $post->create_date = date('Y-m-d H:i:s');
+            $post->modify_date = date('Y-m-d H:i:s');
+
+            if (!$post->save()) {
+                echo "<pre>";
+                Yii::log(json_encode($post->getErrors()));
+                die;
+            }
+        }
+    }
     //**
     //  Load more in page index
     //**//
     public function actionLoadItem()
     {
         $uid = 1;//$_POST['uid'];
-        $type = $_POST['tab_item'] == 2 ? 2:1;
+        $type = $_POST['tab_item'] == 2 ? 2 : 1;
         $page = $_POST['page'];
         $page_size = $_POST['page_size'];
         $offset = $page_size * $page;
@@ -24,10 +65,10 @@ class PostController extends Controller
         if ($type == 2) {
             unset(Yii::app()->session['tab_item']);
             Yii::app()->session['tab_item'] = 2;
-        } else if($type == 1) {
+        } else if ($type == 1) {
             unset(Yii::app()->session['tab_item']);
             Yii::app()->session['tab_item'] = 3;
-        }else{
+        } else {
             unset(Yii::app()->session['tab_item']);
             Yii::app()->session['tab_item'] = 4;
         }
@@ -35,9 +76,9 @@ class PostController extends Controller
         Yii::app()->session['page'] = $page;
 
         $html = '';
-        if($type == 2){
+        if ($type == 2) {
             $query = "select * from post where type = $type order by modify_date desc limit $offset, $page_size";
-        }else{
+        } else {
             $query = "select p.id,p.subject,p.message,p.postusername,p.create_date,p.status,a.expiry_date,avatar from post p
 left join authtoken a on a.user_id = p.postuserid
 left join api_user on api_user.userid = p.postuserid
@@ -82,7 +123,7 @@ where p.type = $type order by p.create_date desc limit $offset, $page_size";
         }
 
         $user = User::model()->findByPk($post['postuserid']);
-        $comment = Comment::model()->findByAttributes(array('post_id'=>$post['postuserid']));
+        $comment = Comment::model()->findByAttributes(array('post_id' => $post['postuserid']));
 
         $this->titlePage = $post['subject'];
 
@@ -210,7 +251,7 @@ where p.type = $type order by p.create_date desc limit $offset, $page_size";
                         $postImage->type = 1;
                         $postImage->status = 1;
                         $postImage->base_url = $new_name;
-                        if($i == 0){
+                        if ($i == 0) {
                             $post->thumb = $new_name;
                         }
                         if (!$postImage->save()) {
@@ -243,9 +284,13 @@ where p.type = $type order by p.create_date desc limit $offset, $page_size";
     {
         $user_id = $_POST['uid'];
         $comment_text = $_POST['comment_text'];
+        Yii::log($comment_text);
         $post_id = $_POST['post_id'];
+        Yii::log(Yii::app()->session['user_object']->username);
         $comment = new Comment();
         $comment->user_id = $user_id;
+        $comment->username = Yii::app()->session['user_object']->username;//Yii::app()->session['username'];
+        $comment->avatar = 'avatar';
         $comment->content = $comment_text;
         $comment->status = 1;
         $comment->post_id = $post_id;
@@ -253,7 +298,8 @@ where p.type = $type order by p.create_date desc limit $offset, $page_size";
         $comment->modify_date = date('Y-m-d H:i:s');
         if (!$comment->save()) {
             echo '<pre>';
-            print_r($comment->getErrors());
+            Yii::log(json_encode($comment->getErrors()));
+
         }
 
         //$this->insertNotificationComment($post_id, $user_id);
@@ -392,7 +438,6 @@ where cm.post_id=$post_id and cm.status = 1 order by cm.id desc";
         $html .= '</ul>';
         echo $html;
     }
-
 
 
     public function actionCheckSocket()
@@ -566,23 +611,14 @@ where cm.post_id=$post_id and cm.status = 1 order by cm.id desc";
     public function actionSell()
     {
         $this->titlePage = 'Đăng tin bán xe | PKL';
-        /*if (!Yii::app()->session['user_id']) {
+        if (Yii::app()->session['user_id']) {
             $this->redirect(Yii::app()->homeurl);
-        }*/
+        }
 
         $biketypes = Biketype::model()->findAll();
-        //$subject = SubjectCategory::model()->findAllByAttributes(array('status' => 1, 'type' => 1));
-        $time = date('Y-m-d H:i:s');
-        $criteria = new CDbCriteria;
-        $criteria->condition = "is_active = 1 and expiry_date > '$time'";
-        $criteria->compare('subscriber_id', Yii::app()->session['user_id']);
-        //$usingService = ServiceSubscriberMapping::model()->findAll($criteria);
-       // $level = Level::model()->findAll();
         $this->render('post/sell', array(
-           'biketypes' => $biketypes,
-           'year' => 2000,
-          //  'subject' => $subject,
-          //  'level' => $level
+            'biketypes' => $biketypes,
+            'year' => 2000,
         ));
     }
 
@@ -603,6 +639,7 @@ where cm.post_id=$post_id and cm.status = 1 order by cm.id desc";
         // $level = Level::model()->findAll();
         $this->render('post/buy');
     }
+
     /**
      * This is the action to handle external exceptions.
      */

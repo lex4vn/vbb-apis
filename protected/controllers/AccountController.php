@@ -179,6 +179,8 @@ class AccountController extends Controller {
 
                             Yii::app()->session['user_id'] = $user->userid;
                             //$sessionKey = CUtils::generateSessionKey($user->userid,$user->username);
+                            Yii::app()->session['username'] = $user->username;
+                            Yii::app()->session['user_object'] = $user;
                             Yii::app()->session['session_key'] = $sessionKey;
                             Yii::app()->user->setState('userSessionTimeout', time() + self::sessionTimeoutSeconds);
                             if (!$this->detect->isMobile() && !$this->detect->isTablet()) {
@@ -407,7 +409,7 @@ class AccountController extends Controller {
             header("location: http://pkl.onedu.vn/profile/");
             exit();
         }
-        header("location: http://pkl.onedu.vn/account/");
+        header("location: http://pkl.vn/account/");
         exit();
     }
 
