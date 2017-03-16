@@ -183,6 +183,13 @@ class Post extends CActiveRecord
         if ($type > 0) {
             $sql .= ' AND t.type =' . $type;
         }
+        Yii::log(Yii::app()->db->createCommand()
+            ->select('*')
+            ->from('post t')
+            ->where($sql)
+            ->limit($limit)
+            ->offset($offset)
+            ->order('modify_date')->text());
         return Yii::app()->db->createCommand()
             ->select('*')
             ->from('post t')
