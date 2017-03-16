@@ -189,7 +189,7 @@ class Post extends CActiveRecord
             ->where($sql)
             ->limit($limit)
             ->offset($offset)
-            ->order('modify_date')->text());
+            ->order('modify_date')->text);
         return Yii::app()->db->createCommand()
             ->select('*')
             ->from('post t')
