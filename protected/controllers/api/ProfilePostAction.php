@@ -42,7 +42,7 @@ class ProfilePostAction extends CAction
             echo json_encode(array('code' => 0,
                 'message' => 'Get list post successful',
                 'totalpages' => 1,
-                'posts' => $items
+                'listThread' => $items
             ));
             return;
         } else {
