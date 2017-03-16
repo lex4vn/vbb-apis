@@ -12,39 +12,38 @@ class ProfilePostAction extends CAction
         // var_dump($_POST['sessionhash']);die();
         $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
         if ($sessionhash) {
-            //$type = $forumid == 69 ? 1 : 2;
-            //$offset = ($page - 1) * $limit;
-            $posts = Post::model()->getPosts(Yii::app()->session['user_id']);
+            $page = isset($params['pageNumber']) ? $params['pageNumber'] : 1;
+            $limit = isset($params['page_size']) ? $params['page_size'] : 20;
 
+            //$type = $forumid == 69 ? 1 : 2;
+            $offset = ($page - 1) * $limit;
+            $posts = Post::model()->findPosts(Yii::app()->session['user_id'], $limit, $offset);
             $items = array();
-            if (count($posts['data'])) {
-                foreach ($posts['data'] as $post) {
-                    $item = array(
-                        'threadid' => $post['id'],
-                        'threadtitle' => $post['subject'],
-                        'postuserid' => $post['postuserid'],
-                        'postusername' => $post['postusername'],
-                       // 'post_url' => API_URL . $post['post_url'],
-                        'preview' => $post['message'],
-                        'price' => $post['price'],
-                        'phone' => $post['phone'],
-                        'bike' => empty($post['bike']) ? 'Khác': $post['bike'],
-                        'address' => $post['location'],
-                        'formality' => $post['formality'],
-                        'image' => IMAGES_PATH.$post['thumb'],
-                        'status' => $post['status'],
-                        'type' => $post['type'],
-                    );
-                    array_push($items, $item);
-                }
-                echo json_encode(array('code' => 0,
-                    'message' => 'Get list post successful',
-                    'totalpages' => $posts['total'],
-                    'posts' => $items
-                ));
-                return;
+
+            foreach ($posts as $post) {
+                $item = array(
+                    'threadid' => $post['id'],
+                    'threadtitle' => $post['subject'],
+                    'postuserid' => $post['postuserid'],
+                    'postusername' => $post['postusername'],
+                    'post_url' => API_URL . $post['id'],
+                    'preview' => $post['message'],
+                    'price' => $post['price'],
+                    'phone' => $post['phone'],
+                    'bike' => $post['bike'],
+                    'address' => $post['location'],
+                    'formality' => $post['formality'],
+                    'image' => $post['thumb'],
+                    'status' => $post['status'],
+                    'type' => $post['type'],
+                );
+                array_push($items, $item);
             }
-            echo json_encode(array('code' => 1, 'message' => 'No results'));
+            echo json_encode(array('code' => 0,
+                'message' => 'Get list post successful',
+                'totalpages' => $posts['total'],
+                'posts' => $items
+            ));
             return;
         } else {
             // Sessionhash is empty
