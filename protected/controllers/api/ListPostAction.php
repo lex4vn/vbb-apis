@@ -57,7 +57,7 @@ class ListPostAction extends CAction
                     'postuserid' => $post['postuserid'],
                     'postusername' => $post['postusername'],
                     'post_url' => API_URL . $post['id'],
-                    'post_date' => $post['create_date'],
+                    'postdate' => $post['create_date'],
                     'preview' => $post['message'],
                     'price' => $post['price'],
                     'phone' => $post['phone'],
