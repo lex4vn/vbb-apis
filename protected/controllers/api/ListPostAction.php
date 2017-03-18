@@ -66,6 +66,7 @@ class ListPostAction extends CAction
                     'formality' => $post['formality'],
                     'image' => $post['thumb'],
                     'status' => $post['status'],
+                    'onlinestatus' => 'online',
                 );
                 array_push($items, $item);
             }

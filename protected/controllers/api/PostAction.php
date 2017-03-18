@@ -49,7 +49,7 @@ class PostAction extends CAction
                     'username' => $comment['username'],
                     'userid' => $comment['user_id'],
                     'avatarurl' =>  $comment['avatar'],
-                    'onlinestatus' => 1,
+                    'onlinestatus' => 'online',
                     'usertitle' => $comment['username'],
                     'postid' => $comment['post_id'],
                     'postdate' => $comment['create_date'],
