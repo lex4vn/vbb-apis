@@ -4,6 +4,7 @@ class ListPostAction extends CAction
 {
     public function run()
     {
+        // http://pkl.vn/vbb-apis/api/getForum?forumid=69
         header('Content-type: application/json');
         $params = $_GET;
         $forumid = isset($params['forumid']) ? $params['forumid'] : null;
@@ -21,11 +22,11 @@ class ListPostAction extends CAction
         if ($sessionhash) {
 
             $type = $forumid == 69 ? 1 : 2;
+            $offset = ($page - 1) * $limit;
 
 //            $criteria = new CDbCriteria;
 //            $criteria->addCondition("type = ".$type);
 //            //$criteria->order = 'modify_date DESC';
-            $offset = ($page - 1) * $limit;
 //            $criteria->limit = $limit;
 //            $criteria->offset = $offset;
 
@@ -56,6 +57,7 @@ class ListPostAction extends CAction
                     'postuserid' => $post['postuserid'],
                     'postusername' => $post['postusername'],
                     'post_url' => API_URL . $post['id'],
+                    'post_date' => $post['create_date'],
                     'preview' => $post['message'],
                     'price' => $post['price'],
                     'phone' => $post['phone'],
