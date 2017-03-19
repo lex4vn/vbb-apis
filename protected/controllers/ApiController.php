@@ -139,6 +139,9 @@ class ApiController extends CController
             'test3' => 'protected.controllers.api.Test3Action',
             'typeAccount' => 'protected.controllers.api.TypeAccountAction',
             'updateProfile' => 'protected.controllers.api.UpdateProfileAction',
+
+
+            'postViewed' => 'protecte.controllers.api.PostViewAction',
             'updatePost' => 'protected.controllers.api.UpdatePostAction',
             // 4. new thread
             'newThread1' => 'protected.controllers.api.NewThreadAction',
