@@ -37,12 +37,12 @@ class UpdatePostAction extends CAction
 
             $post = Post::model()->findByPk($postId);
             if($post->postuserid === $postId) {
-                $post->status = $status == 'Mới' ? 0 : 1;
+                $post->status = $status == 'Mới' || $status == 0 ? 0 : 1;
                 $post->modify_date = date('Y-m-d H:i:s');
                 $post->save();
                 echo json_encode(array('code' => 0, 'message' => 'Post successfull.'));
             }else{
-                echo json_encode(array('code' => 1, 'message' => 'Đã có lỗi khi đăng bài'));
+                echo json_encode(array('code' => 1, 'message' => 'Không cập nhật được bài của người khác'));
             }
 
         } else {
