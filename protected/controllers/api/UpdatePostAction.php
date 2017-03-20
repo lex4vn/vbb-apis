@@ -22,22 +22,26 @@ class UpdatePostAction extends CAction
         }
 
         $postId = isset($params['postid']) ? $params['postid'] : null;
+
         if ($postId === null) {
             echo json_encode(array('code' => 5, 'message' => 'Missing params postid'));
             return;
         }
-        if (!isset($params['status'])) {
-            echo json_encode(array('code' => 5, 'message' => 'Missing params status'));
-            return;
-        }
 
-        $status = isset($params['status']) ? $params['status'] : '0';
+        $price = isset($params['price']) ? $params['price'] : null;
+        $status = isset($params['status']) ? $params['status'] : null;
         $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
         if ($sessionhash) {
 
             $post = Post::model()->findByPk($postId);
             if($post->postuserid === $postId) {
-                $post->status = $status == 'Mới' || $status == 0 ? 0 : 1;
+                if($price != null){
+                    $post->price = $price;
+                }
+                if($status != null){
+                    $post->status = $status == 'Mới' || $status == 0 ? 0 : 1;
+                }
+
                 $post->modify_date = date('Y-m-d H:i:s');
                 $post->save();
                 echo json_encode(array('code' => 0, 'message' => 'Post successfull.'));
