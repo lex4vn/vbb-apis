@@ -19,7 +19,7 @@ class PostViewAction extends CAction
             $offset = ($page - 1) * $limit;
 
             $posts = Yii::app()->db->createCommand()
-                ->select('p.*, t.modified_date')
+                ->select('p.*, t.create_date')
                 ->from('post_view t')
                 ->where('t.user_id ='.Yii::app()->session['user_id'])
                 ->join('post p','t.post_id = p.id')
@@ -27,7 +27,7 @@ class PostViewAction extends CAction
                 //->order('t.modify_date desc')
                 ->limit($limit)
                 ->offset($offset)
-                ->order('modify_date')
+                ->order('t.create_date')
                 ->queryAll();
 
 
