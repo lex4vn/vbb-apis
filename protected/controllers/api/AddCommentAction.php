@@ -50,6 +50,7 @@ class AddCommentAction extends CAction
             if($comment->save()){
                 $post = Post::model()->findByPk($comment->post_id);
                 $post->count_comment += 1;
+                $post->modify_date = date('Y-m-d H:i:s');
                 if($post->save()){
                     echo json_encode(array('code' => 0, 'message' => 'Post successfull.'));
                     $this->send_notification ($sessionhash, $params['postid']);

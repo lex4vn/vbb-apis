@@ -23,9 +23,9 @@ class PostAction extends CAction
             $command = $connection->createCommand($query);
             $result = $command->queryAll();
 
-            if (count($result) > 0){
+            if (count($result) > 0) {
                 $post = $result[0];
-            }else{
+            } else {
                 echo json_encode(array('code' => 1, 'message' => 'No data'));
                 return;
             }
@@ -34,7 +34,7 @@ class PostAction extends CAction
             $queryImages = "select * from post_images where post_id = $threadId";
             $commandImages = $connection->createCommand($queryImages);
             $resultImages = $commandImages->queryAll();
-            foreach($resultImages as $image){
+            foreach ($resultImages as $image) {
                 $images[] = IMAGES_PATH . $image['base_url'];
             }
 
@@ -44,11 +44,11 @@ class PostAction extends CAction
             Yii::log($queryComment);
             $commandComment = $connection->createCommand($queryComment);
             $resultComment = $commandComment->queryAll();
-            foreach($resultComment as $comment){
+            foreach ($resultComment as $comment) {
                 $comments[] = array(
                     'username' => $comment['username'],
                     'userid' => $comment['user_id'],
-                    'avatarurl' =>  $comment['avatar'],
+                    'avatarurl' => $comment['avatar'],
                     'onlinestatus' => 'online',
                     'usertitle' => $comment['username'],
                     'postid' => $comment['post_id'],
@@ -59,11 +59,11 @@ class PostAction extends CAction
             $user = User::model()->findByPk($post['postuserid']);
             $user_title = 'User';
             $avatarurl = '';
-            if($user == null){
+            if ($user == null) {
                 // sync user from forum
                 //echo json_encode(array('code' => 1, 'message' => 'Forum error'));
                 //return;
-            }else{
+            } else {
                 $user_title = $user['username'];// TODO add user_title
                 $avatarurl = $user['avatar'];
             }
@@ -71,9 +71,9 @@ class PostAction extends CAction
             $results = array(
                 'username' => $post['postusername'],
                 'userid' => $post['postuserid'],
-                'avatarurl' =>  $avatarurl,
+                'avatarurl' => $avatarurl,
                 'onlinestatus' => 'online',
-                'usertitle' =>$user_title,
+                'usertitle' => $user_title,
                 'postid' => $post['id'],
                 'post_url' => $post['thumb'],
                 'postdate' => $post['create_date'],
@@ -83,16 +83,17 @@ class PostAction extends CAction
                 'phone' => $post['phone'],
                 'address' => $post['location'],
                 'formality' => $post['formality'],
-                'status' =>  $post['status'],
+                'status' => $post['status'],
                 'images' => $images,
-                'message' =>  $post['message'],
-                'ismypost' => isset($post['userid'])? $post['userid'] == Yii::app()->session['user_id']: false,
-                'totalposts' =>  $post['formality'],
-                'pagenumber' =>  $post['formality'],
-                'perpage' =>  $post['formality'],
+                'message' => $post['message'],
+                'ismypost' => isset($post['userid']) ? $post['userid'] == Yii::app()->session['user_id'] : false,
+                'totalposts' => $post['formality'],
+                'pagenumber' => $post['formality'],
+                'perpage' => $post['formality'],
                 'comments' => $comments
             );
 
+            CUtils::savePostView($post['id'],Yii::app()->session['user_id']);
             echo json_encode(array('code' => 0,
                 'message' => 'Get detail post success',
                 'detailsthread' => $results

@@ -44,7 +44,7 @@ class ListPostAction extends CAction
                 //->order('t.modify_date desc')
                 ->limit($limit)
                 ->offset($offset)
-                ->order('modify_date')
+                ->order('t.modify_date desc')
                 ->queryAll();
 
 

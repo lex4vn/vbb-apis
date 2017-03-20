@@ -173,10 +173,10 @@ class CUtils
         unset(Yii::app()->request->cookies[$name]);
     }
 
-    public static function generateSessionKey($user_id,$user_name,$sessionhash)
+    public static function generateSessionKey($user_id, $user_name, $sessionhash)
     {
-        $str_session_tmp = $user_id . "|" .$user_name."|". microtime(true) . "|" . secret_key;
-        $sessionKey =self::encrypt($str_session_tmp, secret_key);
+        $str_session_tmp = $user_id . "|" . $user_name . "|" . microtime(true) . "|" . secret_key;
+        $sessionKey = self::encrypt($str_session_tmp, secret_key);
         $session = AuthToken::model()->findByPk($user_id);
 
         if ($session == null) {
@@ -186,7 +186,7 @@ class CUtils
             $session->sessionhash = $sessionhash;
             $session->expiry_date = time() + 8640000;
             $session->save();
-        }else{
+        } else {
             $session->token = $sessionKey;
             $session->sessionhash = $sessionhash;
             $session->expiry_date = time() + 8640000;
@@ -537,40 +537,58 @@ class CUtils
             'platformversion' => PLATFORM_VERSION,
             'uniqueid' => $uniqueId]);
         // Get token key
-        return   $response['apiaccesstoken'];
+        return $response['apiaccesstoken'];
     }
-	
-	public static function  send_notification($message, $id) {
-		//day la url cua service, anh cho no thanh constant nhe
-		$url = 'https://fcm.googleapis.com/fcm/send';
-		$fields = array (
-				'registration_ids' => $id,
-				'data' => array (
-						"message" => $message
-				)
-		);
-		$fields = json_encode ( $fields );
-		$headers = array (
-				//day la server key cho ios, anh cho no thanh constant nhe
-				'Authorization: key=AAAADBi4nxg:APA91bHUvoNgm3lO6F4Ge1YTLfT9vOboWnQd5dAmRgZHX07AUA1c2OSbnWyfOB3qKSj68E-vRVpw917uT0DaHW2c3YTuGSMA8-ZEV8IwmQRWqxOrbIxSaZ71cy1BLFoN9fGlWWGaRwOo',
-				'Content-Type: application/json'
-		);
-		$ch = curl_init ();
-		curl_setopt ( $ch, CURLOPT_CUSTOMREQUEST, "POST"); 
-		curl_setopt ( $ch, CURLOPT_URL, $url );
-		curl_setopt ( $ch, CURLOPT_POST, true );
-		curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
-		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
-		curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
-		curl_setopt ( $ch, CURLOPT_SSL_VERIFYHOST, 0 );
-		curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, false );
-		$result = curl_exec ( $ch );
-		if($result == false) {
-			die("Curl failed: ".curl_error($ch));
-		}
-		echo $result;
-		curl_close ( $ch );
-	}
+
+    public static function send_notification($message, $id)
+    {
+        //day la url cua service, anh cho no thanh constant nhe
+        $url = 'https://fcm.googleapis.com/fcm/send';
+        $fields = array(
+            'registration_ids' => $id,
+            'data' => array(
+                "message" => $message
+            )
+        );
+        $fields = json_encode($fields);
+        $headers = array(
+            //day la server key cho ios, anh cho no thanh constant nhe
+            'Authorization: key=AAAADBi4nxg:APA91bHUvoNgm3lO6F4Ge1YTLfT9vOboWnQd5dAmRgZHX07AUA1c2OSbnWyfOB3qKSj68E-vRVpw917uT0DaHW2c3YTuGSMA8-ZEV8IwmQRWqxOrbIxSaZ71cy1BLFoN9fGlWWGaRwOo',
+            'Content-Type: application/json'
+        );
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $result = curl_exec($ch);
+        if ($result == false) {
+            die("Curl failed: " . curl_error($ch));
+        }
+        echo $result;
+        curl_close($ch);
+    }
+
+    public static function savePostView($postid, $userid)
+    {
+        $postview = PostView::model()->findByAttributes(array('post_id' => $postid, 'user_id' => $userid));
+        if ($postview == null) {
+            $postview = new PostView();
+            $postview->post_id = $postid;
+            $postview->user_id = $userid;
+            $postview->create_date = date('Y-m-d H:i:s');
+
+        } else {
+            $postview->create_date = date('Y-m-d H:i:s');
+            $postview->count += 1;
+
+        }
+        $postview->save();
+    }
 }
 
-?>
+
