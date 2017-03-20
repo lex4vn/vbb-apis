@@ -34,7 +34,7 @@ class UpdatePostAction extends CAction
         if ($sessionhash) {
 
             $post = Post::model()->findByPk($postId);
-            if($post->postuserid === $postId) {
+            if($post->postuserid == Yii::app()->session['user_id']) {
                 if($price != null){
                     $post->price = $price;
                 }
