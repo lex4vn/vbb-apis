@@ -75,7 +75,7 @@ class PostAction extends CAction
                 'onlinestatus' => 'online',
                 'usertitle' => $user_title,
                 'postid' => $post['id'],
-                'post_url' => API_URL . $post['id'],
+                'post_url' => VIEW_POST . $post['id'],
                 'postdate' => $post['create_date'],
                 'title' => $post['subject'],
                 'bike' => $post['bike'],
