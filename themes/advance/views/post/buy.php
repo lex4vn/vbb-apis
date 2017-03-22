@@ -1,75 +1,38 @@
-<form enctype="multipart/form-data" id="formUpload" action="" method="post" data-ajax="false">
-    <div class="form-group">
-        <label for="title">Tiêu đề tin</label>
-        <input type="text" name="title" id="title" placeholder="Bắt buộc"/>
-    </div>
+<?php
+    $user_id = Yii::app()->session['user_id'];
+?>
 
-    <div class="form-group">
-        <label>Số điện thoại liên lạc</label>
-        <input type="text" name="phone" id="phone" placeholder="Bắt buộc"/>
-    </div>
+<div class ="list-group-item-answer"></div>
 
-    <div class="form-group">
-        <label>Mô tả</label>
-        <textarea type="text" row="5" name="message" id="message" placeholder="Bắt buộc (không quá 500 kí tự)">
-        </textarea>
-    </div>
-
-    <div class="form-group">
-        <a class="loadgif" style="display: none"><img width="50px"
-                                                      src="<?php echo Yii::app()->theme->baseUrl . '/img/load.gif' ?>"/></a>
-    </div>
-    <div class="question-submit question-submit-question">
-        <button type="submit" class="btn btn-primary">Đăng tin</button>
-    </div>
-
-</form>
-
+<!--<div class="loadItem" style=""><img src="<?php echo Yii::app()->theme->baseUrl .'/img/ajax-loader.gif'?>" /></div>-->
 <script>
-    $("#formUpload").on('submit', (function (e) {
-        var title = $('#title').val();
-        var phone = $('#phone').val();
-        var description = $('#description').val();
-        var uid = <?php Yii::app()->session['user_id'] ?>;
+    $(document).ready(function(){
+      loadItem(1,10);
+    });
 
-        if (title == null || title == '') {
-            alert('Bạn chưa điền tiêu đề tin');
-            return false;
-        }
+    function loadItem(page,page_size){
+        var uid = '<?php echo $user_id ?>';
+        var page = page;
+        var page_size = page_size;  
 
-        if (phone == null || phone == '' || phone == '-1') {
-            alert('Bạn chưa nhập số điện thoại');
-            return false;
-        }
-        if (description == null || description == '') {
-            alert('Bạn chưa nhập mô tả');
-            return false;
-        }
-        e.preventDefault();
-        showLoad();
+        showLoadItem();
 
-        $('.question-submit-question').hide();
-//        $('.loadgif').css('display','block');
         $.ajax({
-            url: "<?php echo Yii::app()->request->baseUrl . '/post/saveBuy'?>",
-            type: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function (data) {
-                hideLoad();
-                window.location.replace("<?php echo Yii::app()->homeurl?>");
-            },
-            error: function () {
+            type: 'POST',
+            url: "<?php echo Yii::app()->baseUrl . '/post/loadItem'?>",
+            data: {'uid':uid,'tab_item':1,'page':page, 'page_size':page_size},
+            dataType:'html',
+            success: function(html){
+                hideLoadItem();
+                $('.list-group-item-answer').html(html);
             }
         });
-    }));
-
-    function showLoad() {
-        $('.loadgif').show();
     }
-    function hideLoad() {
-        $('.loadgif').hide();
+
+    function showLoadItem(){
+        $('.loadItem').show();
+    }
+    function hideLoadItem(){
+        $('.loadItem').hide();
     }
 </script>

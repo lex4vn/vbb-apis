@@ -84,6 +84,30 @@
 
         </div>
     </div>
+
+    <div class="tabs">
+        <ul>
+            <li class="tabs-item" tab_item="1" style="width: 25%;">
+                <a href="#">
+                    <i class="fa icon icon-facebook"></i>
+                    <span>Facebook</span>
+                </a></li>
+            <li class="tabs-item tab-sell" tab_item="2"  style="width: 25%;">
+                <a href="<?php echo Yii::app()->baseUrl . '/post/sell' ?>">
+                    <i class="fa icon icon-buy"></i>
+                    <span>Cần bán</span>
+                </a></li>
+            <li class="tabs-item" tab_item="3"  style="width: 25%;">
+                <a href="<?php echo Yii::app()->baseUrl . '/post/buy' ?>">
+                    <i class="fa icon icon-sell"></i>
+                    <span>Cần mua</span>
+                </a></li>
+            <li class="tabs-item" tab_item="4"  style="width: 25%;">
+                <a href="#">
+                    <i class="fa icon icon-search"></i>
+                    <span>Tìm kiếm</span></a></li>
+        </ul>
+    </div>
     <!--End Main-->
     <!-- End Footer-->
     <?php

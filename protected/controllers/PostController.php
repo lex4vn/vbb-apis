@@ -26,9 +26,18 @@ class PostController extends Controller
     public function actionIndex()
     {
         $this->titlePage = 'Chợ PKL';
-        $this->render('post/index', array());
+        $this->render('post/sell', array());
     }
-
+    public function actionBuy()
+    {
+        $this->titlePage = 'Chợ PKL';
+        $this->render('post/buy', array());
+    }
+    public function actionSell()
+    {
+        $this->titlePage = 'Chợ PKL';
+        $this->render('post/sell', array());
+    }
     public function actionSaveBuy()
     {
         header("Content-Type: text/html;charset=utf-8");
@@ -55,14 +64,14 @@ class PostController extends Controller
     public function actionLoadItem()
     {
         $uid = 1;//$_POST['uid'];
-        $type = $_POST['tab_item'] == 2 ? 2 : 1;
+        $type = $_POST['tab_item'] == 1 ? 1 : 2;
         $page = $_POST['page'];
         $page_size = $_POST['page_size'];
-        $offset = $page_size * $page;
+        $offset = $page_size  * ($page - 1);
 
         $status = 1;
-
-        if ($type == 2) {
+        Yii::log($type);
+        if ($type == 1) {
             unset(Yii::app()->session['tab_item']);
             Yii::app()->session['tab_item'] = 2;
         } else if ($type == 1) {
@@ -79,10 +88,11 @@ class PostController extends Controller
         if ($type == 2) {
             $query = "select * from post where type = $type order by modify_date desc limit $offset, $page_size";
         } else {
-            $query = "select p.id,p.subject,p.message,p.postusername,p.create_date,p.status,a.expiry_date,avatar from post p
+            $query = "select p.id,p.subject,p.message,p.postusername,p.create_date, p.modify_date,p.status,a.expiry_date,avatar from post p
 left join authtoken a on a.user_id = p.postuserid
 left join api_user on api_user.userid = p.postuserid
-where p.type = $type order by p.create_date desc limit $offset, $page_size";
+where p.type = $type order by p.modify_date desc limit $offset, $page_size";
+            Yii::log($query);
         }
         $connection = Yii::app()->db;
         $command = $connection->createCommand($query);
@@ -608,7 +618,7 @@ where cm.post_id=$post_id and cm.status = 1 order by cm.id desc";
         }
     }
 
-    public function actionSell()
+    public function actionAddSell()
     {
         $this->titlePage = 'Đăng tin bán xe';
 
@@ -619,7 +629,7 @@ where cm.post_id=$post_id and cm.status = 1 order by cm.id desc";
         ));
     }
 
-    public function actionBuy()
+    public function actionAddBuy()
     {
         $this->titlePage = 'Đăng tin mua xe';
         /*if (!Yii::app()->session['user_id']) {
