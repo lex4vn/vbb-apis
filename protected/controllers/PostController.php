@@ -4,22 +4,22 @@ class PostController extends Controller
 {
     public function beforeAction($action)
     {
-        if (strcasecmp($action->id, 'index')) {
-            $sessionKey = isset(Yii::app()->session['session_key']) ? Yii::app()->session['session_key'] : null;
-            if ($sessionKey == null) {
-                $this->redirect(Yii::app()->homeurl . '/account/login');
-            }
-            $sessionKey = str_replace(' ', '+', $sessionKey);
-            Yii::log("\n SessionKey: " . $sessionKey);
-            if (!CUtils::checkAuthSessionKey($sessionKey)) {
-                Yii::app()->user->logout();
-                Yii::app()->session->clear();
-                Yii::app()->session->destroy();
-                Yii::app()->user->setFlash('responseToUser', 'Tài khoản Đã bị đăng nhập trên thiêt bị khác');
-                $this->redirect(Yii::app()->homeurl . '/account/login');
-                return false;
-            }
-        }
+//        if (strcasecmp($action->id, 'index')) {
+//            $sessionKey = isset(Yii::app()->session['session_key']) ? Yii::app()->session['session_key'] : null;
+//            if ($sessionKey == null) {
+//                $this->redirect(Yii::app()->homeurl . '/account/login');
+//            }
+//            $sessionKey = str_replace(' ', '+', $sessionKey);
+//            Yii::log("\n SessionKey: " . $sessionKey);
+//            if (!CUtils::checkAuthSessionKey($sessionKey)) {
+//                Yii::app()->user->logout();
+//                Yii::app()->session->clear();
+//                Yii::app()->session->destroy();
+//                Yii::app()->user->setFlash('responseToUser', 'Tài khoản Đã bị đăng nhập trên thiêt bị khác');
+//                $this->redirect(Yii::app()->homeurl . '/account/login');
+//                return false;
+//            }
+//        }
         return parent::beforeAction($action);
     }
 
@@ -610,10 +610,7 @@ where cm.post_id=$post_id and cm.status = 1 order by cm.id desc";
 
     public function actionSell()
     {
-        $this->titlePage = 'Đăng tin bán xe | PKL';
-        if (Yii::app()->session['user_id']) {
-            $this->redirect(Yii::app()->homeurl);
-        }
+        $this->titlePage = 'Đăng tin bán xe';
 
         $biketypes = Biketype::model()->findAll();
         $this->render('post/sell', array(
@@ -624,7 +621,7 @@ where cm.post_id=$post_id and cm.status = 1 order by cm.id desc";
 
     public function actionBuy()
     {
-        $this->titlePage = 'Đăng tin mua xe | PKL';
+        $this->titlePage = 'Đăng tin mua xe';
         /*if (!Yii::app()->session['user_id']) {
             $this->redirect(Yii::app()->homeurl);
         }*/
@@ -651,5 +648,24 @@ where cm.post_id=$post_id and cm.status = 1 order by cm.id desc";
             else
                 $this->render('error', $error);
         }
+    }
+
+
+    public function actionSearch()
+    {
+        $this->titlePage = 'Tìm kiếm';
+        /*if (!Yii::app()->session['user_id']) {
+            $this->redirect(Yii::app()->homeurl);
+        }*/
+
+        $biketypes = Biketype::model()->findAll();
+        //$subject = SubjectCategory::model()->findAllByAttributes(array('status' => 1, 'type' => 1));
+        $time = date('Y-m-d H:i:s');
+        $criteria = new CDbCriteria;
+        $criteria->condition = "is_active = 1 and expiry_date > '$time'";
+        $criteria->compare('subscriber_id', Yii::app()->session['user_id']);
+        //$usingService = ServiceSubscriberMapping::model()->findAll($criteria);
+        // $level = Level::model()->findAll();
+        $this->render('post/search');
     }
 }
