@@ -20,14 +20,16 @@
 }
 
 body {
-    background: #eee;
-    background: url(../img/login-bg.png);
+    background: #f6f6f6;
+    /*background: url(../img/login-bg.png);*/
 }
 
 label {
     display: block;
 }
-
+#content{
+    padding: 10px;
+}
 #content input, #content textarea {
     width: 100%;
     padding: 8px;
@@ -158,6 +160,7 @@ label {
 
 .submit-comment-text {
     margin: 10px 5px !important;
+    width: 100%;
 }
 
 .div-comment-footer {
@@ -959,9 +962,8 @@ a.sign-register,.sign-submit{
 }
 
 .web_body {
-    margin-top: 10px;
     background: #fff;
-    border-radius: 5px;
+    border-radius: 2px;
 }
 
 .webpart {
@@ -993,7 +995,7 @@ a.sign-register,.sign-submit{
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 .listarticle {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .articleitem_body {
@@ -1507,6 +1509,7 @@ a.item-user:hover {
     #tpl-main {
         margin: 0 auto;
         max-width: 960px;
+        padding-bottom: 80px;
     }
 }
 

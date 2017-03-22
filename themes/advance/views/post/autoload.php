@@ -31,7 +31,8 @@ for ($i = 0; $i < count($post); $i++){
              <div class="col-md-6 col-xs-6">
 
                  <div class="article-title">
-                     <h2 style="word-wrap:break-word;"><?php echo $post[$i]['subject'] ?></h2>
+                     <h2 style="word-wrap:break-word;"><a href="<?php echo Yii::app()->baseUrl.'/post/view/'.$post[$i]['id'] ?>
+                     "><?php echo $post[$i]['subject'] ?></a></h2>
                  </div>
 
                  <?php if($tab_item == 2){ ?>

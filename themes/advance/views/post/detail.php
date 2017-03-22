@@ -105,11 +105,11 @@ if ($user['avatar'] == null) {
 
     <div class="col-md-12 comment-footer">
         <div class="row">
-            <div class="col-md-9 col-xs-9">
+            <div class="col-lg-10 col-md-9 col-xs-8">
                 <textarea class="form-control comment-text" rows="1" id="comment-text" name="comment-text"
                           placeholder="Viết bình luận"></textarea>
             </div>
-            <div class="col-md-3 col-xs-3">
+            <div class="col-lg-2 col-md-3 col-xs-4 text-right">
                 <button type="button" class="btn btn-primary submit-comment-text">Send</button>
             </div>
         </div>

@@ -115,7 +115,7 @@
     ?>
 </div>
 <script>
-    $('body a.comment-home, body .like a, .comment a, .name-title a, .name-detail a, body .uploadQuestion a').click(function () {
+    $('.submit-comment-text, body a.comment-home, body .like a, .comment a, .name-title a, .name-detail a, body .uploadQuestion a').click(function () {
         var a = <?php echo $uid ?>;
         if (a == -1) {
             if (confirm("Bạn phải đăng nhập để sử dụng")) {
