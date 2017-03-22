@@ -88,7 +88,7 @@
     <div class="tabs">
         <ul>
             <li class="tabs-item" tab_item="1" style="width: 25%;">
-                <a href="#">
+                <a href="https://www.facebook.com/pklvn/">
                     <i class="fa icon icon-facebook"></i>
                     <span>Facebook</span>
                 </a></li>
@@ -103,7 +103,7 @@
                     <span>Cần mua</span>
                 </a></li>
             <li class="tabs-item" tab_item="4"  style="width: 25%;">
-                <a href="#">
+                <a href="<?php echo Yii::app()->baseUrl . '/post/' ?>">
                     <i class="fa icon icon-search"></i>
                     <span>Tìm kiếm</span></a></li>
         </ul>
