@@ -65,8 +65,8 @@ if ($user['avatar'] == null) {
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-12">
+            <?php if($post['type'] == 1){ ?>
+            <div class="">
                 <?php
                 $images_name = array();
                 foreach ($images as $image) {
@@ -74,22 +74,22 @@ if ($user['avatar'] == null) {
                 }
                 $this->widget('ext.slider.slider', array(
                         'container' => 'slideshow',
-                        'width' => 960,
-                        'height' => 240,
+                        'width' => 100,
+                        'height' => 500,
                         'timeout' => 6000,
                         'infos' => false,
                         'constrainImage' => true,
                         'sliderBase' => '/images/',
                         'imagesPath' => '/',
                         'images' => $images_name,
-                        'urls' => array($post["thumb"], '02.jpg', '03.jpg', '04.jpg'),
-                        'alts' => array('First description', 'Second description', 'Third description', 'Four description'),
+                        'urls' => array($post["thumb"]),
+                        'alts' => array('description'),
                         'defaultUrl' => Yii::app()->request->hostInfo
                     )
                 );
                 ?>
             </div>
-
+    <?php } ?>
 
             <div class="col-md-12">
                 <p class="post-content">
