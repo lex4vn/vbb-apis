@@ -17,9 +17,7 @@ if ($user['avatar'] == null) {
 ?>
 <div class="web_body">
     <div class="listarticle">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="row">
+
                     <!-- AVATAR                    -->
                     <div class="col-md-3 col-xs-3 avata">
                         <a href="#">
@@ -63,8 +61,8 @@ if ($user['avatar'] == null) {
                         }
                         ?>
                     </div>
-                </div>
-            </div>
+
+
             <?php if($post['type'] == 2){ ?>
                 <!-- The Gallery as lightbox dialog, should be a child element of the document body -->
                 <div id="blueimp-gallery" class="blueimp-gallery">
@@ -96,7 +94,7 @@ if ($user['avatar'] == null) {
             </div>
 
 
-        </div>
+
     </div>
 
     <div class="comment-answer-list"></div>
