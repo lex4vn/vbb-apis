@@ -65,7 +65,7 @@ if ($user['avatar'] == null) {
                     </div>
                 </div>
             </div>
-            <?php if($post['type'] == 1){ ?>
+            <?php if($post['type'] == 2){ ?>
             <div class="">
                 <?php
                 $images_name = array();
