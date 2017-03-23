@@ -11,99 +11,54 @@ if($this->userName == null || $this->userName == ''){
 ?>
 <form enctype="multipart/form-data" id="formUpload" action="" method="post" data-ajax="false">
     <div class="form-group">
-        <label for="title">Tiêu đề tin</label>
-        <input type="text" name="title" id="title" placeholder="Bắt buộc" />
+        <label for="title">Tìm kiếm tên xe</label>
+        <input type="text" name="search-name" id="title" placeholder="Nhập tên xe" />
     </div>
 
+
+    <hr/>
+    <h3>Tìm nâng cao</h3>
     <div class="form-group">
 
-            <div class="left-col">
-                <label>Tình trạng bán</label>
-                <select name="status" id="status">
-                    <option value="0">Chưa bán</option>
-                    <option value="1">Đã bán</option>
-                </select>
-            </div>
-
-            <div class="right-col">
-                <label>Dòng xe</label>
-                <select name="bike" id="bike">
-                    <option value="-1">Chọn một</option>
-                    <?php foreach ($biketypes as $biketype) {?>
-                        <option value="<?php echo $biketype['type']?>"><?php echo $biketype['name']?></option>
-                    <?php } ?>
-                </select>
-            </div>
-
-    </div>
-
-    <div class="form-group">
-        <label>Hình ảnh (tối thiểu một ảnh)</label>
-        <div class="ui-block-a img-upload1" id="img-upload1">
-            <div id="filediv">
-                <input name="file[]" type="file" id="file" class="custom-file-input"/>
-            </div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label>Link video</label>
-        <input type="text" name="video" id="video" placeholder="Có thể bỏ qua" />
-    </div>
-
-    <div class="form-group">
-        <label>Hãng xe</label>
-        <input type="text" name="branch" id="branch" placeholder="Bắt buộc (vd: Honda, Yamaha...)" />
-    </div>
-
-    <div class="form-group">
         <div class="left-col">
-                    <label>Năm sản xuất</label>
-                    <select name="year" id="year">
-                        <option value="-1">Bắt buộc</option>
-                       <?php for ($i = 1980;$i <= date('Y');$i++) {?>
-                        <option value="<?php echo $i ?>" <?php if($i == $year) { echo "selected"; }?>><?php echo $i?></option>
-                        <?php } ?>
-                    </select>
-                </div>
-
+            <label>Khoảng giá</label>
+            <input type="text" name="price_min" placeholder="Thấp nhất" />
+        </div>
 
         <div class="right-col">
-                    <label>Tình trạng xe</label>
-                    <select name="status" id="status">
-                        <option value="1">Cũ</option>
-                        <option value="2">Mới</option>
-                    </select>
-                </div>
+            <label></label>
+            <input type="text" name="price_max" placeholder="Cao nhất" />
+        </div>
 
     </div>
-
     <div class="form-group">
-        <label>Giá bán</label>
-        <input type="text" name="price" id="price" placeholder="Bắt buộc" />
-    </div>
 
-    <div class="form-group">
-        <label>Nơi bán</label>
-        <input type="text" name="address" id="address" placeholder="Bắt buộc" />
-    </div>
+        <div class="left-col">
+            <label>Dòng xe</label>
+            <select name="bike" id="bike">
+                <option value="-1">Chọn một</option>
+                <?php foreach ($biketypes as $biketype) {?>
+                    <option value="<?php echo $biketype['type']?>"><?php echo $biketype['name']?></option>
+                <?php } ?>
+            </select>
 
-    <div class="form-group">
-        <label>Số điện thoại liên lạc</label>
-        <input type="text" name="phone" id="phone" placeholder="Bắt buộc" />
-    </div>
+        </div>
 
-    <div class="form-group">
-        <label>Mô tả</label>
-        <textarea type="text" row="5" name="message" id="message" placeholder="Bắt buộc (không quá 500 kí tự)" >
-        </textarea>
+        <div class="right-col">
+            <label>Bạn cần</label>
+            <select name="type" id="type">
+                <option value="0">Mua</option>
+                <option value="1">Bán</option>
+            </select>
+        </div>
+
     </div>
 
     <div class="form-group">
         <a class="loadgif" style="display: none"><img width="50px" src="<?php echo Yii::app()->theme->baseUrl .'/img/load.gif'?>" /></a>
     </div>
     <div class="question-submit question-submit-question">
-        <button type="submit" class="btn btn-primary">Đăng tin</button>
+        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
         <!--<input type="button" id="add_more" class="upload" value="Add More Files">-->
     </div>
 

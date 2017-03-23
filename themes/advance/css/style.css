@@ -353,6 +353,7 @@ input[type='file'] {
     border-radius: 50%;
     float: left;
     margin-right: 4px;
+    max-width: 120px;
 }
 
 #menu_panel {

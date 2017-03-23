@@ -66,29 +66,27 @@ if ($user['avatar'] == null) {
                 </div>
             </div>
             <?php if($post['type'] == 2){ ?>
-            <div class="">
-                <?php
-                $images_name = array();
-                foreach ($images as $image) {
-                    $images_name[] = $image['base_url'];
-                }
-                $this->widget('ext.slider.slider', array(
-                        'container' => 'slideshow',
-                        'width' => 100,
-                        'height' => 500,
-                        'timeout' => 6000,
-                        'infos' => false,
-                        'constrainImage' => true,
-                        'sliderBase' => '/images/',
-                        'imagesPath' => '/',
-                        'images' => $images_name,
-                        'urls' => array($post["thumb"]),
-                        'alts' => array('description'),
-                        'defaultUrl' => Yii::app()->request->hostInfo
-                    )
-                );
-                ?>
-            </div>
+                <!-- The Gallery as lightbox dialog, should be a child element of the document body -->
+                <div id="blueimp-gallery" class="blueimp-gallery">
+                    <div class="slides"></div>
+                    <h3 class="title"></h3>
+                    <a class="prev">‹</a>
+                    <a class="next">›</a>
+                    <a class="close">×</a>
+                    <a class="play-pause"></a>
+                    <ol class="indicator"></ol>
+                </div>
+                <div id="links">
+                    <?php
+                    $images_name = array();
+                    foreach ($images as $image) { ?>
+                        <a href="<?php echo IPSERVER.$image['base_url'] ?>" title="<?php echo $post['subject'] ?>">
+                            <img src="<?php echo IPSERVER.$image['base_url'] ?>" alt="<?php echo $post['subject'] ?>">
+                        </a>
+                    <?php  } ?>
+                </div>
+
+
     <?php } ?>
 
             <div class="col-md-12">
@@ -298,3 +296,25 @@ if ($user['avatar'] == null) {
         </div>
     </div>
 </div>
+
+
+<script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl ?>/js/blueimp-gallery.min.js"></script>
+<script>
+    document.getElementById('links').onclick = function (event) {
+        event = event || window.event;
+        var target = event.target || event.srcElement,
+            link = target.src ? target.parentNode : target,
+            options = {index: link, event: event},
+            links = this.getElementsByTagName('a');
+        blueimp.Gallery(links, options);
+    };
+</script>
+<script>
+    blueimp.Gallery(
+        document.getElementById('links').getElementsByTagName('a'),
+        {
+            container: '#blueimp-gallery-carousel',
+            carousel: true
+        }
+    );
+</script>

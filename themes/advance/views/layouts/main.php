@@ -19,6 +19,7 @@
     <link href="<?php echo Yii::app()->theme->baseUrl ?>/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="<?php echo Yii::app()->theme->baseUrl ?>/css/bootstrap-select.css" rel="stylesheet"/>
     <link href="<?php echo Yii::app()->theme->baseUrl ?>/css/reset.css" rel="stylesheet"/>
+    <link href="<?php echo Yii::app()->theme->baseUrl ?>/css/blueimp-gallery.min.css" rel="stylesheet"/>
     <link href="<?php echo Yii::app()->theme->baseUrl ?>/Plugin/Fancybox/fancybox.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl ?>/css/style.css"/>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -103,7 +104,7 @@
                     <span>Cần mua</span>
                 </a></li>
             <li class="tabs-item" tab_item="4"  style="width: 25%;">
-                <a href="<?php echo Yii::app()->baseUrl . '/post/' ?>">
+                <a href="<?php echo Yii::app()->baseUrl . '/post/search' ?>">
                     <i class="fa icon icon-search"></i>
                     <span>Tìm kiếm</span></a></li>
         </ul>
@@ -115,7 +116,7 @@
     ?>
 </div>
 <script>
-    $('.submit-comment-text, body a.comment-home, body .like a, .comment a, .name-title a, .name-detail a, body .uploadQuestion a').click(function () {
+    $('.submit-comment-text, body a.comment-home, body .like a, .comment a, .name-title a').click(function () {
         var a = <?php echo $uid ?>;
         if (a == -1) {
             if (confirm("Bạn phải đăng nhập để sử dụng")) {
@@ -124,57 +125,6 @@
             return false;
         }
 
-    });
-</script>
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <h3>Lọc</h3>
-                <div class="classAll" style="text-align: left; font-weight: 100 !important">
-                    <?php
-//                    $classAll = null;
-//                        foreach ($classAll as $classAll):
-//                            ?>
-<!--                            <input type="checkbox" name="class" id="class" value="--><?php //echo $classAll['id'] ?><!--"/>-->
-<!--                            <label>--><?php //echo $classAll['class_name'] ?><!--</label><br/>-->
-<!--                            --><?php
-//                        endforeach;
-                    ?>
-                </div>
-                <div class="" style="text-align: center">
-                    <button type="button" class="btn btn-primary listClass" style="">Đồng ý</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<script>
-    $('.listClass').click(function () {
-        var array_result = [];
-        $('input:checked').each(function () {
-            array_result.push($(this).val());
-        });
-        var text = "";
-        for (i = 0; i < array_result.length; i++) {
-            if (i == array_result.length - 1) {
-                text += array_result[i];
-            } else {
-                text += array_result[i] + ',';
-            }
-        }
-        if (array_result.length > 0) {
-            $.ajax({
-                type: 'POST',
-                url: "<?php echo Yii::app()->baseUrl . '/site/test'?>",
-                data: {'text': text},
-                dataType: 'html',
-                success: function (html) {
-                    window.location.href = '<?php echo Yii::app()->baseUrl . '/site'?>';
-                }
-            });
-        } else
-            location.reload();
     });
 </script>
 </body>
