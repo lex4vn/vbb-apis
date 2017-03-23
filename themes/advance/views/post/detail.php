@@ -80,8 +80,8 @@ if ($user['avatar'] == null) {
                     <?php
                     $images_name = array();
                     foreach ($images as $image) { ?>
-                        <a href="<?php echo IPSERVER.$image['base_url'] ?>" title="<?php echo $post['subject'] ?>">
-                            <img src="<?php echo IPSERVER.$image['base_url'] ?>" alt="<?php echo $post['subject'] ?>">
+                        <a href="<?php echo IMAGES_PATH.$image['base_url'] ?>" title="<?php echo $post['subject'] ?>">
+                            <img src="<?php echo IMAGES_PATH.$image['base_url'] ?>" alt="<?php echo $post['subject'] ?>">
                         </a>
                     <?php  } ?>
                 </div>
