@@ -86,7 +86,9 @@ class PostController extends Controller
 
         $html = '';
         if ($type == 2) {
-            $query = "select * from post where type = $type order by modify_date desc limit $offset, $page_size";
+            $query = "select *,api_user.avatar as avatar from post
+left join api_user on api_user.userid = post.postuserid
+where type = $type order by modify_date desc limit $offset, $page_size";
         } else {
             $query = "select p.id,p.subject,p.message,p.postusername,p.create_date, p.modify_date,p.status,a.expiry_date,api_user.avatar as avatar from post p
 left join authtoken a on a.user_id = p.postuserid
