@@ -57,7 +57,7 @@ for ($i = 0; $i < count($post); $i++){
                      </div>
 
                      <div class="text-right">
-                         <?php echo $post[$i]['status'] == 1? 'Chưa bán': 'Đã bán' ?>
+                         <?php echo $post[$i]['status'] == 0? 'Chưa bán': 'Đã bán' ?>
                      </div>
                  </div>
 
