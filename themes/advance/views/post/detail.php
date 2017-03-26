@@ -4,7 +4,7 @@ if (Yii::app()->session['user_id']) {
 } else {
     $user_id = -1;
 }
-
+$can_delete = $user_id == 22671 ? true : false;
 $CUtils = new CUtils();
 $time = $CUtils->formatTime($post['modify_date']);
 $secs = '00';
@@ -17,7 +17,13 @@ if ($user['avatar'] == null) {
 ?>
 <div class="web_body">
     <div class="listarticle">
+                <?php if($can_delete){ ?>
 
+                    <a href="<?php echo Yii::app()->baseUrl.'/post/delete/'.$post['id'] ?>">
+                        Delete
+                    </a>
+
+                <?php } ?>
                     <!-- AVATAR                    -->
                     <div class="col-md-3 col-xs-3 avata">
                         <a href="#">
