@@ -15,7 +15,7 @@ for ($i = 0; $i < count($post); $i++){
 
                 <a class="ava" href="<?php echo Yii::app()->baseUrl.'/post/view/'.$post[$i]['id'] ?>">
 
-                    <?php if($type == 2){ ?>
+                    <?php if($type == 1){ ?>
                 <img
                 src="<?php echo $post[$i]['thumb'] ?>"
                 title="<?php echo $post[$i]['subject']?>"
