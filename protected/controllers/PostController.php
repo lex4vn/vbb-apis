@@ -63,14 +63,14 @@ class PostController extends Controller
     //**//
     public function actionLoadItem()
     {
-        $uid = 1;//$_POST['uid'];
+        //$uid = 1;//$_POST['uid'];
         $type = $_POST['tab_item'] == 1 ? 2 : 1;
         $page = $_POST['page'];
         $page_size = $_POST['page_size'];
         $offset = $page_size  * ($page - 1);
 
-        $status = 1;
-        Yii::log($type);
+       // $status = 1;
+       // Yii::log($type);
         if ($type == 1) {
             unset(Yii::app()->session['tab_item']);
             Yii::app()->session['tab_item'] = 2;
@@ -112,7 +112,7 @@ where p.type = $type order by p.modify_date desc limit $offset, $page_size";
 
         $this->renderPartial('post/autoload', array(
             'post' => $post,
-            'user_id' => $uid,
+           // 'user_id' => $uid,
             'tab_item' => $type,
         ));
     }
