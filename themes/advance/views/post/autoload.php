@@ -12,9 +12,10 @@ for ($i = 0; $i < count($post); $i++){
          <div class="row ">
 
              <div class="col-lg-2 col-md-3 col-sm-4 col-xs-4">
+
                 <a class="ava" href="<?php echo Yii::app()->baseUrl.'/post/view/'.$post[$i]['id'] ?>">
 
-                    <?php if($tab_item == 2){ ?>
+                    <?php if($type == 2){ ?>
                 <img
                 src="<?php echo $post[$i]['thumb'] ?>"
                 title="<?php echo $post[$i]['subject']?>"
