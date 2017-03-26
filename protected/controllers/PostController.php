@@ -88,7 +88,7 @@ class PostController extends Controller
         if ($type == 2) {
             $query = "select * from post where type = $type order by modify_date desc limit $offset, $page_size";
         } else {
-            $query = "select p.id,p.subject,p.message,p.postusername,p.create_date, p.modify_date,p.status,a.expiry_date,avatar from post p
+            $query = "select p.id,p.subject,p.message,p.postusername,p.create_date, p.modify_date,p.status,a.expiry_date,api_user.avatar as avatar from post p
 left join authtoken a on a.user_id = p.postuserid
 left join api_user on api_user.userid = p.postuserid
 where p.type = $type order by p.modify_date desc limit $offset, $page_size";
@@ -292,11 +292,14 @@ where p.type = $type order by p.modify_date desc limit $offset, $page_size";
 
     public function actionInsertComment()
     {
+        if(Yii::app()->session['user_id'] == null || Yii::app()->session['user_object'] == null) {
+            return;
+        }
         $user_id = $_POST['uid'];
         $comment_text = $_POST['comment_text'];
-        Yii::log($comment_text);
+        //Yii::log($comment_text);
         $post_id = $_POST['post_id'];
-        Yii::log(Yii::app()->session['user_object']->username);
+        //Yii::log(Yii::app()->session['user_object']->username);
         $comment = new Comment();
         $comment->user_id = $user_id;
         $comment->username = Yii::app()->session['user_object']->username;//Yii::app()->session['username'];
@@ -309,7 +312,6 @@ where p.type = $type order by p.modify_date desc limit $offset, $page_size";
         if (!$comment->save()) {
             echo '<pre>';
             Yii::log(json_encode($comment->getErrors()));
-
         }
 
         //$this->insertNotificationComment($post_id, $user_id);
@@ -670,12 +672,14 @@ where cm.post_id=$post_id and cm.status = 1 order by cm.id desc";
 
         $biketypes = Biketype::model()->findAll();
         //$subject = SubjectCategory::model()->findAllByAttributes(array('status' => 1, 'type' => 1));
-        $time = date('Y-m-d H:i:s');
-        $criteria = new CDbCriteria;
-        $criteria->condition = "is_active = 1 and expiry_date > '$time'";
-        $criteria->compare('subscriber_id', Yii::app()->session['user_id']);
+        //$time = date('Y-m-d H:i:s');
+       // $criteria = new CDbCriteria;
+       // $criteria->condition = "is_active = 1 and expiry_date > '$time'";
+       // $criteria->compare('subscriber_id', Yii::app()->session['user_id']);
         //$usingService = ServiceSubscriberMapping::model()->findAll($criteria);
         // $level = Level::model()->findAll();
-        $this->render('post/search');
+        $this->render('post/search',array(
+            'biketypes'=>$biketypes,
+            'year'=>2010));
     }
 }
