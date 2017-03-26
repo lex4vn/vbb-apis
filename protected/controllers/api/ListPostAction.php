@@ -39,7 +39,7 @@ class ListPostAction extends CAction
             $posts = Yii::app()->db->createCommand()
                 ->select('*')
                 ->from('post t')
-                ->where('t.status=1 and t.type='.$type)
+                ->where('t.type='.$type)
                 //->group('m.question_id')
                 //->order('t.modify_date desc')
                 ->limit($limit)
