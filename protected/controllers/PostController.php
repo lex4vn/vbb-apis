@@ -154,6 +154,38 @@ where p.type = $type order by p.modify_date desc limit $offset, $page_size";
         );
     }
 
+    public function actionDelete($id)
+    {
+        if (!isset($id)) {
+            $this->redirect(Yii::app()->homeurl);
+        }
+        $post = Post::model()->findByPk($id);
+        if ($post == null) {
+            $this->redirect(Yii::app()->homeurl);
+        }
+
+        $user_id = Yii::app()->session['user_id'];
+        // 22671 thond
+        if($user_id != 22671){
+            $this->redirect(Yii::app()->homeurl);
+        }
+
+        $post->delete();
+//        $connection = Yii::app()->db;
+//        $command = $connection->createCommand('delete from comment where post_id = '.$id);
+//        $command->query();
+//
+//        $command = $connection->createCommand('delete from where post_id = '.$id);
+//        $command->query();
+
+//        $comment = Comment::model()->findByAttributes(array('post_id' =>$id));
+//
+//        $this->titlePage = $post['subject'];
+//
+//        $images = PostImages::model()->findAllByAttributes(array('post_id' => $post['id']));
+        $this->redirect(Yii::app()->homeurl);
+
+    }
     public function actionComment()
     {
         $this->titlePage = 'Câu hỏi | PKL';
