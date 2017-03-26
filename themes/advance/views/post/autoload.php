@@ -11,7 +11,7 @@ for ($i = 0; $i < count($post); $i++){
      <div class="listarticle">
          <div class="row ">
 
-             <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+             <div class="col-lg-2 col-md-3 col-sm-4 col-xs-4">
                 <a class="ava" href="<?php echo Yii::app()->baseUrl.'/post/view/'.$post[$i]['id'] ?>">
 
                     <?php if($tab_item == 2){ ?>
@@ -30,7 +30,7 @@ for ($i = 0; $i < count($post); $i++){
                 </a>
              </div>
 
-             <div class="col-lg-10 col-md-9  col-sm-8 col-xs-6">
+             <div class="col-lg-10 col-md-9  col-sm-8 col-xs-8">
 
                  <div class="article-title">
                      <h2 style="word-wrap:break-word;"><a href="<?php echo Yii::app()->baseUrl.'/post/view/'.$post[$i]['id'] ?>

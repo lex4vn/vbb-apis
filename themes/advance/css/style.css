@@ -456,7 +456,7 @@ input[type='file'] {
     font-family: font-dep;
     font-size: 11px;
 }
-.article-title, .article-title, .article-user, .article-location{padding-right:15px}
+.article-title, .article-price, .article-user, .article-location{padding-right:15px}
 .article-title {
     margin-top: 7px
 }
