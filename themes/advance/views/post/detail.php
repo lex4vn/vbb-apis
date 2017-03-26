@@ -4,7 +4,8 @@ if (Yii::app()->session['user_id']) {
 } else {
     $user_id = -1;
 }
-$can_delete = $user_id == 22671 ? true : false;
+// ksoft 20364
+$can_delete = $user_id == 22671 || $user_id == 20364 ? true : false;
 $CUtils = new CUtils();
 $time = $CUtils->formatTime($post['modify_date']);
 $secs = '00';
@@ -20,7 +21,7 @@ if ($user['avatar'] == null) {
                 <?php if($can_delete){ ?>
 
                     <a href="<?php echo Yii::app()->baseUrl.'/post/delete/'.$post['id'] ?>">
-                        Delete
+                        Xoá bài viết này
                     </a>
 
                 <?php } ?>
