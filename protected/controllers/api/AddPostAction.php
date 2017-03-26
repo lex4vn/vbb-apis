@@ -71,7 +71,7 @@ class AddPostAction extends CAction
             $post->location = $location;
             $post->formality = $formality;
             $post->message = $message;
-            $post->status = $status == 'Mới'? 0: 1;
+            $post->status = $status == 'Mới' || $status == '0'? 0: 1;
             $post->create_date = date('Y-m-d H:i:s');
             $post->modify_date = date('Y-m-d H:i:s');
             $post->thumb = 'noimage.png';
