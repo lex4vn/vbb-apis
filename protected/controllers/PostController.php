@@ -64,7 +64,7 @@ class PostController extends Controller
     public function actionLoadItem()
     {
         //$uid = 1;//$_POST['uid'];
-        $type = $_POST['tab_item'] == 1 ? 2 : 1;
+        $type = $_POST['tab_item'] == 1 ? 1 : 2;
         $page = $_POST['page'];
         $page_size = $_POST['page_size'];
         $offset = $page_size  * ($page - 1);
