@@ -22,7 +22,7 @@ for ($i = 0; $i < count($post); $i++){
                 alt="<?php echo $post[$i]['subject'] ?>" />
                     <?php }else{ ?>
                         <img class="avata"
-                            src="<?php echo $post[$i]['avatar'] ?>"
+                            src="<?php echo empty($post[$i]['avatar'])? 'http://pkl.vn/forum/images/noavatar.jpg': $post[$i]['avatar'] ?>"
                             title="<?php echo $post[$i]['subject']?>"
                             alt="<?php echo $post[$i]['subject'] ?>" />
                     <?php } ?>
