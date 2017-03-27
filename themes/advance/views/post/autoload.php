@@ -133,7 +133,7 @@ for ($i = 0; $i < count($post); $i++){
         showLoadItem();
         $.ajax({
             type: 'POST',
-            url: "<?php echo Yii::app()->baseUrl . '/question/loadItem'?>",
+            url: "<?php echo Yii::app()->baseUrl . '/post/loadItem'?>",
             data: {'uid':uid,'tab_item':tab_item,'page':page, 'page_size':page_size},
             dataType:'html',
             success: function(html){
