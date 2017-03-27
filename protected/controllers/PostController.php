@@ -169,8 +169,9 @@ where p.type = $type order by p.modify_date desc limit $offset, $page_size";
         if($user_id != 22671 || $user_id != 20364){
             $this->redirect(Yii::app()->homeurl);
         }
-
+        Yii::log('Xoa bai viet id'.$id);
         $post->delete();
+        Yii::log('Done.');
 //        $connection = Yii::app()->db;
 //        $command = $connection->createCommand('delete from comment where post_id = '.$id);
 //        $command->query();
