@@ -65,14 +65,7 @@
                 }
 
                 ?>
-                <div id="divcontainingNotificationWidget"></div>
-                <div class="finter">
-                    <?php // if ($checkmenu == 'site' || $checkmenu =='') { ?>
-                    <a href="javascript:;" data-toggle="modal" data-target="#myModal"><img
-                            src="<?php echo Yii::app()->theme->baseUrl ?>/img/topnav-add.png" class="icon-search1"/>
-                    </a>
-                    <?php // } ?>
-                </div>
+
             </div>
         </div>
     </div>
