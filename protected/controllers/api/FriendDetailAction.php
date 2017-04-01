@@ -23,7 +23,7 @@ class FriendDetailAction extends CAction
                 'avatarurl' => $buddy['avatar'],
                 'fullname' => isset($buddy['fullname']) ? $buddy['fullname'] : $buddy['username'],
                 'phonenumber' => $buddy['phonenumber'],
-                'onlinestatus' => 1,//$buddy['expiry_date'],
+                'onlinestatus' => $buddy['expiry_date'] >= (time() + 900)?'Online' : 'Offline',
                 'displayemail' => empty($buddy['email']) ? '' : $buddy['email'],
             );
             array_push($result, $item);
