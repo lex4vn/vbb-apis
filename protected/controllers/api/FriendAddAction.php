@@ -23,7 +23,7 @@ class FriendAddAction extends CAction
         $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
 
         $userId = Yii::app()->session['user_id'];
-        $user = User::model()->findByPk($userId);
+        $user = User::model()->findByPk($params['userid']);
 
         if ($user == null) {
             echo json_encode(array('code' => 1, 'message' => 'Can not add this user.'));
