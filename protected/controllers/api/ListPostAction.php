@@ -20,7 +20,8 @@ class ListPostAction extends CAction
         }
         $sessionhash = CUtils::getSessionHash(($params['sessionhash']));
         if ($sessionhash) {
-
+            //1 is mua
+            // 2 la can ban
             $type = $forumid == 69 ? 1 : 2;
             $offset = ($page - 1) * $limit;
 
@@ -51,6 +52,11 @@ class ListPostAction extends CAction
             $items = array();
             //var_dump($posts);die;
             foreach ($posts as $post) {
+                $online = 'online';
+                if($type == 2){
+                    $auth = AuthToken::model()->findByAttributes(array('user_id'=>$post['postuserid']));
+                    $online = $auth['expiry_date'] >= (time() + 900)? 'online' : 'offline';
+                }
                 $item = array(
                     'threadid' => $post['id'],
                     'threadtitle' => $post['subject'],
@@ -66,7 +72,7 @@ class ListPostAction extends CAction
                     'formality' => $post['formality'],
                     'image' => $post['thumb'],
                     'status' => $post['status'],
-                    'onlinestatus' => 'online',
+                    'onlinestatus' => $online,
                 );
                 array_push($items, $item);
             }
