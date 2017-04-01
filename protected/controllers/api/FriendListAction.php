@@ -35,7 +35,7 @@ class FriendListAction extends CAction
                     'onlinestatus' => $buddy['expiry_date'] >= (time() + 900)?'Online' : 'Offline',
                     'displayemail' => empty($buddy['email']) ? '' : $buddy['email'],
                 );
-                Yii::log($buddy['expiry_date'].(time() + 900));
+                //Yii::log($buddy['expiry_date'].(time() + 900));
                 array_push($result, $item);
 
             }
