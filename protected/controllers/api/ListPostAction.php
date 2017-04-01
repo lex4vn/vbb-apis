@@ -55,7 +55,7 @@ class ListPostAction extends CAction
                 $online = 'online';
                 if($type == 2){
                     $auth = AuthToken::model()->findByAttributes(array('user_id'=>$post['postuserid']));
-                    $online = $auth['expiry_date'] >= (time() + 900)? 'online' : 'offline';
+                    $online = $auth['expiry_date'] >= (time() + 900)? 1 : 0;
                 }
                 $item = array(
                     'threadid' => $post['id'],
