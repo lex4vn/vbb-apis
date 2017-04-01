@@ -83,6 +83,47 @@ class LoginGoogleAction extends CAction
                         'userid' => $response['session']->userid,
                         'username' => $response['response']->errormessage[1],
                     ));
+
+
+                    $phonenumber = '';
+                    if(isset($response['response']->blocks)) {
+                        $fields = $response['response']->blocks->aboutme->block_data->fields->category->fields;
+                        foreach ($fields as $field) {
+                            if ($field->profilefield->title == "Phone Number") {
+                                $phonenumber = $field->profilefield->value;
+                            }
+                        }
+                    }
+
+                    $usertitle = '';
+                    $avatar = '';
+                    $status = '';
+                    $email = '';
+                    if(isset($response['response']->prepared)) {
+                        $usertitle = $response['response']->prepared->usertitle;
+                        $avatar = str_replace("amp;","",API_URL.$response['response']->prepared->avatarurl);
+                        $status = $response['response']->prepared->onlinestatus->onlinestatus == 1 ? "1" : "0";
+                        $email = $response['response']->prepared->displayemail;
+                    }
+
+                    $user = User::model()->findByPk($response['session']->userid);
+                    if($user == null){
+                        $user = new User();
+                        $user->userid = $response['session']->userid;
+                        $user->username = $response['response']->errormessage[1];
+                        $user->phonenumber =  $phonenumber;
+                        $user->password =  $email;
+                        $user->usertitle = $usertitle;
+                        $user->avatar = $avatar;
+                        $user->status = $status;
+                    }else{
+                        $user->phonenumber =  $phonenumber;
+                        $user->usertitle = $usertitle;
+                        //$user->avatar = $avatar;
+                        $user->password =  $email;
+                        $user->status = $status;
+                    }
+                    $user->save();
                     return;
                 }
 
