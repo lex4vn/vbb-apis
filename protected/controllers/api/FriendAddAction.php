@@ -34,7 +34,7 @@ class FriendAddAction extends CAction
                     'userid'=> $params['userid'],
                     'api_v' => '1'
                 ], ConnectorInterface::METHOD_POST);
-
+                Yii::log('ID friend:'.$params['userid']);
                 if(isset($profile['response'])){
                     $result = array();
                     $fields = $profile['response']->blocks->aboutme->block_data->fields->category->fields;
@@ -57,7 +57,7 @@ class FriendAddAction extends CAction
                         $status = $profile['response']->prepared->onlinestatus->onlinestatus == 1 ? "1" : "0";
                         $email = $profile['response']->prepared->displayemail;
                     }
-
+                    Yii::log('Name friend:'.$profile['response']->prepared->username);
                     $user = User::model()->findByPk($params['userid']);
                     if($user == null){
                         $user = new User();
