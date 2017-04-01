@@ -101,10 +101,12 @@ class LoginAction extends CAction
                         $usertitle = '';
                         $avatar = '';
                         $status = '';
+                        $email = '';
                         if(isset($response['response']->prepared)) {
                             $usertitle = $response['response']->prepared->usertitle;
                             $avatar = str_replace("amp;","",API_URL.$response['response']->prepared->avatarurl);
                             $status = $response['response']->prepared->onlinestatus->onlinestatus == 1 ? "1" : "0";
+                            $email = $response['response']->prepared->displayemail;
                         }
 
                         $user = User::model()->findByPk($user_id);
@@ -113,6 +115,7 @@ class LoginAction extends CAction
                             $user->userid = $user_id;
                             $user->username = $username;
                             $user->phonenumber =  $phonenumber;
+                            $user->password =  $email;
                             $user->usertitle = $usertitle;
                             $user->avatar = $avatar;
                             $user->status = $status;
@@ -120,6 +123,7 @@ class LoginAction extends CAction
                             $user->phonenumber =  $phonenumber;
                             $user->usertitle = $usertitle;
                             //$user->avatar = $avatar;
+                            $user->password =  $email;
                             $user->status = $status;
                         }
                         $user->save();

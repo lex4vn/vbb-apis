@@ -69,7 +69,15 @@ class ApiController extends CController
         // Sort by ASC
         return array(
             'accessKey' => 'protected.controllers.api.AccessSessionKeyAction',
-            'addFriend' => 'protected.controllers.api.AddFriendAction',
+
+            'addFriend1' => 'protected.controllers.api.AddFriendAction',
+            'listProfileBuddy1' => 'protected.controllers.api.ListProfileBuddyAction',
+            'detailFriend1' => 'protected.controllers.api.DetailFriendAction',
+
+            'addFriend' => 'protected.controllers.api.FriendAddAction',
+            'listProfileBuddy' => 'protected.controllers.api.FriendListAction',
+            'detailFriend' => 'protected.controllers.api.FriendDetailAction',
+
             'addDevicetoken' => 'protected.controllers.api.AddDeviceToken',
             'androidInAppPurchase' => 'protected.controllers.api.AndroidInAppPurchaseAction',
             'cancelService' => 'protected.controllers.api.CancelserivceAction',
@@ -112,7 +120,7 @@ class ApiController extends CController
             'listBlog' => 'protected.controllers.api.ListBlogAction',
             'listCategoryBlog' => 'protected.controllers.api.CategoryBlogAction',
             'listChapterVideo' => 'protected.controllers.api.ListChapterVideoAction',
-            'listProfileBuddy' => 'protected.controllers.api.ListProfileBuddyAction',
+
             'listquestion' => 'protected.controllers.api.ListquestionAction',
             'listReport' => 'protected.controllers.api.ListReportAction',
             'login' => 'protected.controllers.api.LoginAction',
@@ -156,7 +164,7 @@ class ApiController extends CController
 
 
 
-            'detailFriend' => 'protected.controllers.api.DetailFriendAction',
+
             'detailComments' => 'protected.controllers.api.DetailCommentAction',
             //7
             'advancedSearch1' => 'protected.controllers.api.AdvancedSearchAction',
