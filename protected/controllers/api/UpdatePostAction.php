@@ -38,7 +38,7 @@ class UpdatePostAction extends CAction
                 if($price != null){
                     $post->price = $price;
                 }
-                if($status != null){
+                if($status !== null){
                     $post->status = $status == 'Mới' || $status == 0 ? 0 : 1;
                 }
 
