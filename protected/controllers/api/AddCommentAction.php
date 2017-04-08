@@ -53,7 +53,7 @@ class AddCommentAction extends CAction
                 $post->modify_date = date('Y-m-d H:i:s');
                 if($post->save()){
                     echo json_encode(array('code' => 0, 'message' => 'Post successfull.'));
-                    $this->send_notification ($sessionhash, $params['postid']);
+                    $this->send_notification ($post);
                     return;
                 }
 
@@ -67,31 +67,21 @@ class AddCommentAction extends CAction
         }
         echo json_encode(array('code' => 2, 'message' => 'Forum error'));
     }
-    private function send_notification ($sessionhash, $threadId) {
-        $apiConfig = unserialize(base64_decode($sessionhash));
-        $api = new Api($apiConfig, new GuzzleProvider(API_URL));
-        $response = $api->callRequest('showthread', [
-            'threadid' => $threadId,
-            'api_v' => '1'
-        ], ConnectorInterface::METHOD_GET);
 
-        if (isset($response['response'])){
-            $tokens = array();
-            $post_owner = $response['response']->postbits->post->userid;
+    private function send_notification ($post) {
             //check you are not post_owner -> do not push notification
             $user_id = Yii::app()->session['user_id'];
-            if ($user_id == $post_owner) {
-                //return;
+            if ($user_id == $post->post_id) {
+                return;
             }
-            $user = User::model()->findByAttributes(array('userid'=>$post_owner));
+
+            $tokens = array();
+            $user = User::model()->findByAttributes(array('userid'=>$post->postuserid));
             if(isset($user) && isset($user->device_token)) {
                 $tokens[] = $user->device_token;
             }
-            $post_title = $response['response']->postbits->post->title;
-            $user_name = Yii::app()->session['username'];
-            $message = $user_name." just commented on your thread '" .$post_title. "'.";
-            var_dump($message);
-            //CUtils::send_notification($message, $tokens);
-        }
+            $message = Yii::app()->session['username']." just commented on your thread '" . $post->subject. "'.";
+            //var_dump($message);
+            CUtils::send_notification($message, $tokens);
     }
 }
