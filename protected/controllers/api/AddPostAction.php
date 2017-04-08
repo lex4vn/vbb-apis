@@ -108,7 +108,7 @@ class AddPostAction extends CAction
 
 
             echo json_encode(array('code' => 0, 'message' => 'Post successfull.'));
-            //$this->send_notification("Your friend: .... just posted a thread: " +  $params['subject'],$sessionhash);
+            $this->send_notification("Your friend $post->postusername just posted: ". $params['subject']);
             return;
         } else {
             // Sessionhash is empty
@@ -117,28 +117,14 @@ class AddPostAction extends CAction
         }
     }
 
-    private function send_notification($sessionhash, $msg)
-    {
-        $apiConfig = unserialize(base64_decode($sessionhash));
-        $api = new Api($apiConfig, new GuzzleProvider(API_URL));
-        $response = $api->callRequest('profile_buddylist', [
-            'api_v' => '1'
-        ], ConnectorInterface::METHOD_POST);
-        if (isset($response['response'])) {
-            $tokens = array();
-            foreach ($response['response']->HTML->buddylist as $buddy) {
-                $user = $buddy->user;
-
-                $userid = $user->userid;
-
-                $user = User::model()->findByAttributes(array('userid' => $userid));
-                if (isset($user) && isset($user->device_token)) {
-                    $tokens[] = $user->device_token;
-                }
-
+    private function send_notification ($message) {
+        $tokens = array();
+        $users = Relationship::model()->friendsBelong(Yii::app()->session['user_id']);
+        foreach($users as $user) {
+            if (isset($user) && isset($user->device_token)) {
+                $tokens[] = $user->device_token;
             }
-            CUtils::send_notification($msg, $tokens);
         }
-
+        CUtils::send_notification($message, $tokens);
     }
 }

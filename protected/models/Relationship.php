@@ -99,6 +99,16 @@ class Relationship extends CActiveRecord
 		return parent::model($className);
 	}
 
+	public function friendsBelong($uid)
+	{
+		return Yii::app()->db->createCommand()
+			->select('u.device_token')
+			->from('relationship r')
+			->join('api_user u', 'u.userid=r.user_two_id')
+			->where('(r.user_two_id=:id AND r.status = 1)', array(':id'=>$uid))
+			->queryAll();
+	}
+
 	public function friendList($uid,$limit,$offset)
 	{
 		return Yii::app()->db->createCommand()
