@@ -106,6 +106,7 @@ class FriendAddAction extends CAction
             $relationShip->action_user_id = $userId;
 
             if ($relationShip->save()) {
+                $this->send_notification ($params['userid']);
                 echo json_encode(array('code' => 0, 'message' => 'Add ' . $user['username'] . ' to friend list successfull.'));
 
             } else {
@@ -117,5 +118,16 @@ class FriendAddAction extends CAction
             echo json_encode(array('code' => 101, 'message' => 'User logged out'));
         }
 
+    }
+
+    private function send_notification ($userid) {
+        $tokens = array();
+        $user = User::model()->findByAttributes(array('userid'=>$userid));
+        if(isset($user) && isset($user->device_token)) {
+            $tokens[] = $user->device_token;
+        }
+        $message = Yii::app()->session['username']."  just added you to friends list.";
+        //var_dump($message);
+        CUtils::send_notification($message, $tokens);
     }
 }
