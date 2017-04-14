@@ -16,7 +16,7 @@ class TestAction extends CAction
         //day la url cua service, anh cho no thanh constant nhe
         $url = 'https://fcm.googleapis.com/fcm/send';
         $fields = array(
-            'registration_ids' => "d_AzycHgjrk:APA91bFxu34Uhg4U1S0aPlCPdInS-5ezSMOUU82aHID_MCOoA5XOqDYOqYdxyPeAs0-5qur8dcf0KqnzjZwS2hIzMGyemt0q3UgtU12OtIuJszKakogreqfU9WACpsab3hMsMuPfeOdw",
+            'registration_ids' => array("d_AzycHgjrk:APA91bFxu34Uhg4U1S0aPlCPdInS-5ezSMOUU82aHID_MCOoA5XOqDYOqYdxyPeAs0-5qur8dcf0KqnzjZwS2hIzMGyemt0q3UgtU12OtIuJszKakogreqfU9WACpsab3hMsMuPfeOdw"),
             'data' => array(
                 "message" => "Testttttttttt"
             )
