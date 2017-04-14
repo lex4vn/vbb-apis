@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by JetBrains PhpStorm.
  * User: hungld
@@ -6,19 +7,12 @@
  * Time: 2:18 PM
  * To change this template use File | Settings | File Templates.
  */
-
-class TestAction extends CAction{
-    public function run(){
+class TestAction extends CAction
+{
+    public function run()
+    {
         header('Content-type: application/json');
-
-        $apiConfig = new Signes\ApiConfig('mkAUvs6w', '12344567', 'lex', 'vb', 'yii', '898');
-        $apiConnector = new Signes\GuzzleProvider('http://localhost/forum/');
-
-        $api = new Api($apiConfig, $apiConnector);
-
-        $response = $api->callRequest('user.fetchByEmail', ['email' => 'test@example.com']);
-        $bool = false;
-        echo json_encode(array('test'=> $bool));
-        return;
+        CUtils::send_notification("Tesstestetsetsete", "d_AzycHgjrk:APA91bFxu34Uhg4U1S0aPlCPdInS-5ezSMOUU82aHID_MCOoA5XOqDYOqYdxyPeAs0-5qur8dcf0KqnzjZwS2hIzMGyemt0q3UgtU12OtIuJszKakogreqfU9WACpsab3hMsMuPfeOdw");
+        echo json_encode(array('code' => 0, 'message' => 'OK'));
     }
 }
