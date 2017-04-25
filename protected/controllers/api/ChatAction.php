@@ -20,6 +20,7 @@ class ChatAction extends CAction
             $number_item = 10;
             $sender = '';
             // Send message
+            Yii::log(':::::::::'.$type);
             if ($type == 1) {
                 if (!isset($params['recipient']) || $params['recipient'] == '') {
                     echo json_encode(array('code' => 5, 'message' => 'Missing params recipient'));
