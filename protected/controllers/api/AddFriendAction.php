@@ -67,4 +67,22 @@ class AddFriendAction extends CAction
         }
         echo json_encode(array('code' => 2, 'message' => 'Forum error'));
     }
+
+
+    private function send_notification ($post) {
+        //check you are not post_owner -> do not push notification
+        $user_id = Yii::app()->session['user_id'];
+        if ($user_id == $post->post_id) {
+            return;
+        }
+
+        $tokens = array();
+        $user = User::model()->findByAttributes(array('userid'=>$post->postuserid));
+        if(isset($user) && isset($user->device_token)) {
+            $tokens[] = $user->device_token;
+        }
+        $message = Yii::app()->session['username']." just commented on your thread '" . $post->subject. "'.";
+        //var_dump($message);
+        CUtils::send_notification($message, $tokens);
+    }
 }

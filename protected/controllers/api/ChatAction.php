@@ -76,7 +76,7 @@ class ChatAction extends CAction
                 $comment->time = date('Y-m-d H:i:s');
 
 
-                Yii::log(json_encode((array)$comment));
+                //Yii::log(json_encode((array)$comment));
                 if ($comment->save()) {
                     echo json_encode(
                         array(

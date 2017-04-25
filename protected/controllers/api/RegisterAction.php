@@ -158,7 +158,7 @@ class RegisterAction extends CAction
                         }
                     }
                     echo json_encode(array('code' => 2, 'message' => $messsage));
-                    var_dump($errorList);
+                    //var_dump($errorList);
                     return;
                 }
 

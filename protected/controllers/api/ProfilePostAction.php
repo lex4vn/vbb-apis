@@ -36,7 +36,7 @@ class ProfilePostAction extends CAction
                     'image' => $post['thumb'],
                     'status' => $post['status'],
                     'type' => $post['type'],
-                    'onlinestatus' => 1,
+                    'onlinestatus' => 'online',
                 );
                 array_push($items, $item);
             }
