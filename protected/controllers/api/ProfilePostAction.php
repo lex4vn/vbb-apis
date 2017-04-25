@@ -1,5 +1,5 @@
 <?php
-
+// Bai da dang
 class ProfilePostAction extends CAction
 {
     public function run()
@@ -17,7 +17,7 @@ class ProfilePostAction extends CAction
 
             //$type = $forumid == 69 ? 1 : 2;
             $offset = ($page - 1) * $limit;
-            $posts = Post::model()->findPosts(Yii::app()->session['user_id'], $limit, $offset);
+            $posts = Post::model()->findPosts(Yii::app()->session['user_id'], $limit, $offset,0,0);
             $items = array();
 
             foreach ($posts as $post) {
