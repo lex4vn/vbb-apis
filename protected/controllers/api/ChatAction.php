@@ -58,6 +58,9 @@ class ChatAction extends CAction
 //                    $recipient_name = $response[1];
 //                }
                 $user = User::model()->findByAttributes(array('userid' => $params['recipient']));
+                if (!$user) {
+                    $user = User::model()->findByAttributes(array('username' => $params['recipient']));
+                }
                 Yii::log($params['recipient']);
                 if (!$user) {
                     echo json_encode(array('code' => 5, 'message' => 'Message failed'));
