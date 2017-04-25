@@ -582,7 +582,7 @@ class CUtils
             $postview->post_id = $postid;
             $postview->user_id = $userid;
             $postview->create_date = date('Y-m-d H:i:s');
-
+            $postview->count = 1;
         } else {
             $postview->create_date = date('Y-m-d H:i:s');
             $postview->count += 1;
