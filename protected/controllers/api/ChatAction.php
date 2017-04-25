@@ -58,6 +58,7 @@ class ChatAction extends CAction
 //                    $recipient_name = $response[1];
 //                }
                 $user = User::model()->findByAttributes(array('userid' => $params['recipient']));
+                Yii::log($params['recipient']);
                 if (!$user) {
                     echo json_encode(array('code' => 5, 'message' => 'Message failed'));
                     return;
@@ -72,6 +73,7 @@ class ChatAction extends CAction
                 $comment->time = date('Y-m-d H:i:s');
 
 
+                Yii::log(json_encode((array)$comment));
                 if ($comment->save()) {
                     echo json_encode(
                         array(
