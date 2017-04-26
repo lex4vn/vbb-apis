@@ -123,11 +123,14 @@ class FriendAddAction extends CAction
     private function send_notification ($userid) {
         $tokens = array();
         $user = User::model()->findByAttributes(array('userid'=>$userid));
-        if(isset($user) && isset($user->device_token)) {
+        if(isset($user) && isset($user->device_token) && !empty($user->device_token)) {
             $tokens[] = $user->device_token;
         }
         $message = Yii::app()->session['username']."  just added you to friends list.";
         //var_dump($message);
-        CUtils::send_notification($message, $tokens);
+        if(empty($tokens)){
+            CUtils::send_notification($message, $tokens);
+        }
+
     }
 }
