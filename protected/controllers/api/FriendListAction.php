@@ -26,7 +26,7 @@ class FriendListAction extends CAction
             }
 
             foreach ($friends as $buddy) {
-                $item = array(
+                $result[] = array(
                     'userid' => $buddy['userid'],
                     'username' => $buddy['username'],
                     'avatarurl' => $buddy['avatar'],
@@ -36,7 +36,7 @@ class FriendListAction extends CAction
                     'displayemail' => empty($buddy['email']) ? '' : $buddy['email'],
                 );
                 //Yii::log($buddy['expiry_date'].(time() + 900));
-                array_push($result, $item);
+                //array_push($result, $item);
 
             }
             echo json_encode(array('code' => 0,
