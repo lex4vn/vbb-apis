@@ -187,7 +187,7 @@ class CUtils
             $session->expiry_date = time() + 8640000;//8640000;
             $session->save();
         } else {
-            //$session->token = $sessionKey;
+            $session->token = $sessionKey;
             $session->sessionhash = $sessionhash;
             $session->expiry_date = time() + 8640000;//8640000;
             $session->update();
