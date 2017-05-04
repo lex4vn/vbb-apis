@@ -37,7 +37,45 @@ class ChatAction extends CAction
                     return;
                 }
                 $sender = $params['recipient'];
-            } else {
+            } else if($type == 3) {
+                // Get message all message
+                $number_item = isset($params['type']) && $params['type'] > 10 ? $params['type'] : $number_item;
+                $type = 3;
+            }else  if($type == 4) {
+                // Xoa message
+                if (!isset($params['message_id']) || $params['message_id'] == '') {
+                    echo json_encode(array('code' => 5, 'message' => 'Missing params message_id'));
+                    return;
+                }
+                $message = Chat::model()->findByPk($params['message_id']);
+                if($message){
+                    if($message['fromid'] = Yii::app()->session['user_id'] || $message['to'] = Yii::app()->session['user_id']){
+                        echo json_encode(array('code' => 1, 'message' => 'Cannot delete message'));
+                        return;
+                    }
+                }else{
+                    echo json_encode(array('code' => 102, 'message' => 'message_id not exist'));
+                    return;
+                }
+                if($message->delete()){
+                    echo json_encode(
+                        array(
+                            'code' => 0,
+                            'message' => 'Delete message successful',
+                        )
+                    );
+                    return;
+                }else{
+                    echo json_encode(
+                        array(
+                            'code' => 1,
+                            'message' => 'Cannot delete message',
+                        )
+                    );
+                    return;
+                }
+
+            }else{
                 // Get message all message
                 $number_item = isset($params['type']) && $params['type'] > 10 ? $params['type'] : $number_item;
                 $type = 3;
