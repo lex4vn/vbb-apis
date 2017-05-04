@@ -49,6 +49,7 @@ class ChatAction extends CAction
                 }
                 $message = Chat::model()->findByPk($params['message_id']);
                 if($message){
+                    Yii::log($message['fromid']);
                     if($message['fromid'] == Yii::app()->session['user_id'] || $message['to'] == Yii::app()->session['user_id']){
                         echo json_encode(array('code' => 1, 'message' => 'Cannot delete message'));
                         return;
