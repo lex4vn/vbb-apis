@@ -230,7 +230,7 @@ class ChatAction extends CAction
 
             //send notification
             $fromuser = Yii::app()->session['username'];
-            $message = "New message from " . $fromuser;
+            $message = $fromuser.": " . $comment->message;
             //$recipient = User::model()->findByAttributes(array('userid'=>$recipient_id));
             $tokens = array();
             if (isset($user->device_token)) {
