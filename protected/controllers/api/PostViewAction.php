@@ -51,6 +51,7 @@ class PostViewAction extends CAction
                     'status' => $post['status'],
                     'onlinestatus' => 'online',
                     'modified_date' => $post['modified_date'],
+                    'type' => $post['type'],
                 );
                 array_push($items, $item);
             }
