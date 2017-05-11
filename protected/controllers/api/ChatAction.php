@@ -21,13 +21,13 @@ class ChatAction extends CAction
         if ($sessionhash) {
 
             if ($type == 1) {
-                $this->message();
+                $this->message($params);
             } elseif ($type == 2) {
-                $this->conversation();
+                $this->conversation($params);
             } elseif ($type == 3) {
-                $this->conversations();
+                $this->conversations($params);
             } elseif ($type == 4) {
-                $this->deleteConversation();
+                $this->deleteConversation($params);
             } else {
                 echo json_encode(array('code' => 1, 'message' => 'Sai tham số type.'));
             }
@@ -37,7 +37,7 @@ class ChatAction extends CAction
         }
     }
 
-    private function deleteConversation()
+    private function deleteConversation($params)
     {
         // Xoa message
         if (!isset($params['receipt_id']) || $params['receipt_id'] == '') {
@@ -75,7 +75,7 @@ class ChatAction extends CAction
         }
     }
 
-    private function conversations()
+    private function conversations($params)
     {
         $number_item = 10;
         $sender = '';
@@ -138,7 +138,7 @@ class ChatAction extends CAction
         }
     }
 
-    private function conversation()
+    private function conversation($params)
     {
         if (!isset($params['recipient']) || $params['recipient'] == '') {
             echo json_encode(array('code' => 5, 'message' => 'Missing params recipient'));
@@ -184,7 +184,7 @@ class ChatAction extends CAction
         ));
     }
 
-    private function message()
+    private function message($params)
     {
         if (!isset($params['recipient']) || $params['recipient'] == '') {
             echo json_encode(array('code' => 5, 'message' => 'Missing params recipient'));
