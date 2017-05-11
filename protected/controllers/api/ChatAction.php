@@ -47,11 +47,11 @@ class ChatAction extends CAction
         $from = $params['receipt_id'];
         $userid = Yii::app()->session['user_id'];
         $connection=Yii::app()->db;
-        $sql = "UPDATE api_chat SET status_from = 0 WHERE fromid = $userid and touser = $from";
+        $sql = "UPDATE api_chat SET status_from = 0 WHERE fromid = $userid and api_chat.to = $from";
         $command = $connection->createCommand($sql);
         $command->execute();
 
-        $sql = "UPDATE api_chat SET status_to = 0 WHERE to = $userid and fromid = $from";
+        $sql = "UPDATE api_chat SET status_to = 0 WHERE api_chat.to = $userid and fromid = $from";
         $command = $connection->createCommand($sql);
         $command->execute();
 
