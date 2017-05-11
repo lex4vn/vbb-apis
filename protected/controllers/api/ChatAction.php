@@ -44,35 +44,23 @@ class ChatAction extends CAction
             echo json_encode(array('code' => 5, 'message' => 'Missing params receipt_id'));
             return;
         }
-        $message = Chat::model()->findAllByAttributes($params['from_user_id']);
-        if ($message) {
-            Yii::log($message['fromid']);
-            if ($message['fromid'] != Yii::app()->session['user_id'] && $message['to'] != Yii::app()->session['user_id']) {
-                echo json_encode(array('code' => 1, 'message' => 'Cannot delete message'));
-                return;
-            }
-            $message->status_from = 0;
-        } else {
-            echo json_encode(array('code' => 102, 'message' => 'message_id not exist'));
-            return;
-        }
-        if ($message->save()) {
-            echo json_encode(
-                array(
-                    'code' => 0,
-                    'message' => 'Delete message successful',
-                )
-            );
-            return;
-        } else {
-            echo json_encode(
-                array(
-                    'code' => 1,
-                    'message' => 'Cannot delete message',
-                )
-            );
-            return;
-        }
+        $from = $params['receipt_id'];
+        $userid = Yii::app()->session['user_id'];
+        $connection=Yii::app()->db;
+        $sql = "UPDATE api_chat SET status_from = 0 WHERE fromid = $userid and touser = $from";
+        $command = $connection->createCommand($sql);
+        $command->execute();
+
+        $sql = "UPDATE api_chat SET status_to = 0 WHERE to = $userid and fromid = $from";
+        $command = $connection->createCommand($sql);
+        $command->execute();
+
+        echo json_encode(
+            array(
+                'code' => 0,
+                'message' => 'Delete message successful',
+            )
+        );
     }
 
     private function conversations($params)
