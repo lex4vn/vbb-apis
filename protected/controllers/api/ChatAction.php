@@ -84,7 +84,7 @@ class ChatAction extends CAction
         $criteria = new CDbCriteria;
         $criteria->alias = 't';
         $criteria->select = 't.*';
-        $criteria->condition = '(t.to = ' . $userid . ') or (fromid = ' . $userid;
+        $criteria->condition = '(t.to = ' . $userid . ' and status_to = 1) or (status_from =1 and fromid = ' . $userid. ')';
         //.Yii::app()->session['user_id'];
         $criteria->group = 'fromid,t.to';
         $criteria->order = 'time desc';
