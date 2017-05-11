@@ -579,7 +579,6 @@ class CUtils
         if ($result == false) {
             die("Curl failed: " . curl_error($ch));
         }
-        echo $result;
         curl_close($ch);
     }
 
