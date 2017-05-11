@@ -228,7 +228,7 @@ class CUtils
         if (substr($sessionKey, 0, 1) == "@") {
             $abc = str_replace('@', '', $sessionKey);
             Yii::app()->session['user_id'] = $abc;
-            Yii::app()->session['username'] = 'OnlyTest';
+            Yii::app()->session['username'] = 'thond';
             return true;
         }
         $sessionKey = str_replace(' ', '+', $sessionKey);
