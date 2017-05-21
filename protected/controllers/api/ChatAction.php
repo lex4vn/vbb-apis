@@ -85,21 +85,24 @@ class ChatAction extends CAction
             $messageContents = array();
             $historyGroup = array();
             foreach ($messages as $mess) {
-                if ($mess->fromuser == Yii::app()->session['user_id']) {
-                    $historyGroup[]['from'] = $mess->touser;
+                if ($mess->fromid == Yii::app()->session['user_id']) {
+                    $uniqueKey = $mess->fromid.'|'.$mess->to;
                 } else {
-                    $historyGroup[]['from'] = $mess->fromuser;
+                    $uniqueKey = $mess->to.'|'.$mess->fromid;
                 }
-                $messageContents[] = array(
-                    'sender_id' => $mess->fromid,
-                    'sender_name' => $mess->fromuser,
-                    'senddate' => $mess->time,
-                    'read' => $mess->read,
-                    'receipt_id' => $mess->to,
-                    'receipt_name' => $mess->touser,
-                    'content' => $mess->message,
-                    'avatar_url' => '',
-                );
+                if(!in_array($uniqueKey,$historyGroup)){
+                    $messageContents[] = array(
+                        'sender_id' => $mess->fromid,
+                        'sender_name' => $mess->fromuser,
+                        'senddate' => $mess->time,
+                        'read' => $mess->read,
+                        'receipt_id' => $mess->to,
+                        'receipt_name' => $mess->touser,
+                        'content' => $mess->message,
+                        'avatar_url' => '',
+                    );
+                }
+                $historyGroup[] = $uniqueKey;
             }
             //var_dump($historyGroup);die;
 //            if ($type == 3) {
