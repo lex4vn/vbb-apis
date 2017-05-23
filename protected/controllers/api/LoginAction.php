@@ -21,6 +21,21 @@ class LoginAction extends CAction
 		$isEmail = filter_var($params['username'], FILTER_VALIDATE_EMAIL);
         $uniqueId = uniqid();
 
+        if(!$isEmail){
+            $user = User::model()->findByAttributes(array('username'=>$params['username']));
+            if($user & $user->password == $params['password']){
+                $sessionKey = CUtils::generateSessionKey($user->userid,$user->username,$user->sessionhash);
+                echo json_encode(array('code' => 0,
+                    'message' => 'Login successful',
+                    'sessionhash' => $sessionKey,
+                    'result' =>  true,
+                    'userid' =>  $user->userid,
+                    'username' =>  $user->username,
+                ));
+                return;
+            }
+        }
+
         $apiConfig = new ApiConfig(API_KEY, $uniqueId, CLIENT_NAME, CLIENT_VERSION, PLATFORM_NAME, PLATFORM_VERSION);
         $apiConnector = new GuzzleProvider(API_URL);
         $api = new Api($apiConfig, $apiConnector);
@@ -70,7 +85,7 @@ class LoginAction extends CAction
                     ));
                     return;
                 }
-                if ('redirect_login' == $result &&  $response['session']->userid !== '0') {
+                if ('redirect_login' == $result &&  $response['session'] ->userid !== '0') {
                     $sessionKey = CUtils::generateSessionKey($response['session']->userid,$response['response']->errormessage[1],base64_encode(serialize($apiConfig)));
                     echo json_encode(array('code' => 0,
                         'message' => 'Login successful',
