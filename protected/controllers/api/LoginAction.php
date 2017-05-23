@@ -24,7 +24,7 @@ class LoginAction extends CAction
         if(!$isEmail){
             $user = User::model()->findByAttributes(array('username'=>$params['username']));
             if($user & $user->password == $params['password']){
-                $sessionKey = CUtils::generateSessionKey($user->userid,$user->username,$user->sessionhash);
+                $sessionKey = CUtils::generateSessionKey($user->userid,$user->username);
                 echo json_encode(array('code' => 0,
                     'message' => 'Login successful',
                     'sessionhash' => $sessionKey,
