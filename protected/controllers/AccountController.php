@@ -82,6 +82,24 @@ class AccountController extends Controller {
             $isEmail = filter_var($username, FILTER_VALIDATE_EMAIL);
             $uniqueId = uniqid();
 
+            if(!$isEmail){
+                $user = User::model()->findByAttributes(array('username'=>$username));
+                if($user & $user->password == $password){
+                    $sessionKey = CUtils::generateSessionKey($user->userid,$user->username,'12345679');
+                    Yii::app()->session['user_id'] = $user->userid;
+                    //$sessionKey = CUtils::generateSessionKey($user->userid,$user->username);
+                    Yii::app()->session['username'] = $user->username;
+                    Yii::app()->session['user_object'] = $user;
+                    Yii::app()->session['session_key'] = $sessionKey;
+                    Yii::app()->user->setState('userSessionTimeout', time() + self::sessionTimeoutSeconds);
+                    if (!$this->detect->isMobile() && !$this->detect->isTablet()) {
+                        $this->redirect(Yii::app()->homeurl . 'post ');
+                    }else{
+                        $this->redirect(Yii::app()->homeurl . 'post');
+                    }
+                }
+            }
+
             $apiConfig = new ApiConfig(API_KEY, $uniqueId, CLIENT_NAME, CLIENT_VERSION, PLATFORM_NAME, PLATFORM_VERSION);
             $apiConnector = new GuzzleProvider(API_URL);
             $api = new Api($apiConfig, $apiConnector);
