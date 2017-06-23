@@ -167,8 +167,8 @@ where p.type = $type order by p.modify_date desc limit $offset, $page_size";
 
         $user_id = Yii::app()->session['user_id'];
         Yii::log('User id'.$user_id);
-        // 22671 thond  // ksoft 20364
-        if($user_id != 22671 && $user_id != 20364){
+        // 22671 thond  // ksoft 20364 // ndh091 2
+        if($user_id != 2 && $user_id != 20364){
             $this->redirect(Yii::app()->homeurl);
         }
         Yii::log('Xoa bai viet id'.$id);

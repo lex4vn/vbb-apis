@@ -4,8 +4,8 @@ if (Yii::app()->session['user_id']) {
 } else {
     $user_id = -1;
 }
-// ksoft 20364
-$can_delete = $user_id == 22671 || $user_id == 20364 ? true : false;
+// ksoft 20364 ndh091 2
+$can_delete = $user_id == 2 || $user_id == 20364 ? true : false;
 $CUtils = new CUtils();
 $time = $CUtils->formatTime($post['modify_date']);
 $secs = '00';
